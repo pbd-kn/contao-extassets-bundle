@@ -1,4 +1,4 @@
-# Contao Extassets
+    # Contao Extassets
 
 > This bundle is outdated and not actively maintained anymore! Please have a look at [Encore Bundle](https://github.com/heimrichhannot/contao-encore-bundle) if you need a good and actively maintained asset solution.
 
