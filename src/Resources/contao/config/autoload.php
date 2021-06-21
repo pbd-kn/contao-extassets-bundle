@@ -12,16 +12,18 @@
 /**
  * Register the namespaces
  */
+/*
 ClassLoader::addNamespaces(array
 (
 	'ExtAssets',
 	'CssSplitter',
 ));
-
+*/
 
 /**
  * Register the classes
  */
+/*
 ClassLoader::addClasses(array
 (
 	// Models
@@ -40,3 +42,4 @@ ClassLoader::addClasses(array
 	'CssSplitter\Tests\SplitterTest' => 'system/modules/extassets/classes/vendor/php-css-splitter/tests/Tests/SplitterTest.php',
 	'CssSplitter\Splitter'           => 'system/modules/extassets/classes/vendor/php-css-splitter/src/Splitter.php',
 ));
+*/

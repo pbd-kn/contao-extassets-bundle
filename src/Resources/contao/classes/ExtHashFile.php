@@ -1,6 +1,6 @@
 <?php
 
-namespace ExtAssets;
+namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 class ExtHashFile extends \File
 {

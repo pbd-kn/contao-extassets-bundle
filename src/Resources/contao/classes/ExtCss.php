@@ -15,7 +15,7 @@
  * Namespace
  */
 
-namespace ExtAssets;
+namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use Contao\Dbafs;
 

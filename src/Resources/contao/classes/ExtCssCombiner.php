@@ -1,8 +1,8 @@
 <?php
 
-namespace ExtAssets;
+namespace PBDKN\ExtAssets\Resources\contao\classes;
 
-require_once TL_ROOT . "/system/modules/extassets/classes/vendor/php-css-splitter/src/Splitter.php";
+xxx require_once TL_ROOT . "/system/modules/extassets/classes/vendor/php-css-splitter/src/Splitter.php";
 
 class ExtCssCombiner extends \Frontend
 {

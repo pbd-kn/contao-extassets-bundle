@@ -8,8 +8,7 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
-namespace ExtAssets;
-
+namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 class ExtAssetsUpdater
 {

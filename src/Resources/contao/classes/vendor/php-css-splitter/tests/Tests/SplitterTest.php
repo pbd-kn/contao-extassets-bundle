@@ -8,7 +8,8 @@
  * @copyright 2014, David Lundgren. All Rights Reserved.
  * @license   MIT
  */
-namespace CssSplitter\Tests;
+
+namespace PBDKN\ExtAssets\Resources\contao\classes\vendor\CssSplitter\tests\Tests;
 
 use CssSplitter\Splitter;
 
