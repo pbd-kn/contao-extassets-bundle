@@ -31,6 +31,6 @@ namespace PBDKN\ExtAssets;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ContaoEfgco4Bundle extends Bundle
+class ContaoExtassetBundle extends Bundle
 {
 }
