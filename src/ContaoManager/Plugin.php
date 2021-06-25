@@ -38,7 +38,7 @@ class Plugin implements BundlePluginInterface
     {
         return [
             BundleConfig::create(ContaoExtassetBundle::class)
-                ->setLoadAfter([ContaoCoreBundle::class])
-                ->setReplace(['extasset']),        ];
+                ->setLoadAfter([ContaoCoreBundle::class]),
+                        ];
     }
 }
