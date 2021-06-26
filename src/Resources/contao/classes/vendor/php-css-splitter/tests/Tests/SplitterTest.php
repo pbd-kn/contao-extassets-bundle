@@ -9,7 +9,7 @@
  * @license   MIT
  */
 
-namespace PBDKN\ExtAssets\Resources\contao\classes\vendor\CssSplitter\tests\Tests;
+namespace PBDKN\ExtAssets\Resources\contao\classes\vendor\php-css-splitter\tests\Tests;
 
 use CssSplitter\Splitter;
 
