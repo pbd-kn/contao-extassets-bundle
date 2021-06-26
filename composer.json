@@ -1,5 +1,5 @@
 {
-    "name": "pbd-kn/contao-extassets-bundle",
+    "name": "pbd-kn/contao-extassets",
     "description":"External CSS & JS assets groups with bootstrap and font-awesome support",
     "keywords":["contao", "css", "js", "bootstrap", "font awesome"],
     "type": "contao-module",

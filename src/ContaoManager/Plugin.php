@@ -30,14 +30,14 @@ use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use PBDKN\Extassets\ContaoExtassetsBundle;
+use PBDKN\Extassets\ContaoExtassets;
 
 class Plugin implements BundlePluginInterface
 {
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(ContaoExtassetsBundle::class)
+            BundleConfig::create(ContaoExtassets::class)
                 ->setLoadAfter([ContaoCoreBundle::class]),
                         ];
     }
