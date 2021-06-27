@@ -50,12 +50,12 @@ define('LESSCSSCACHEDIR', 'assets/css/lesscache/');
 
 $GLOBALS['BE_MOD']['design']['extcss'] = [
     'tables' => ['tl_extcss', 'tl_extcss_file', 'tl_files'],
-    'icon'   => 'system/modules/extassets/assets/extcss/icon.png',
+    'icon'   => 'vendor/pbd-kn/contao-extassets/src/Resources/contao/assets/extcss/icon.png',
 ];
 
 $GLOBALS['BE_MOD']['design']['extjs'] = [
     'tables' => ['tl_extjs', 'tl_extjs_file', 'tl_files'],
-    'icon'   => 'system/modules/extassets/assets/extjs/icon.png',
+    'icon'   => 'vendor/pbd-kn/contao-extassets/src/Resources/contao/assets/extcss/icon.png',
 ];
 
 /**
@@ -67,24 +67,24 @@ $GLOBALS['TL_MIME']['less'] = ['text/css', 'iconCSS.gif'];
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = ['ExtAssets\ExtCss', 'hookReplaceDynamicScriptTags'];
-$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = ['ExtAssets\ExtJs', 'hookReplaceDynamicScriptTags'];
-$GLOBALS['TL_HOOKS']['getPageLayout'][]            = ['ExtAssets\ExtCss', 'hookGetPageLayout'];
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = ['PBDKN\ExtAssets\Resources\contao\classes\ExtCss', 'hookReplaceDynamicScriptTags'];
+$GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = ['PBDKN\ExtAssets\Resources\contao\classes\ExtJs', 'hookReplaceDynamicScriptTags'];
+$GLOBALS['TL_HOOKS']['getPageLayout'][]            = ['PBDKN\ExtAssets\Resources\contao\classes\ExtCss', 'hookGetPageLayout'];
 
 /**
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_extcss']      = 'ExtAssets\ExtCssModel';
-$GLOBALS['TL_MODELS']['tl_extcss_file'] = 'ExtAssets\ExtCssFileModel';
-$GLOBALS['TL_MODELS']['tl_extjs']       = 'ExtAssets\ExtJsModel';
-$GLOBALS['TL_MODELS']['tl_extjs_file']  = 'ExtAssets\ExtJsFileModel';
+$GLOBALS['TL_MODELS']['tl_extcss']      = 'PBDKN\ExtAssets\Resources\contao\models\ExtCssModel';
+$GLOBALS['TL_MODELS']['tl_extcss_file'] = 'PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel';
+$GLOBALS['TL_MODELS']['tl_extjs']       = 'PBDKN\ExtAssets\Resources\contao\models\ExtJsModel';
+$GLOBALS['TL_MODELS']['tl_extjs_file']  = 'PBDKN\ExtAssets\Resources\contao\models\ExtJsFileModel';
 
 /**
  * PurgeData
  */
 $GLOBALS['TL_PURGE']['folders']['less'] = [
     'affected' => [BOOTSTRAPLESSCUSTOMDIR, FONTAWESOMELESSCUSTOMDIR, LESSCSSCACHEDIR, 'assets/css/'],
-    'callback' => ['ExtAssets\ExtAutomator', 'purgeLessCache'],
+    'callback' => ['PBDKN\ExtAssets\Resources\contao\classes\ExtAutomator', 'purgeLessCache'],
 ];
 
 /**
