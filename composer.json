@@ -18,11 +18,10 @@
         }        
     ],
     "require": {
+        "php": "~5.4 || ~7.0",
         "php": "^7.2 || ^8.0",
         "contao/core-bundle": "^4.9",
-        "codefog/contao-haste": "^4.24",
-        "symfony/config": "^4.4 || ^5.1",
-        "symfony/dependency-injection": "^4.4 || ^5.1"
+	    "heimrichhannot/contao-haste_plus": ">=1.4.0"
     },
     "autoload": {
         "psr-4": {

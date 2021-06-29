@@ -1,7 +1,6 @@
 <?php
 
-use ExtAssets\ExtCssModel;
-
+use PBDKN\ExtAssets\Resources\contao\models\ExtCssModel;
 /**
  * Contao Open Source CMS
  *
@@ -157,7 +156,9 @@ class tl_extcss_file extends Backend
 
         $dca = &$GLOBALS['TL_DCA']['tl_extcss_file'];
 
-        \ExtAssets\ExtCss::observeCssGroupFolder($dc->id);
+        //\ExtAssets\ExtCss::observeCssGroupFolder($dc->id);
+        \PBDKN\ExtAssets\Resources\contao\classes\ExtCss::observeCssGroupFolder($dc->id);
+        
     }
 
     /**

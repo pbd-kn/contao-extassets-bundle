@@ -9,7 +9,7 @@
  * @copyright 2014, David Lundgren. All Rights Reserved.
  * @license   MIT
  */
-namespace PBDKN\ExtAssets\Resources\contao\classes\vendor\php-css-splitter\src;
+namespace PBDKN\ExtAssets\Resources\contao\classes\vendor\php_css_splitter\src;
 
 /**
  * Splitter of the CSS
