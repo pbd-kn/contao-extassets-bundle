@@ -63,7 +63,7 @@ class ExtJs extends \Frontend
 	{
 		$arrJs = array();
 
-		$objJs = ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
+		$objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
 
 		if($objJs === null) return false;
 
@@ -71,7 +71,7 @@ class ExtJs extends \Frontend
 
 		while($objJs->next())
 		{
-			$objFiles = ExtJsFileModel::findMultipleByPid($objJs->id);
+			$objFiles = \PBDKN\ExtAssets\Resources\contao\models\ExtJsFileModel::findMultipleByPid($objJs->id);
 
 			if($objFiles === null) continue;
 

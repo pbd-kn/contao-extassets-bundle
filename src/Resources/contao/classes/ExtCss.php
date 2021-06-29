@@ -117,7 +117,7 @@ class ExtCss extends \Frontend
 
     public static function observeCssGroupFolder($groupId)
     {
-        $objCss = ExtCssModel::findByPk($groupId);
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findByPk($groupId);
 
         if ($objCss === null || $objCss->observeFolderSRC == '')
         {
@@ -139,7 +139,7 @@ class ExtCss extends \Frontend
             return false;
         }
 
-        $objCssFiles = ExtCssFileModel::findMultipleByPids([$groupId]);
+        $objCssFiles = \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel::findMultipleByPids([$groupId]);
 
         $arrOldFileNames = [];
 
@@ -237,7 +237,7 @@ class ExtCss extends \Frontend
             return false;
         }
 
-        $objExtCssFileModel = ExtCssFileModel::findBy('src', $objFileModel->uuid);
+        $objExtCssFileModel = \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel::findBy('src', $objFileModel->uuid);
 
         if ($objExtCssFileModel === null)
         {
@@ -259,7 +259,7 @@ class ExtCss extends \Frontend
             return false;
         }
 
-        $objFileModel         = new ExtCssFileModel();
+        $objFileModel         = new \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel();
         $objFileModel->pid    = $groupId;
         $objFileModel->tstamp = time();
 
@@ -289,7 +289,7 @@ class ExtCss extends \Frontend
      */
     public function hookGetPageLayout($objPage, &$objLayout, $objThis)
     {
-        $objCss = ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
 
         if ($objCss === null)
         {
@@ -308,7 +308,7 @@ class ExtCss extends \Frontend
      */
     public function updateExtCss()
     {
-        $objCss = ExtCssModel::findAll();
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findAll();
 
         if ($objCss === null)
         {
@@ -353,7 +353,7 @@ class ExtCss extends \Frontend
     {
         $arrCss = [];
 
-        $objCss = ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
 
         if ($objCss === null)
         {

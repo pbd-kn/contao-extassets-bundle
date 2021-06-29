@@ -200,7 +200,7 @@ class ExtCssCombiner extends \Frontend
 
     protected function addCssFiles()
     {
-        $objFiles = ExtCssFileModel::findMultipleByPids($this->ids, ['order' => 'FIELD(pid, ' . implode(",", $this->ids) . '), sorting DESC']);
+        $objFiles = \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel::findMultipleByPids($this->ids, ['order' => 'FIELD(pid, ' . implode(",", $this->ids) . '), sorting DESC']);
 
         if ($objFiles === null)
         {
