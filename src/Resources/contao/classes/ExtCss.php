@@ -289,6 +289,9 @@ class ExtCss extends \Frontend
      */
     public function hookGetPageLayout($objPage, &$objLayout, $objThis)
     {
+        AssetsLog::setAssetDebugmode(1);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strBuffer '.$strBuffer);
+
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
 
         if ($objCss === null)
@@ -327,6 +330,10 @@ class ExtCss extends \Frontend
 
     public function hookReplaceDynamicScriptTags($strBuffer)
     {
+        // strbuffer enthält di aktuelle Seite
+        AssetsLog::setAssetDebugmode(1);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
+
         global $objPage;
 
         if (!$objPage)
@@ -340,6 +347,7 @@ class ExtCss extends \Frontend
         {
             return $strBuffer;
         }
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'seite und layout vorhanden ');
 
         // the dynamic script replacement array
         $arrReplace = [];
@@ -355,16 +363,21 @@ class ExtCss extends \Frontend
 
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
 
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
         if ($objCss === null)
         {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objCss null ');
+
             if (!is_array($GLOBALS['TL_USER_CSS']) || empty($GLOBALS['TL_USER_CSS']))
             {
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'no Usercss');
                 return false;
             }
 
             // remove TL_USER_CSS less files, otherwise Contao Combiner fails
             foreach ($GLOBALS['TL_USER_CSS'] as $key => $css)
             {
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'remove ['.$key.']: '.$css);
                 $arrCss = trimsplit('|', $css);
 
                 $extension = substr($arrCss[0], strlen($arrCss[0]) - 4, strlen($arrCss[0]));

@@ -11,7 +11,8 @@
 
 namespace PBDKN\ExtAssets\Resources\contao\classes\vendor\php_css_splitter\tests\Tests;
 
-use CssSplitter\Splitter;
+use PBDKN\ExtAssets\Resources\contao\classes\vendor\php_css_splitter\src;
+
 
 class SplitterTest
 	extends \PHPUnit_Framework_TestCase

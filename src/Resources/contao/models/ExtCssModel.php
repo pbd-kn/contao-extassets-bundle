@@ -16,6 +16,7 @@
  * Namespace
  */
 namespace PBDKN\ExtAssets\Resources\contao\models;
+use PBDKN\ExtAssets\Resources\contao\classes\AssetsLog;
 
 /**
  * Class ExtcssModel
@@ -35,12 +36,16 @@ class ExtCssModel extends \Model
 	 */
 	public static function findMultipleByIds($arrIds, array $arrOptions=array())
 	{
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
+
 		if (!is_array($arrIds) || empty($arrIds))
 		{
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'arrIds leer ');
 			return null;
 		}
 
 		$t = static::$strTable;
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'table '.$t);
 
 		if (!isset($arrOptions['order']))
 		{
@@ -52,12 +57,14 @@ class ExtCssModel extends \Model
 
 	public static function findMultipleBootstrapByIds($arrIds, array $arrOptions=array())
 	{
+        AssetsLog::setAssetDebugmode(1);
 		if (!is_array($arrIds) || empty($arrIds))
 		{
 			return null;
 		}
 
 		$t = static::$strTable;
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'findMultipleBootstrapByIds '.$t);
 
 		if (!isset($arrOptions['order']))
 		{

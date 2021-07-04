@@ -48,6 +48,8 @@ class ExtCssCombiner extends \Frontend
     public function __construct(\Model\Collection $objCss, $arrReturn = [], $blnCache)
     {
         parent::__construct();
+        AssetsLog::setAssetDebugmode(1);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
 
         $this->start = microtime(true);
         $this->cache = $blnCache;
@@ -90,6 +92,7 @@ class ExtCssCombiner extends \Frontend
 
         if (!$this->cache)
         {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Kein cache vorhanden ');
             $this->objLess = new \Less_Parser($this->arrLessOptions);
 
             $this->addBootstrapVariables();
@@ -154,8 +157,8 @@ class ExtCssCombiner extends \Frontend
                 echo '</pre>';
             }
         }
-
-        $splitter = new \CssSplitter\Splitter();
+        //$splitter = new \CssSplitter\Splitter();
+        $splitter = new \PBDKN\ExtAssets\Resources\contao\classes\vendor\php_css_splitter\src\Splitter();
         $count    = $splitter->countSelectors($strCss);
 
         // IE 6 - 9 has a limit of 4096 selectors
@@ -200,6 +203,8 @@ class ExtCssCombiner extends \Frontend
 
     protected function addCssFiles()
     {
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
+
         $objFiles = \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel::findMultipleByPids($this->ids, ['order' => 'FIELD(pid, ' . implode(",", $this->ids) . '), sorting DESC']);
 
         if ($objFiles === null)
@@ -210,6 +215,7 @@ class ExtCssCombiner extends \Frontend
         while ($objFiles->next())
         {
             $objFileModel = \FilesModel::findByPk($objFiles->src);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'src '.$objFiles->src);
 
             if ($objFileModel === null)
             {
@@ -222,6 +228,7 @@ class ExtCssCombiner extends \Frontend
             }
 
             $objFile = new \File($objFileModel->path);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objFileModel->path '.$objFileModel->path.' objFile->value '.$objFile->value);
 
             if ($objFile->size == 0)
             {
@@ -233,7 +240,7 @@ class ExtCssCombiner extends \Frontend
                 $this->rewrite = true;
             }
 
-            $this->objLess->parseFile($objFile->value);
+            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
         }
     }
 
@@ -288,6 +295,7 @@ class ExtCssCombiner extends \Frontend
     protected function addBootstrapVariables()
     {
         $objFile = new \File($this->getBootstrapSrc('variables.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('variables.less'));
 
         $strVariables = '';
 
@@ -344,6 +352,8 @@ class ExtCssCombiner extends \Frontend
     protected function addBootstrapMixins()
     {
         $objFile = new \File($this->getBootstrapSrc('mixins.less'));
+        AssetsLog::setAssetDebugmode(1);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('mixins.less'));
 
         if (str_replace('v', '', BOOTSTRAPVERSION) >= '3.2.0')
         {
