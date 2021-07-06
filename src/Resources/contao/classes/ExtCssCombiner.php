@@ -49,7 +49,7 @@ class ExtCssCombiner extends \Frontend
     {
         parent::__construct();
         AssetsLog::setAssetDebugmode(1);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD);
 
         $this->start = microtime(true);
         $this->cache = $blnCache;
@@ -62,12 +62,14 @@ class ExtCssCombiner extends \Frontend
         }
 
         $this->variablesSrc = 'variables-' . $this->title . '.less';
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->variablesSrc '.$this->variablesSrc);
 
         $this->mode = $this->cache ? 'none' : 'static';
 
         $this->arrReturn = $arrReturn;
 
         $this->objUserCssFile = new \File($this->getSrc($this->title . '.css'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->objUserCssFile '.$this->getSrc($this->title . '.css'));
 
         if(!$this->objUserCssFile->exists())
         {
@@ -89,7 +91,7 @@ class ExtCssCombiner extends \Frontend
             'cache_dir' => TL_ROOT . '/assets/css/lesscache',
 
         ];
-
+//$this->cache=false;
         if (!$this->cache)
         {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Kein cache vorhanden ');
@@ -129,6 +131,7 @@ class ExtCssCombiner extends \Frontend
         else
         {
             // remove custom less files as long as we can not provide mixins and variables in cache mode
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Cache vorhanden ');
             unset($GLOBALS['TL_USER_CSS']);
 
             // always add bootstrap
@@ -246,6 +249,9 @@ class ExtCssCombiner extends \Frontend
 
     protected function addBootstrap()
     {
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'objFile '.$this->getBootstrapSrc('bootstrap.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'objTarget '.$this->getBootstrapCustomSrc('bootstrap-' . $this->title . '.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'objOut '.$this->getSrc('bootstrap-' . $this->title . '.css'));
         $objFile   = new \File($this->getBootstrapSrc('bootstrap.less'));
         $objTarget = new \File($this->getBootstrapCustomSrc('bootstrap-' . $this->title . '.less'));
         $objOut    = new \File($this->getSrc('bootstrap-' . $this->title . '.css'), true);
@@ -254,6 +260,8 @@ class ExtCssCombiner extends \Frontend
 
         if ($this->rewriteBootstrap || !$objOut->exists())
         {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->rewriteBootstrap '.$this->rewriteBootstrap);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add content from '.$objFile->value);
             $strCss = $objFile->getContent();
 
             $strCss = str_replace('@import "', '@import "../', $strCss);
@@ -273,12 +281,13 @@ class ExtCssCombiner extends \Frontend
             $objTarget->close();
 
             $objParser = new \Less_Parser($this->arrLessOptions);
-            $objParser->parseFile($objTarget->value);
+            $objParser->parseFile(TL_ROOT . '/' . $objTarget->value);
 
             $objOut = new \File($objOut->value);
             $objOut->write($objParser->getCss());
             $objOut->close();
         }
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'self add content from '.$objFile->value);
 
         $this->arrReturn[self::$bootstrapCssKey][] = [
             'src'  => $objOut->value,
@@ -295,7 +304,7 @@ class ExtCssCombiner extends \Frontend
     protected function addBootstrapVariables()
     {
         $objFile = new \File($this->getBootstrapSrc('variables.less'));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('variables.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add Bootstrapvariables from '.$this->getBootstrapSrc('variables.less'));
 
         $strVariables = '';
 
@@ -308,6 +317,7 @@ class ExtCssCombiner extends \Frontend
         {
             return;
         }
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' getBootstrapCustomSrc from (objTarget)'.$this->getBootstrapCustomSrc($this->variablesSrc));
 
         $objTarget = new \File($this->getBootstrapCustomSrc($this->variablesSrc));
 
@@ -318,11 +328,13 @@ class ExtCssCombiner extends \Frontend
         {
             while ($objFilesModels->next())
             {
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path);
                 $objFile    = new \File($objFilesModels->path);
                 $strContent = $objFile->getContent();
 
                 if ($this->isFileUpdated($objFile, $objTarget))
                 {
+                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileUpdated');
                     $this->rewrite          = true;
                     $this->rewriteBootstrap = true;
                     if ($strContent)
@@ -339,6 +351,7 @@ class ExtCssCombiner extends \Frontend
 
         if ($this->rewriteBootstrap)
         {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' rewriteBootstrap');
             $objTarget->write($strVariables);
             $objTarget->close();
         }
@@ -369,7 +382,7 @@ class ExtCssCombiner extends \Frontend
                     }
 
                     $objMixinFile = new \File(BOOTSTRAPLESSDIR . '/' . $strFile);
-                    $this->objLess->parseFile($objMixinFile->value);
+                    $this->objLess->parseFile(TL_ROOT . '/' . $objMixinFile->value);
                 }
             }
 
@@ -379,7 +392,7 @@ class ExtCssCombiner extends \Frontend
 
         if ($objFile->size > 0)
         {
-            $this->objLess->parseFile($objFile->value);
+            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
         }
     }
 
@@ -392,7 +405,7 @@ class ExtCssCombiner extends \Frontend
 
         if ($objFile->size > 0)
         {
-            $this->objLess->parseFile($objFile->value);
+            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
         }
     }
 
@@ -414,7 +427,7 @@ class ExtCssCombiner extends \Frontend
 
             if ($objFile->size > 0)
             {
-                $this->objLess->parseFile($objFile->value);
+                $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
             }
         }
     }
@@ -425,48 +438,76 @@ class ExtCssCombiner extends \Frontend
 
         if ($objFile->size > 0)
         {
-            $this->objLess->parseFile($objFile->value);
+            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
         }
     }
 
     protected function addFontAwesomeVariables()
     {
-        $this->objLess->parseFile($this->getFontAwesomeLessSrc('variables.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addFontAwesomeVariables from '.$this->getFontAwesomeLessSrc('variables.less'));
+        $objFile = new \File($this->getFontAwesomeLessSrc('variables.less'));
+
+        if ($objFile->exists() && $objFile->size > 0)
+        {
+          $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
+        }
     }
 
     protected function addFontAwesomeCore()
     {
-        $this->objLess->parseFile($this->getFontAwesomeLessSrc('core.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addFontAwesomeCore from '.$this->getFontAwesomeLessSrc('core.less'));
+        $objFile = new \File($this->getFontAwesomeLessSrc('core.less'));
+
+        if ($objFile->exists() && $objFile->size > 0)
+        {
+          $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
+        }
     }
 
     protected function addFontAwesomeMixins()
     {
-        $this->objLess->parseFile($this->getFontAwesomeLessSrc('mixins.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addFontAwesomeMixins from '.$this->getFontAwesomeLessSrc('mixins.less'));
+        $objFile = new \File($this->getFontAwesomeLessSrc('mixins.less'));
+
+        if ($objFile->exists() && $objFile->size > 0)
+        {
+          $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
+        }
     }
 
     protected function addFontAwesome()
     {
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addFontAwesome from '.$this->getFontAwesomeCssSrc('font-awesome.less'));
         $objFile = new \File($this->getFontAwesomeCssSrc('font-awesome.css'), true);
-
-        $strCss = $objFile->getContent();
-        $strCss = str_replace("../fonts", '/' . rtrim(FONTAWESOMEFONTDIR, '/'), $strCss);
-
-        $this->objLess->parse($strCss);
+        if ($objFile->exists() && $objFile->size > 0)
+        {
+          $strCss = $objFile->getContent();
+          $strCss = str_replace("../fonts", '/' . rtrim(FONTAWESOMEFONTDIR, '/'), $strCss);
+          $this->objLess->parse($strCss);
+        }
     }
 
     protected function addElegantIconsVariables()
     {
-        $this->objLess->parseFile($this->getElegentIconsLessSrc('variables.less'));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addElegantIconsVariables from '.$this->getElegentIconsLessSrc('variables.less'));
+        $objFile = new \File($this->getElegentIconsLessSrc('variables.less'));
+
+        if ($objFile->exists() && $objFile->size > 0)
+        {
+          $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);
+        }
     }
 
     protected function addElegantIcons()
     {
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addElegantIcons from '.$this->getElegentIconsCssSrc('elegant-icons.less'));
         $objFile = new \File($this->getElegentIconsCssSrc('elegant-icons.css'), true);
-
-        $strCss = $objFile->getContent();
-        $strCss = str_replace("../fonts", '/' . rtrim(ELEGANTICONSFONTDIR, '/'), $strCss);
-
-        $this->objLess->parse($strCss);
+        if ($objFile->exists() && $objFile->size > 0)
+        {
+          $strCss = $objFile->getContent();
+          $strCss = str_replace("../fonts", '/' . rtrim(ELEGANTICONSFONTDIR, '/'), $strCss);
+          $this->objLess->parse($strCss);
+        }
     }
 
     protected function addCustomLessFiles()
@@ -476,6 +517,7 @@ class ExtCssCombiner extends \Frontend
             return false;
         }
 
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addCustomLessFiles');
         foreach ($GLOBALS['TL_USER_CSS'] as $key => $css)
         {
             $arrCss = trimsplit('|', $css);
@@ -497,7 +539,8 @@ class ExtCssCombiner extends \Frontend
                 $this->arrLessImportDirs[$objFile->dirname] = $objFile->dirname;
             }
 
-            $this->objLess->parseFile($objFile->value);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addCustomLessFiles from '.$objFile->value);
+            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);  // muss da nich TL_ROOT\    dazu ???
 
             unset($GLOBALS['TL_USER_CSS'][$key]);
         }

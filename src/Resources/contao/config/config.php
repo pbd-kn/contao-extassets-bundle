@@ -18,7 +18,7 @@ define('CSSDIR', 'assets/css/');
 
 $componentsDir = 'assets/components';
 
-if (version_compare(VERSION . '.' . BUILD, '4.0.0', '>='))
+if (version_compare(VERSION . '.' . BUILD, '4.0.0', '<'))
 {
     $componentsDir = 'assets';
 }
