@@ -19,7 +19,7 @@ namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use Contao\Dbafs;
 
-require_once TL_ROOT . "/vendor/pbd-kn/contao-extassets/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php";
+require_once TL_ROOT . "/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php";
 
 /**
  * Class ExtCss
