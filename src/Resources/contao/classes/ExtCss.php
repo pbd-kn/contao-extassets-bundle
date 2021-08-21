@@ -431,7 +431,8 @@ class ExtCss extends \Frontend
                     // add hash to url, otherwise css file will still be cached
                     $arrCss['src'] .= '?' . $arrCss['hash'];
                 }
-
+                $str=sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'adduser css key '.$str);
                 $arrUserCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
             }
         }
@@ -448,6 +449,8 @@ class ExtCss extends \Frontend
                 {
                     continue;
                 }
+                $str=sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'addbootstrap css key '.$str);
                 $arrBaseCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
                 $arrHashs[]   = $arrCss['hash'];
             }
@@ -473,5 +476,7 @@ class ExtCss extends \Frontend
 
         $GLOBALS['TL_CSS']      = array_merge(is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
         $GLOBALS['TL_USER_CSS'] = array_merge(is_array($GLOBALS['TL_USER_CSS']) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
+foreach ($GLOBALS['TL_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
+foreach ($GLOBALS['TL_USER_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
     }
 }

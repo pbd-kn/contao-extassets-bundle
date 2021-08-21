@@ -18,13 +18,14 @@ define('CSSDIR', 'assets/css/');
 
 $componentsDir = 'assets/components';
 
-if (version_compare(VERSION . '.' . BUILD, '4.0.0', '<'))
+if (version_compare(VERSION . '.' . BUILD, '4.0.0', '>='))
 {
     $componentsDir = 'assets';
 }
 
 define('BOOTSTRAPDIR', $componentsDir . '/bootstrap/');
 define('BOOTSTRAPLESSDIR', $componentsDir . '/bootstrap/less/');
+define('BOOTSTRAPDISTDIR', $componentsDir . '/bootstrap/dist/');
 define('BOOTSTRAPLESSCUSTOMDIR', $componentsDir . '/bootstrap/less/custom/');
 define('BOOTSTRAPJSDIR', $componentsDir . '/bootstrap/js/');
 

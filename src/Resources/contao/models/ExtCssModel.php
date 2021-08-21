@@ -64,13 +64,15 @@ class ExtCssModel extends \Model
 		}
 
 		$t = static::$strTable;
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'findMultipleBootstrapByIds '.$t);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'findMultipleBootstrapByIds table '.$t);
 
 		if (!isset($arrOptions['order']))
 		{
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'order not set');
 			$arrOptions['order'] = \Database::getInstance()->findInSet("$t.id", $arrIds);
 		}
 
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'vor return array ' . "$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")");
 		return static::findBy(array("$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")"), null, $arrOptions);
 	}
 }

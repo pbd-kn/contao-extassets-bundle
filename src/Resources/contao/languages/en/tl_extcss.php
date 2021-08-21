@@ -19,7 +19,8 @@ $GLOBALS['TL_LANG']['tl_extcss']['addBootstrapPrint'] = array('Enable print.css'
 $GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'] = array('Variable sources', 'If global variables, such as the bootstrap variables should be overwritten, add the files here.');
 $GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = array('Sort order ', 'Sort order of the variables sources.');
 $GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = array('Observer folder', 'Specify a folder to be monitored, and new files are added automatically.');
-$GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = array('Add elegant icons', 'Elegant Icon Font der Gruppe hinzufügen.');
+$GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = array('Add elegant icons', 'Add Elegant Icon Font to group.');
+$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = array('Add Bootstrap', 'Add Bootstrap. Please clear lesscache');
 
 /**
  * Legends

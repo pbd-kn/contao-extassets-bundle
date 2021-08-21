@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_extcss'] = array(
     // Palettes
     'palettes'    => array(
         '__selector__' => array('addBootstrap'),
-        'default'      => '{title_legend},title;{config_legend},observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;',
+        'default'      => '{title_legend},title;{config_legend},addingbootstrap,observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;',
     ),
     // Subpalettes
     'subpalettes' => array(),
@@ -130,6 +130,14 @@ $GLOBALS['TL_DCA']['tl_extcss'] = array(
             'default'   => true,
             'sql'       => "char(1) NOT NULL default ''",
         ),
+        'addingbootstrap'   => array(
+            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'default'   => true,
+            'sql'       => "char(1) NOT NULL default ''",
+        ),
+        
         'observeFolderSRC'  => array(
             'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'],
             'exclude'   => true,
