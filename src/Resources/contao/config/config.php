@@ -25,7 +25,7 @@ if (version_compare(VERSION . '.' . BUILD, '4.0.0', '>='))
 
 define('BOOTSTRAPDIR', $componentsDir . '/bootstrap/');
 define('BOOTSTRAPLESSDIR', $componentsDir . '/bootstrap/less/');
-define('BOOTSTRAPDISTDIR', $componentsDir . '/bootstrap/dist/');
+define('BOOTSTRAPDISTDIR', 'vendor/twbs/bootstrap/dist/');
 define('BOOTSTRAPLESSCUSTOMDIR', $componentsDir . '/bootstrap/less/custom/');
 define('BOOTSTRAPJSDIR', $componentsDir . '/bootstrap/js/');
 

@@ -20,7 +20,7 @@ $GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'] = array('Variablen Quellen', 'S
 $GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = array('Sortierreihenfolge ', 'Sortierreihenfolge der Variablen Quellen.');
 $GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = array('Ordner überwachen', 'Geben Sie einen Ordner an, der überwacht werden soll, und neue Dateien automatisch hinzugefügt werden.');
 $GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = array('Elegant Icons hinzufügen', 'Elegant Icon Font der Gruppe hinzufügen.');
-$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = array('Bootstrap hinzufügen', 'Bootstrap hinzufügen. Bitte less cache leeren');
+$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = array('Bootstrap hinzufügen', 'Bootstrap hinzufügen (Asset/bootstrap/less als less-src. BOOTSTRAPDISTDIR als compiled Version css/bootstrap.min.css). Bitte less cache leeren');
 
 /**
  * Legends
