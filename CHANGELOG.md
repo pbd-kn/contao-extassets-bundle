@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [10.22.21]
+
+### Added
+- converted to Contao 4.9
+
 ## [1.2.4] - 2018-02-27
 
 ### Fixed
@@ -45,3 +50,4 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - add php7 support. fixed contao-core dependency
+

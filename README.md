@@ -1,6 +1,12 @@
-    # Contao Extassets
+    # Contao Extassets Bundle
 
-> This bundle is outdated and not actively maintained anymore! Please have a look at [Encore Bundle](https://github.com/heimrichhannot/contao-encore-bundle) if you need a good and actively maintained asset solution.
+
+this bundle has been completely converted from heimrichhannot/contao-extassets to pbd-kn/contao-extasset-bundle 
+
+The namespaces for psr-4 were revised.
+
+Bootstrap's selection introduced.
+Either bootstrap-less is recompiled or taken over from the twbs package. 
 
 Create your own css & js groups and add them to your contao theme layouts.
 
@@ -8,7 +14,8 @@ Create your own css & js groups and add them to your contao theme layouts.
 - Backend Module for external css
 - Backend Module for external js 
 - Add multiple CSS & JS groups to contao layout 
-- Bootstrap framework support (for css by default, enable within js group)
+- Select Bootstrap framework support (for css by default, enable within js group)
+  compile the less version or take min version from twbs
 - Font-Awesome added by default (availability of all variables and mixins)
 - Elegant Icons can be added (availability of all variables and mixins)
 - Css file caching for production mode (disable byPassCache in contao settings)
@@ -19,8 +26,9 @@ Create your own css & js groups and add them to your contao theme layouts.
 - Complete lesscss support, automatically compile all your less files within a external css group to css
 - Observer folders (recursive) within your external css groups
 - Add multiple custom variable files, to overwrite for example bootstrap variables.less (like @brand-primary)
-- make use of all bootstrap mixins and variables within your own less files (See: http://getbootstrap.com/customize/#less-variables)
-- bootstrap print.css support
+- With bootstrap selected make use of all bootstrap mixins and variables within your own less files (See: http://getbootstrap.com/customize/#less-variables)
+  or take botstrap mibn from twbs package
+  bootstrap print.css support
 - Internet Explorer 6-9 - 4096 css-selector handling (Internet Explorer 6 - 9 has only a maximum of 4096 css-selectors possible per file. Extassets make usage of https://github.com/zweilove/css_splitter ans solve this problem by splitting aggregated files into parts.)
 - all files within $GLOBALS['TL_USER_CSS'] will be parsed within external css groups
 
@@ -28,10 +36,10 @@ Create your own css & js groups and add them to your contao theme layouts.
 
 #### Contao 4.0
 
-1. Install via composer
+1. Install via Contao Manager
 
 ```
-composer require heimrichhannot/contao-extassets
+composer require pbd-kn/contao-extassets-bundle
 ```
 
 2. Add the following to lines to the `$bundles` array in your `app/AppKernel.php` 
