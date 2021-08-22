@@ -65,6 +65,7 @@ class ExtCssCombiner extends \Frontend
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->variablesSrc '.$this->variablesSrc);  // variables-pbdlessundcssfiles.less
 
         $this->mode = $this->cache ? 'none' : 'static';
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->mode '.$this->mode.' this->cache '.$this->cache);
 
         $this->arrReturn = $arrReturn;
 
@@ -92,6 +93,7 @@ class ExtCssCombiner extends \Frontend
 
         ];
 
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'vor !this->cache '.$this->cache);
 
         if (!$this->cache)
         {
@@ -270,7 +272,7 @@ class ExtCssCombiner extends \Frontend
 
         if ($this->rewriteBootstrap || !$objOut->exists())
         {   // Bootstrap neu erzeugen          file title-bootstrap.
-          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->rewriteBootstrap '.$this->rewriteBootstrap.' file exist ?? '.$objFile->exists());
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->rewriteBootstrap '.$this->rewriteBootstrap.' file exist '.$objOut->value.' exist '.$objOut->exists());
           if ($objFile->exists())           // bootstrap liegt in less-form vor
           {
               AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->rewriteBootstrap '.$this->rewriteBootstrap);
@@ -300,34 +302,32 @@ class ExtCssCombiner extends \Frontend
               AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objOut Neu '.$objOut->value);
               $objOut->write($objParser->getCss());
               $objOut->close();
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add bootstrap from '.$objFile->value); //assets/bootstrap/less/bootstrap.less
-              $this->arrReturn[self::$bootstrapCssKey][] = [
+          } else {  // check ob dist css min vorhanden ist
+              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'distFile check '); 
+              $objFiledist   = new \File($this->getBootstrapDist('css/bootstrap.min.css'));
+              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'objFiledist '.$this->getBootstrapDist('css/bootstrap.min.css')); 
+              if ($objFiledist->exists())           // bootstrap liegt in less-form vor
+              {
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy bootstrap dist from '.$objFiledist->value.' copy to '.$objTarget->value);
+                $objFiledist->copyTo($objOut->value);
+
+              } else {
+                \System::log('bootstrap not in asset/bootstrap/less or '.BOOTSTRAPDISTDIR.' please install twbs', __METHOD__, TL_ERROR);
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in asset/bootstrap/less or '.BOOTSTRAPDISTDIR.' please install twbs');
+                return;
+              }              
+          }  
+        } else {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap file exist '.$objOut->value.' exist '.$objOut->exists());
+        }
+        
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add bootstrap from '.$objFile->value); //assets/bootstrap/less/bootstrap.less
+        $this->arrReturn[self::$bootstrapCssKey][] = [
                   'src'  => $objOut->value,
                   'type' => 'all', // 'all' is required for .hidden-print class, not 'screen'
                   'mode' => $this->mode,
                   'hash' => version_compare(VERSION, '3.4', '>=') ? $objOut->mtime : $objOut->hash,
-              ];
-          } else {  // check ob dist css min vorhanden ist
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'distFile check '); 
-              $objFile   = new \File($this->getBootstrapDist('css/bootstrap.min.css'));
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'distFile '.$this->getBootstrapDist('css/bootstrap.min.css')); 
-              if ($objFile->exists())           // bootstrap liegt in less-form vor
-              {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add bootstrap dist from '.$objFile->value);
-                $this->arrReturn[self::$bootstrapCssKey][] = [
-                  'src'  => $objFile->value,
-                  'type' => 'all', // 'all' is required for .hidden-print class, not 'screen'
-                  'mode' => $this->mode,
-                  'hash' => version_compare(VERSION, '3.4', '>=') ? $objFile->mtime : $objFile->hash,
-                ];
-              } else {
-                \System::log('bootstrap not in asset/bootstrap/less or '.BOOTSTRAPDISTDIR.' please install twbs', __METHOD__, TL_ERROR);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in asset/bootstrap/less or '.BOOTSTRAPDISTDIR.' please install twbs');
-              }
-          }  
-        }
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'----------------------------------------'); 
-
+        ];
     }
 
     /**
@@ -584,6 +584,8 @@ class ExtCssCombiner extends \Frontend
 
     protected function isFileUpdated(\File $objFile, \File $objTarget)
     {
+        $res=($objFile->size > 0 && ($this->rewrite || $this->rewriteBootstrap || $objFile->mtime > $objTarget->mtime)); 
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'updated ?? objFile '.$objFile->value.' objTarget '.$objTarget->value.' res '.$res);
         return ($objFile->size > 0 && ($this->rewrite || $this->rewriteBootstrap || $objFile->mtime > $objTarget->mtime));
     }
 
