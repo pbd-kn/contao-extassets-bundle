@@ -48,29 +48,26 @@ class ExtCssCombiner extends \Frontend
     public function __construct(\Model\Collection $objCss, $arrReturn = [], $blnCache)
     {
         parent::__construct();
-        AssetsLog::setAssetDebugmode(1);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' blnCache '.$blnCache);
-
-        $this->start = microtime(true);
-        $this->cache = $blnCache;
+        
 
         $this->loadDataContainer('tl_extcss');
-
         while ($objCss->next())
         {
             $this->arrData[] = $objCss->row();
         }
+        AssetsLog::setAssetDebugmode($this->setDebug);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' blnCache '.$blnCache.' Debug '.$this->setDebug);
+        $this->start = microtime(true);
+        $this->cache = $blnCache;
 
         $this->variablesSrc = 'variables-' . $this->title . '.less';
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->variablesSrc '.$this->variablesSrc);  // variables-pbdlessundcssfiles.less
-
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->variablesSrc '.$this->variablesSrc); 
         $this->mode = $this->cache ? 'none' : 'static';
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->mode '.$this->mode.' this->cache '.$this->cache);
 
         $this->arrReturn = $arrReturn;
 
         $this->objUserCssFile = new \File($this->getSrc($this->title . '.css'));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->objUserCssFile '.$this->getSrc($this->title . '.css')); //assets/css/pbdlessundcssfiles.css
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->objUserCssFile '.$this->getSrc($this->title . '.css')); 
 
         if(!$this->objUserCssFile->exists())
         {
@@ -93,12 +90,10 @@ class ExtCssCombiner extends \Frontend
 
         ];
 
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'vor !this->cache '.$this->cache);
 
         if (!$this->cache)
         {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Kein cache vorhanden ');
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'addingbootstrap  '.$this->addingbootstrap);
             $this->objLess = new \Less_Parser($this->arrLessOptions);      // geparste Files werden in less zwischengespeichert
 
             $this->addBootstrapVariables();
@@ -106,7 +101,7 @@ class ExtCssCombiner extends \Frontend
             $this->addFontAwesomeCore();
             $this->addFontAwesomeMixins();
             $this->addFontAwesome();
-            if ($this->addingbootstrap) {
+            if ($this->addingbootstrap) {             // add full bootstrap
               $this->addBootstrapMixins();
               $this->addBootstrapAlerts();
               $this->addBootstrap();
@@ -205,13 +200,7 @@ class ExtCssCombiner extends \Frontend
                 'hash' => version_compare(VERSION, '3.4', '>=') ? $this->objUserCssFile->mtime : $this->objUserCssFile->hash,
             ];
         }
-
-        if ($this->debug)
-        {
-            print '<pre>';
-            print_r('ExtCssCombiner execution time: ' . (microtime(true) - $this->start) . ' seconds');
-            print '</pre>';
-        }
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'ExtCssCombiner user less execution time: ' . (microtime(true) - $this->start) . ' seconds');
 
         return $arrReturn;
     }
@@ -219,7 +208,6 @@ class ExtCssCombiner extends \Frontend
 
     protected function addCssFiles()
     {
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
 
         $objFiles = \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel::findMultipleByPids($this->ids, ['order' => 'FIELD(pid, ' . implode(",", $this->ids) . '), sorting DESC']);
 
@@ -266,7 +254,7 @@ class ExtCssCombiner extends \Frontend
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'objOut '.$this->getSrc('bootstrap-' . $this->title . '.css')); //assets/css/bootstrap-pbdlessundcssfiles.css
         $objFile   = new \File($this->getBootstrapSrc('bootstrap.less'));
         $objTarget = new \File($this->getBootstrapCustomSrc('bootstrap-' . $this->title . '.less'));
-        $objOut    = new \File($this->getSrc('bootstrap-' . $this->title . '.css'), true);
+        $objOut    = new \File($this->getSrc('bootstrap-' . $this->title . '.css'), true);           // enthaelt das evtl. neu compilierte bootstra
 
         //$this->objLess->addImportDir($objFile->dirname);
 
@@ -275,8 +263,7 @@ class ExtCssCombiner extends \Frontend
           AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->rewriteBootstrap '.$this->rewriteBootstrap.' file exist '.$objOut->value.' exist '.$objOut->exists());
           if ($objFile->exists())           // bootstrap liegt in less-form vor
           {
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->rewriteBootstrap '.$this->rewriteBootstrap);
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add content from '.$objFile->value);
+              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'this->rewriteBootstrap '.$this->rewriteBootstrap.'add content from '.$objFile->value);
               $strCss = $objFile->getContent();               // enthaelt wohl alle notwendigen imports
 
               $strCss = str_replace('@import "', '@import "../', $strCss);
@@ -299,13 +286,11 @@ class ExtCssCombiner extends \Frontend
               $objParser->parseFile(TL_ROOT . '/' . $objTarget->value);
 
               $objOut = new \File($objOut->value);
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objOut Neu '.$objOut->value);
               $objOut->write($objParser->getCss());
               $objOut->close();
+              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap less neu compiliert '.$objOut->value);
           } else {  // check ob dist css min vorhanden ist
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'distFile check '); 
               $objFiledist   = new \File($this->getBootstrapDist('css/bootstrap.min.css'));
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'objFiledist '.$this->getBootstrapDist('css/bootstrap.min.css')); 
               if ($objFiledist->exists())           // bootstrap liegt in less-form vor
               {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy bootstrap dist from '.$objFiledist->value.' copy to '.$objTarget->value);
@@ -321,7 +306,7 @@ class ExtCssCombiner extends \Frontend
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap file exist '.$objOut->value.' exist '.$objOut->exists());
         }
         
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add bootstrap from '.$objFile->value); //assets/bootstrap/less/bootstrap.less
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add bootstrap from '.$objFile->value); // in objFile ist das compilierte bootstrap file
         $this->arrReturn[self::$bootstrapCssKey][] = [
                   'src'  => $objOut->value,
                   'type' => 'all', // 'all' is required for .hidden-print class, not 'screen'
@@ -329,7 +314,7 @@ class ExtCssCombiner extends \Frontend
                   'hash' => version_compare(VERSION, '3.4', '>=') ? $objOut->mtime : $objOut->hash,
         ];
     }
-
+    
     /**
      * variables.less must not be changed
      * use custom bootstrapVariablesSRC to change variables
@@ -351,7 +336,7 @@ class ExtCssCombiner extends \Frontend
             return;
         }
 
-        $objTarget = new \File($this->getBootstrapCustomSrc($this->variablesSrc));
+        $objTarget = new \File($this->getBootstrapCustomSrc($this->variablesSrc));  // Zwischenspeicher fuer user less files
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' getBootstrapCustomSrc from (objTarget)'.$this->getBootstrapCustomSrc($this->variablesSrc).' lng: '.$objTarget->size); // assets/bootstrap/less/custom/variables-pbdlessundcssfiles.less lng: 29555
 
         // overwrite bootstrap variables with custom variables
@@ -362,12 +347,12 @@ class ExtCssCombiner extends \Frontend
             while ($objFilesModels->next())
             {
                 $objFile    = new \File($objFilesModels->path);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
+                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
                 $strContent = $objFile->getContent();
 
                 if ($this->isFileUpdated($objFile, $objTarget))
                 {
-                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileUpdated');
+                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'fileUpdated objFile->value '.$objFile->value.' objTarget->value '.$objTarget->value );
                     $this->rewrite          = true;
                     $this->rewriteBootstrap = true;
                     if ($strContent)
@@ -384,7 +369,7 @@ class ExtCssCombiner extends \Frontend
 
         if ($this->rewriteBootstrap)
         {
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' rewriteBootstrap');
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'add bootstrapvariables rewriteBootstrap');
             $objTarget->write($strVariables);
             $objTarget->close();
         }
@@ -398,7 +383,6 @@ class ExtCssCombiner extends \Frontend
     protected function addBootstrapMixins()
     {
         $objFile = new \File($this->getBootstrapSrc('mixins.less'));
-        AssetsLog::setAssetDebugmode(1);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('mixins.less').' lng: '.$objFile->size);
 
         if (str_replace('v', '', BOOTSTRAPVERSION) >= '3.2.0')
@@ -458,7 +442,7 @@ class ExtCssCombiner extends \Frontend
         foreach ($arrUtilities as $strFile)
         {
             $objFile = new \File($this->getBootstrapSrc($strFile));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc($strFile).' lng: '.$objFile->size);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc($strFile).' lng: '.$objFile->size);
 
             if ($objFile->size > 0)
             {
@@ -553,7 +537,6 @@ class ExtCssCombiner extends \Frontend
             return false;
         }
 
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addCustomLessFiles');
         foreach ($GLOBALS['TL_USER_CSS'] as $key => $css)
         {
             $arrCss = trimsplit('|', $css);
@@ -575,8 +558,8 @@ class ExtCssCombiner extends \Frontend
                 $this->arrLessImportDirs[$objFile->dirname] = $objFile->dirname;
             }
 
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add addCustomLessFiles from '.$objFile->value);
-            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);  // muss da nich TL_ROOT\    dazu ???
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' add \'TL_USER_CSS\' addCustomLessFiles from '.$objFile->value);
+            $this->objLess->parseFile(TL_ROOT . '/' . $objFile->value);  // muss da nicht TL_ROOT\    dazu ???
 
             unset($GLOBALS['TL_USER_CSS'][$key]);
         }
@@ -584,8 +567,6 @@ class ExtCssCombiner extends \Frontend
 
     protected function isFileUpdated(\File $objFile, \File $objTarget)
     {
-        $res=($objFile->size > 0 && ($this->rewrite || $this->rewriteBootstrap || $objFile->mtime > $objTarget->mtime)); 
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'updated ?? objFile '.$objFile->value.' objTarget '.$objTarget->value.' res '.$res);
         return ($objFile->size > 0 && ($this->rewrite || $this->rewriteBootstrap || $objFile->mtime > $objTarget->mtime));
     }
 
@@ -601,6 +582,8 @@ class ExtCssCombiner extends \Frontend
             case 'addFontAwesome':
                 return max($this->getEach($strKey));
             case 'addingbootstrap':
+                return max($this->getEach($strKey));
+            case 'setDebug':
                 return max($this->getEach($strKey));
             case 'variablesSRC':
             case 'variablesOrderSRC':

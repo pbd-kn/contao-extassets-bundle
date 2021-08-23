@@ -36,16 +36,16 @@ class ExtCssModel extends \Model
 	 */
 	public static function findMultipleByIds($arrIds, array $arrOptions=array())
 	{
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
 
 		if (!is_array($arrIds) || empty($arrIds))
 		{
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'arrIds leer ');
+            //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'arrIds leer ');
 			return null;
 		}
 
 		$t = static::$strTable;
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'table '.$t);
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'table '.$t);
 
 		if (!isset($arrOptions['order']))
 		{
@@ -57,22 +57,22 @@ class ExtCssModel extends \Model
 
 	public static function findMultipleBootstrapByIds($arrIds, array $arrOptions=array())
 	{
-        AssetsLog::setAssetDebugmode(1);
+        //AssetsLog::setAssetDebugmode(1);
 		if (!is_array($arrIds) || empty($arrIds))
 		{
 			return null;
 		}
 
 		$t = static::$strTable;
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'findMultipleBootstrapByIds table '.$t);
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'findMultipleBootstrapByIds table '.$t);
 
 		if (!isset($arrOptions['order']))
 		{
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'order not set');
+            //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'order not set');
 			$arrOptions['order'] = \Database::getInstance()->findInSet("$t.id", $arrIds);
 		}
 
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'vor return array ' . "$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")");
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'vor return array ' . "$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")");
 		return static::findBy(array("$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")"), null, $arrOptions);
 	}
 }

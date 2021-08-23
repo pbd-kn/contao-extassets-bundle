@@ -75,7 +75,7 @@ $GLOBALS['TL_DCA']['tl_extjs'] = array(
 
     // Palettes
     'palettes' => array(
-        'default' => '{title_legend},title;{bootstrap_legend},addBootstrap;',
+        'default' => '{title_legend},title;{bootstrap_legend},addBootstrap;setDebug;',
     ),
     // Fields
     'fields'   => array(
@@ -98,6 +98,13 @@ $GLOBALS['TL_DCA']['tl_extjs'] = array(
             'inputType' => 'checkbox',
             'default'   => true,
             'sql'       => "char(1) NOT NULL default ''",
+        ),
+        'setDebug'   => array(
+            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'default'   => true,
+            'sql'       => "char(1) NOT NULL default '0'",
         ),
     ),
 );

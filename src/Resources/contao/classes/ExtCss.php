@@ -289,8 +289,8 @@ class ExtCss extends \Frontend
      */
     public function hookGetPageLayout($objPage, &$objLayout, $objThis)
     {
-        AssetsLog::setAssetDebugmode(1);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strBuffer '.$strBuffer);
+        //AssetsLog::setAssetDebugmode(1); achtung wird erst im extcsscombiner gesetzt
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strBuffer '.$strBuffer);
 
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
 
@@ -331,8 +331,6 @@ class ExtCss extends \Frontend
     public function hookReplaceDynamicScriptTags($strBuffer)
     {
         // strbuffer enthält di aktuelle Seite
-        AssetsLog::setAssetDebugmode(1);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
 
         global $objPage;
 
@@ -347,7 +345,6 @@ class ExtCss extends \Frontend
         {
             return $strBuffer;
         }
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'seite und layout vorhanden ');
 
         // the dynamic script replacement array
         $arrReplace = [];
@@ -363,21 +360,20 @@ class ExtCss extends \Frontend
 
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
 
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> ');
         if ($objCss === null)
         {
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objCss null ');
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objCss null ');//achtung wird erst im extcsscombiner gesetzt
 
             if (!is_array($GLOBALS['TL_USER_CSS']) || empty($GLOBALS['TL_USER_CSS']))
             {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'no Usercss');
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'no Usercss'); //achtung wird erst im extcsscombiner gesetzt
                 return false;
             }
 
             // remove TL_USER_CSS less files, otherwise Contao Combiner fails
             foreach ($GLOBALS['TL_USER_CSS'] as $key => $css)
             {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'remove ['.$key.']: '.$css);
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'remove ['.$key.']: '.$css); //achtung wird erst im extcsscombiner gesetzt
                 $arrCss = trimsplit('|', $css);
 
                 $extension = substr($arrCss[0], strlen($arrCss[0]) - 4, strlen($arrCss[0]));
@@ -432,7 +428,6 @@ class ExtCss extends \Frontend
                     $arrCss['src'] .= '?' . $arrCss['hash'];
                 }
                 $str=sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'adduser css key '.$str);
                 $arrUserCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
             }
         }
@@ -450,7 +445,6 @@ class ExtCss extends \Frontend
                     continue;
                 }
                 $str=sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'addbootstrap css key '.$str);
                 $arrBaseCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
                 $arrHashs[]   = $arrCss['hash'];
             }
@@ -476,7 +470,7 @@ class ExtCss extends \Frontend
 
         $GLOBALS['TL_CSS']      = array_merge(is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
         $GLOBALS['TL_USER_CSS'] = array_merge(is_array($GLOBALS['TL_USER_CSS']) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
-foreach ($GLOBALS['TL_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
-foreach ($GLOBALS['TL_USER_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
+        foreach ($GLOBALS['TL_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
+        foreach ($GLOBALS['TL_USER_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
     }
 }

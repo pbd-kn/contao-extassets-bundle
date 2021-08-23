@@ -21,6 +21,7 @@ $GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = array('Sort order ', 'So
 $GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = array('Observer folder', 'Specify a folder to be monitored, and new files are added automatically.');
 $GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = array('Add elegant icons', 'Add Elegant Icon Font to group.');
 $GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = array('Add Bootstrap', 'Add Bootstrap. (Asset/bootstrap/less as less-src. BOOTSTRAPDISTDIR as compiled version css/bootstrap.min.css). Please clear lesscache');
+$GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = array('set Debug', 'write Debug to var/logs/prod-[Date]-extasset_debug.log');
 
 /**
  * Legends

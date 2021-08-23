@@ -81,7 +81,7 @@ $GLOBALS['TL_DCA']['tl_extcss'] = array(
     // Palettes
     'palettes'    => array(
         '__selector__' => array('addBootstrap'),
-        'default'      => '{title_legend},title;{config_legend},addingbootstrap,observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;',
+        'default'      => '{title_legend},title;{config_legend},addingbootstrap,observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;setDebug;',
     ),
     // Subpalettes
     'subpalettes' => array(),
@@ -145,6 +145,14 @@ $GLOBALS['TL_DCA']['tl_extcss'] = array(
             'eval'      => array('fieldType' => 'radio', 'filesOnly' => false, 'extensions' => 'css, less'),
             'sql'       => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : "binary(16) NULL",
         ),
+        'setDebug'   => array(
+            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'default'   => true,
+            'sql'       => "char(1) NOT NULL default '0'",
+        ),
+
     ),
 );
 
