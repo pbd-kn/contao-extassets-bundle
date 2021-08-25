@@ -1,38 +1,67 @@
 <?php
 
-/**
- * Contao Open Source CMS
+declare(strict_types=1);
+
+/*
  *
- * Copyright (C) 2005-2013 Leo Feyer
+ *  Contao Open Source CMS
  *
- * @package   Extassets
- * @author    r.kaltofen@heimrich-hannot.de
- * @license   GNU/LGPL
- * @copyright Heimrich & Hannot GmbH
+ *  Copyright (c) 2005-2014 Leo Feyer
+ *
+ *
+ *  Contao Open Source CMS
+ *
+ *  Copyright (C) 2005-2013 Leo Feyer
+ *   @package   Extassets
+ *   @author    r.kaltofen@heimrich-hannot.de
+ *   @license   GNU/LGPL
+ *   @copyright Heimrich & Hannot GmbH
+ *
+ *  The namespaces for psr-4 were revised.
+ *
+ *  @package   contao-extasset-bundle
+ *  @author    Peter Broghammer <pb-contao@gmx.de>
+ *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *  @copyright Peter Broghammer 2021-
+ *
+ *  Bootstrap's selection introduced.
+ *
  */
 
 /**
- * Namespace
+ * Namespace.
  */
 
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use Contao\Dbafs;
 
-require_once TL_ROOT . "/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php";
+require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
 
 /**
- * Class ExtCss
+ * Class ExtCss.
  *
  * @copyright  Heimrich & Hannot GmbH
- * @author     r.kaltofen@heimrich-hannot.de
- * @package    Devtools
  */
 class ExtCss extends \Frontend
 {
+    /**
+     * If is in live mode.
+     */
+    protected $blnLiveMode = false;
 
     /**
-     * Singleton
+     * Cached be login status.
+     */
+    protected $blnBeLoginStatus;
+
+    /**
+     * The variables cache.
+     */
+    protected $arrVariables;
+
+    /**
+     * Singleton.
      */
     private static $instance = null;
 
@@ -43,9 +72,8 @@ class ExtCss extends \Frontend
      */
     public static function getInstance()
     {
-        if (self::$instance == null)
-        {
-            self::$instance = new ExtCss();
+        if (null === self::$instance) {
+            self::$instance = new self();
 
             // remember cookie FE_PREVIEW state
             $fePreview = \Input::cookie('FE_PREVIEW');
@@ -64,23 +92,6 @@ class ExtCss extends \Frontend
     }
 
     /**
-     * If is in live mode.
-     */
-    protected $blnLiveMode = false;
-
-
-    /**
-     * Cached be login status.
-     */
-    protected $blnBeLoginStatus = null;
-
-
-    /**
-     * The variables cache.
-     */
-    protected $arrVariables = null;
-
-    /**
      * Get productive mode status.
      */
     public static function isLiveMode()
@@ -88,15 +99,13 @@ class ExtCss extends \Frontend
         return static::getInstance()->blnLiveMode ? true : false;
     }
 
-
     /**
      * Set productive mode.
      */
-    public static function setLiveMode($liveMode = true)
+    public static function setLiveMode($liveMode = true): void
     {
         static::getInstance()->blnLiveMode = $liveMode;
     }
-
 
     /**
      * Get productive mode status.
@@ -106,11 +115,10 @@ class ExtCss extends \Frontend
         return static::getInstance()->blnLiveMode ? false : true;
     }
 
-
     /**
      * Set designer mode.
      */
-    public static function setDesignerMode($designerMode = true)
+    public static function setDesignerMode($designerMode = true): void
     {
         static::getInstance()->blnLiveMode = !$designerMode;
     }
@@ -119,23 +127,20 @@ class ExtCss extends \Frontend
     {
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findByPk($groupId);
 
-        if ($objCss === null || $objCss->observeFolderSRC == '')
-        {
+        if (null === $objCss || '' === $objCss->observeFolderSRC) {
             return false;
         }
 
         $objObserveModel = \FilesModel::findByUuid($objCss->observeFolderSRC);
 
-        if ($objObserveModel === null || !is_dir(TL_ROOT . '/' . $objObserveModel->path))
-        {
+        if (null === $objObserveModel || !is_dir(TL_ROOT.'/'.$objObserveModel->path)) {
             return false;
         }
 
-        $lastUpdate = filemtime(TL_ROOT . '/' . $objObserveModel->path);
+        $lastUpdate = filemtime(TL_ROOT.'/'.$objObserveModel->path);
 
         // check if folder content has updated
-        if ($lastUpdate <= $objObserveModel->tstamp)
-        {
+        if ($lastUpdate <= $objObserveModel->tstamp) {
             return false;
         }
 
@@ -143,12 +148,10 @@ class ExtCss extends \Frontend
 
         $arrOldFileNames = [];
 
-        if ($objCssFiles !== null)
-        {
+        if (null !== $objCssFiles) {
             $objCssFilesModel = \FilesModel::findMultipleByUuids($objCssFiles->fetchEach('src'));
 
-            if ($objCssFilesModel !== null)
-            {
+            if (null !== $objCssFilesModel) {
                 $arrOldFileNames = $objCssFilesModel->fetchEach('path');
             }
         }
@@ -162,8 +165,7 @@ class ExtCss extends \Frontend
 
         $arrRemove = [];
 
-        if ($objVariablesModel !== null)
-        {
+        if (null !== $objVariablesModel) {
             $arrVariables = $objVariablesModel->fetchEach('path');
 
             // remove variables from oberserve files
@@ -173,12 +175,9 @@ class ExtCss extends \Frontend
             $arrRemove = array_intersect($arrOldFileNames, $arrVariables);
         }
 
-
-        if (!empty($arrDiff))
-        {
+        if (!empty($arrDiff)) {
             // add new files
-            foreach ($arrDiff as $key => $path)
-            {
+            foreach ($arrDiff as $key => $path) {
                 static::addCssFileToGroup($path, $groupId);
             }
         }
@@ -186,14 +185,11 @@ class ExtCss extends \Frontend
         // cleanup
         $arrRemove = array_merge($arrRemove, array_diff($arrOldFileNames, $arrFileNames));
 
-        if (!empty($arrRemove))
-        {
+        if (!empty($arrRemove)) {
             // add new files
-            foreach ($arrRemove as $key => $path)
-            {
+            foreach ($arrRemove as $key => $path) {
                 // file is not part of the observed folder
-                if (strpos($path, $objObserveModel->path) === false)
-                {
+                if (false === strpos($path, $objObserveModel->path)) {
                     continue;
                 }
 
@@ -207,20 +203,85 @@ class ExtCss extends \Frontend
         return true;
     }
 
+    /**
+     * Add viewport if bootstrap responsive is enabled.
+     *
+     * @param PageModel   $objPage
+     * @param LayoutModel $objLayout
+     * @param PageRegular $objThis
+     */
+    public function hookGetPageLayout($objPage, &$objLayout, $objThis)
+    {
+        //AssetsLog::setAssetDebugmode(1); achtung wird erst im extcsscombiner gesetzt
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strBuffer '.$strBuffer);
+
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
+
+        if (null === $objCss) {
+            return false;
+        }
+
+        $blnXhtml = ('xhtml' === $objPage->outputFormat);
+
+        $GLOBALS['TL_HEAD'][] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"'.($blnXhtml ? ' />' : '>')."\n";
+    }
+
+    /**
+     * Update all Ext Css Files.
+     *
+     * @return bool
+     */
+    public function updateExtCss()
+    {
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findAll();
+
+        if (null === $objCss) {
+            return false;
+        }
+
+        $arrReturn = [];
+
+        while ($objCss->next()) {
+            $combiner = new ExtCssCombiner($objCss->current(), $arrReturn);
+
+            $arrReturn = $combiner->getUserCss();
+        }
+    }
+
+    public function hookReplaceDynamicScriptTags($strBuffer)
+    {
+        // strbuffer enthält di aktuelle Seite
+
+        global $objPage;
+
+        if (!$objPage) {
+            return $strBuffer;
+        }
+
+        $objLayout = \LayoutModel::findByPk($objPage->layout);
+
+        if (!$objLayout) {
+            return $strBuffer;
+        }
+
+        // the dynamic script replacement array
+        $arrReplace = [];
+
+        $this->parseExtCss($objLayout, $arrReplace);
+
+        return $strBuffer;
+    }
+
     protected static function scanLessFiles($path, $arrReturn = [])
     {
-        $arrFileNames = scan(TL_ROOT . '/' . $path);
+        $arrFileNames = scan(TL_ROOT.'/'.$path);
 
-        foreach ($arrFileNames as $key => $name)
-        {
-            $src = $path . '/' . $name;
+        foreach ($arrFileNames as $key => $name) {
+            $src = $path.'/'.$name;
 
-            if (is_dir(TL_ROOT . '/' . $src))
-            {
+            if (is_dir(TL_ROOT.'/'.$src)) {
                 array_insert($arrReturn, $key, static::scanLessFiles($src));
-            }
-            else
-            {
+            } else {
                 $arrReturn[] = $src;
             }
         }
@@ -232,15 +293,13 @@ class ExtCss extends \Frontend
     {
         $objFileModel = \FilesModel::findBy('path', $path);
 
-        if ($objFileModel === null)
-        {
+        if (null === $objFileModel) {
             return false;
         }
 
         $objExtCssFileModel = \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel::findBy('src', $objFileModel->uuid);
 
-        if ($objExtCssFileModel === null)
-        {
+        if (null === $objExtCssFileModel) {
             return false;
         }
 
@@ -254,21 +313,19 @@ class ExtCss extends \Frontend
         // create Files Model
         $objFile = new \File($path);
 
-        if (!in_array(strtolower($objFile->extension), ['css', 'less']))
-        {
+        if (!\in_array(strtolower($objFile->extension), ['css', 'less'], true)) {
             return false;
         }
 
-        $objFileModel         = new \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel();
-        $objFileModel->pid    = $groupId;
+        $objFileModel = new \PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel();
+        $objFileModel->pid = $groupId;
         $objFileModel->tstamp = time();
 
-        $objNextSorting = \Database::getInstance()->prepare("SELECT MAX(sorting) AS sorting FROM tl_extcss_file WHERE pid=?")->execute($groupId);
+        $objNextSorting = \Database::getInstance()->prepare('SELECT MAX(sorting) AS sorting FROM tl_extcss_file WHERE pid=?')->execute($groupId);
 
-        $objFileModel->sorting = (intval($objNextSorting->sorting) + 64);
+        $objFileModel->sorting = ((int) ($objNextSorting->sorting) + 64);
 
-        if (($objModel = $objFile->getModel()) === null)
-        {
+        if (($objModel = $objFile->getModel()) === null) {
             $objModel = Dbafs::addResource($path);
         }
 
@@ -279,107 +336,29 @@ class ExtCss extends \Frontend
         return $objFileModel;
     }
 
-
-    /**
-     * Add viewport if bootstrap responsive is enabled
-     *
-     * @param PageModel   $objPage
-     * @param LayoutModel $objLayout
-     * @param PageRegular $objThis
-     */
-    public function hookGetPageLayout($objPage, &$objLayout, $objThis)
-    {
-        //AssetsLog::setAssetDebugmode(1); achtung wird erst im extcsscombiner gesetzt
-        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strBuffer '.$strBuffer);
-
-        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
-
-        if ($objCss === null)
-        {
-            return false;
-        }
-
-        $blnXhtml = ($objPage->outputFormat == 'xhtml');
-
-        $GLOBALS['TL_HEAD'][] = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"' . ($blnXhtml ? ' />' : '>') . "\n";
-    }
-
-    /**
-     * Update all Ext Css Files
-     *
-     * @return boolean
-     */
-    public function updateExtCss()
-    {
-        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findAll();
-
-        if ($objCss === null)
-        {
-            return false;
-        }
-
-        $arrReturn = [];
-
-        while ($objCss->next())
-        {
-            $combiner = new ExtCssCombiner($objCss->current(), $arrReturn);
-
-            $arrReturn = $combiner->getUserCss();
-        }
-    }
-
-    public function hookReplaceDynamicScriptTags($strBuffer)
-    {
-        // strbuffer enthält di aktuelle Seite
-
-        global $objPage;
-
-        if (!$objPage)
-        {
-            return $strBuffer;
-        }
-
-        $objLayout = \LayoutModel::findByPk($objPage->layout);
-
-        if (!$objLayout)
-        {
-            return $strBuffer;
-        }
-
-        // the dynamic script replacement array
-        $arrReplace = [];
-
-        $this->parseExtCss($objLayout, $arrReplace);
-
-        return $strBuffer;
-    }
-
     protected function parseExtCss($objLayout, &$arrReplace)
     {
         $arrCss = [];
 
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
 
-        if ($objCss === null)
-        {
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objCss null ');//achtung wird erst im extcsscombiner gesetzt
+        if (null === $objCss) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objCss null '); //achtung wird erst im extcsscombiner gesetzt
 
-            if (!is_array($GLOBALS['TL_USER_CSS']) || empty($GLOBALS['TL_USER_CSS']))
-            {
+            if (!\is_array($GLOBALS['TL_USER_CSS']) || empty($GLOBALS['TL_USER_CSS'])) {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'no Usercss'); //achtung wird erst im extcsscombiner gesetzt
+
                 return false;
             }
 
             // remove TL_USER_CSS less files, otherwise Contao Combiner fails
-            foreach ($GLOBALS['TL_USER_CSS'] as $key => $css)
-            {
+            foreach ($GLOBALS['TL_USER_CSS'] as $key => $css) {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'remove ['.$key.']: '.$css); //achtung wird erst im extcsscombiner gesetzt
                 $arrCss = trimsplit('|', $css);
 
-                $extension = substr($arrCss[0], strlen($arrCss[0]) - 4, strlen($arrCss[0]));
+                $extension = substr($arrCss[0], \strlen($arrCss[0]) - 4, \strlen($arrCss[0]));
 
-                if ($extension == 'less')
-                {
+                if ('less' === $extension) {
                     unset($GLOBALS['TL_USER_CSS'][$key]);
                 }
             }
@@ -389,8 +368,7 @@ class ExtCss extends \Frontend
 
         $arrReturn = [];
 
-        while ($objCss->next())
-        {
+        while ($objCss->next()) {
             static::observeCssGroupFolder($objCss->id);
         }
 
@@ -401,10 +379,8 @@ class ExtCss extends \Frontend
         $arrReturn = $combiner->getUserCss();
 
         // HOOK: add custom css
-        if (isset($GLOBALS['TL_HOOKS']['parseExtCss']) && is_array($GLOBALS['TL_HOOKS']['parseExtCss']))
-        {
-            foreach ($GLOBALS['TL_HOOKS']['parseExtCss'] as $callback)
-            {
+        if (isset($GLOBALS['TL_HOOKS']['parseExtCss']) && \is_array($GLOBALS['TL_HOOKS']['parseExtCss'])) {
+            foreach ($GLOBALS['TL_HOOKS']['parseExtCss'] as $callback) {
                 $arrCss = static::importStatic($callback[0])->{$callback[1]}($arrCss);
             }
         }
@@ -415,62 +391,56 @@ class ExtCss extends \Frontend
         $static = true;
 
         // collect all usercss
-        if (isset($arrReturn[ExtCssCombiner::$userCssKey]) && is_array($arrReturn[ExtCssCombiner::$userCssKey]))
-        {
-            foreach ($arrReturn[ExtCssCombiner::$userCssKey] as $arrCss)
-            {
+        if (isset($arrReturn[ExtCssCombiner::$userCssKey]) && \is_array($arrReturn[ExtCssCombiner::$userCssKey])) {
+            foreach ($arrReturn[ExtCssCombiner::$userCssKey] as $arrCss) {
                 // if not static, css has been split, and bootstrap mustn't not be aggregated, otherwise
                 // will be loaded after user css
-                if ($arrCss['mode'] != 'static')
-                {
+                if ('static' !== $arrCss['mode']) {
                     $static = false;
                     // add hash to url, otherwise css file will still be cached
-                    $arrCss['src'] .= '?' . $arrCss['hash'];
+                    $arrCss['src'] .= '?'.$arrCss['hash'];
                 }
-                $str=sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
+                $str = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
                 $arrUserCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], $arrCss['mode'], $arrCss['hash']);
             }
         }
 
         // TODO: Refactor equal logic…
         // at first collect bootstrap to prevent overwrite of usercss
-        if (isset($arrReturn[ExtCssCombiner::$bootstrapCssKey]) && is_array($arrReturn[ExtCssCombiner::$bootstrapCssKey]))
-        {
+        if (isset($arrReturn[ExtCssCombiner::$bootstrapCssKey]) && \is_array($arrReturn[ExtCssCombiner::$bootstrapCssKey])) {
             $arrHashs = [];
 
-            foreach ($arrReturn[ExtCssCombiner::$bootstrapCssKey] as $arrCss)
-            {
-                if (in_array($arrCss['hash'], $arrHashs))
-                {
+            foreach ($arrReturn[ExtCssCombiner::$bootstrapCssKey] as $arrCss) {
+                if (\in_array($arrCss['hash'], $arrHashs, true)) {
                     continue;
                 }
-                $str=sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
+                $str = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
                 $arrBaseCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
-                $arrHashs[]   = $arrCss['hash'];
+                $arrHashs[] = $arrCss['hash'];
             }
         }
 
         // TODO: Refactor equal logic…
         // at first collect bootstrap to prevent overwrite of usercss
-        if (isset($arrReturn[ExtCssCombiner::$bootstrapPrintCssKey]) && is_array($arrReturn[ExtCssCombiner::$bootstrapPrintCssKey]))
-        {
+        if (isset($arrReturn[ExtCssCombiner::$bootstrapPrintCssKey]) && \is_array($arrReturn[ExtCssCombiner::$bootstrapPrintCssKey])) {
             $arrHashs = [];
 
-            foreach ($arrReturn[ExtCssCombiner::$bootstrapPrintCssKey] as $arrCss)
-            {
-                if (in_array($arrCss['hash'], $arrHashs))
-                {
+            foreach ($arrReturn[ExtCssCombiner::$bootstrapPrintCssKey] as $arrCss) {
+                if (\in_array($arrCss['hash'], $arrHashs, true)) {
                     continue;
                 }
                 $arrBaseCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
-                $arrHashs[]   = $arrCss['hash'];
+                $arrHashs[] = $arrCss['hash'];
             }
         }
 
-
-        $GLOBALS['TL_CSS']      = array_merge(is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
-        $GLOBALS['TL_USER_CSS'] = array_merge(is_array($GLOBALS['TL_USER_CSS']) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
-        foreach ($GLOBALS['TL_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
-        foreach ($GLOBALS['TL_USER_CSS'] as $k=>$v) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
+        $GLOBALS['TL_CSS'] = array_merge(\is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
+        $GLOBALS['TL_USER_CSS'] = array_merge(\is_array($GLOBALS['TL_USER_CSS']) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
+        foreach ($GLOBALS['TL_CSS'] as $k => $v) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
+        }
+        foreach ($GLOBALS['TL_USER_CSS'] as $k => $v) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
+        }
     }
 }

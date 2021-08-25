@@ -1,48 +1,64 @@
 <?php
 
-/**
- * Contao Open Source CMS
+declare(strict_types=1);
+
+/*
  *
- * Copyright (C) 2005-2013 Leo Feyer
+ *  Contao Open Source CMS
  *
- * @package   ExtAssets
- * @author    r.kaltofen@heimrich-hannot.de
- * @license   GNU/LGPL
- * @copyright Heimrich & Hannot GmbH
+ *  Copyright (c) 2005-2014 Leo Feyer
+ *
+ *
+ *  Contao Open Source CMS
+ *
+ *  Copyright (C) 2005-2013 Leo Feyer
+ *   @package   Extassets
+ *   @author    r.kaltofen@heimrich-hannot.de
+ *   @license   GNU/LGPL
+ *   @copyright Heimrich & Hannot GmbH
+ *
+ *  The namespaces for psr-4 were revised.
+ *
+ *  @package   contao-extasset-bundle
+ *  @author    Peter Broghammer <pb-contao@gmx.de>
+ *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *  @copyright Peter Broghammer 2021-
+ *
+ *  Bootstrap's selection introduced.
+ *
  */
 
-/**
+/*
  * Custom Variables
  */
-define('CSSDIR', 'assets/css/');
+\define('CSSDIR', 'assets/css/');
 
 $componentsDir = 'assets/components';
 
-if (version_compare(VERSION . '.' . BUILD, '4.0.0', '>='))
-{
+if (version_compare(VERSION.'.'.BUILD, '4.0.0', '>=')) {
     $componentsDir = 'assets';
 }
 
-define('BOOTSTRAPDIR', $componentsDir . '/bootstrap/');
-define('BOOTSTRAPLESSDIR', $componentsDir . '/bootstrap/less/');
-define('BOOTSTRAPDISTDIR', 'vendor/twbs/bootstrap/dist/');
-define('BOOTSTRAPLESSCUSTOMDIR', $componentsDir . '/bootstrap/less/custom/');
-define('BOOTSTRAPJSDIR', $componentsDir . '/bootstrap/js/');
+\define('BOOTSTRAPDIR', $componentsDir.'/bootstrap/');
+\define('BOOTSTRAPLESSDIR', $componentsDir.'/bootstrap/less/');
+\define('BOOTSTRAPDISTDIR', 'vendor/twbs/bootstrap/dist/');
+\define('BOOTSTRAPLESSCUSTOMDIR', $componentsDir.'/bootstrap/less/custom/');
+\define('BOOTSTRAPJSDIR', $componentsDir.'/bootstrap/js/');
 
-define('FONTAWESOMEDIR', $componentsDir . '/font-awesome/');
-define('FONTAWESOMECSSDIR', FONTAWESOMEDIR . 'css/');
-define('FONTAWESOMELESSDIR', FONTAWESOMEDIR . 'less/');
-define('FONTAWESOMELESSCUSTOMDIR', FONTAWESOMEDIR . 'less/custom/');
-define('FONTAWESOMEFONTDIR', FONTAWESOMEDIR . 'fonts/');
+\define('FONTAWESOMEDIR', $componentsDir.'/font-awesome/');
+\define('FONTAWESOMECSSDIR', FONTAWESOMEDIR.'css/');
+\define('FONTAWESOMELESSDIR', FONTAWESOMEDIR.'less/');
+\define('FONTAWESOMELESSCUSTOMDIR', FONTAWESOMEDIR.'less/custom/');
+\define('FONTAWESOMEFONTDIR', FONTAWESOMEDIR.'fonts/');
 
-define('ELEGANTICONSDIR', $componentsDir . '/elegant-icons/');
-define('ELEGANTICONSCSSDIR', ELEGANTICONSDIR . 'css/');
-define('ELEGANTICONSLESSDIR', ELEGANTICONSDIR . 'less/');
-define('ELEGANTICONSFONTDIR', ELEGANTICONSDIR . 'fonts/');
+\define('ELEGANTICONSDIR', $componentsDir.'/elegant-icons/');
+\define('ELEGANTICONSCSSDIR', ELEGANTICONSDIR.'css/');
+\define('ELEGANTICONSLESSDIR', ELEGANTICONSDIR.'less/');
+\define('ELEGANTICONSFONTDIR', ELEGANTICONSDIR.'fonts/');
 
-define('LESSCSSCACHEDIR', 'assets/css/lesscache/');
+\define('LESSCSSCACHEDIR', 'assets/css/lesscache/');
 
-/**
+/*
  * BACK END MODULES
  *
  * Back end modules are stored in a global array called "BE_MOD". You can add
@@ -51,36 +67,35 @@ define('LESSCSSCACHEDIR', 'assets/css/lesscache/');
 
 $GLOBALS['BE_MOD']['design']['extcss'] = [
     'tables' => ['tl_extcss', 'tl_extcss_file', 'tl_files'],
-    'icon'   => 'vendor/pbd-kn/contao-extassets/src/Resources/contao/assets/extcss/icon.png',
+    'icon' => 'vendor/pbd-kn/contao-extassets/src/Resources/contao/assets/extcss/icon.png',
 ];
 
 $GLOBALS['BE_MOD']['design']['extjs'] = [
     'tables' => ['tl_extjs', 'tl_extjs_file', 'tl_files'],
-    'icon'   => 'vendor/pbd-kn/contao-extassets/src/Resources/contao/assets/extcss/icon.png',
+    'icon' => 'vendor/pbd-kn/contao-extassets/src/Resources/contao/assets/extcss/icon.png',
 ];
 
-/**
+/*
  * Mime types
  */
 $GLOBALS['TL_MIME']['less'] = ['text/css', 'iconCSS.gif'];
 
-
-/**
+/*
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = ['PBDKN\ExtAssets\Resources\contao\classes\ExtCss', 'hookReplaceDynamicScriptTags'];
 $GLOBALS['TL_HOOKS']['replaceDynamicScriptTags'][] = ['PBDKN\ExtAssets\Resources\contao\classes\ExtJs', 'hookReplaceDynamicScriptTags'];
-$GLOBALS['TL_HOOKS']['getPageLayout'][]            = ['PBDKN\ExtAssets\Resources\contao\classes\ExtCss', 'hookGetPageLayout'];
+$GLOBALS['TL_HOOKS']['getPageLayout'][] = ['PBDKN\ExtAssets\Resources\contao\classes\ExtCss', 'hookGetPageLayout'];
 
-/**
+/*
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_extcss']      = 'PBDKN\ExtAssets\Resources\contao\models\ExtCssModel';
+$GLOBALS['TL_MODELS']['tl_extcss'] = 'PBDKN\ExtAssets\Resources\contao\models\ExtCssModel';
 $GLOBALS['TL_MODELS']['tl_extcss_file'] = 'PBDKN\ExtAssets\Resources\contao\models\ExtCssFileModel';
-$GLOBALS['TL_MODELS']['tl_extjs']       = 'PBDKN\ExtAssets\Resources\contao\models\ExtJsModel';
-$GLOBALS['TL_MODELS']['tl_extjs_file']  = 'PBDKN\ExtAssets\Resources\contao\models\ExtJsFileModel';
+$GLOBALS['TL_MODELS']['tl_extjs'] = 'PBDKN\ExtAssets\Resources\contao\models\ExtJsModel';
+$GLOBALS['TL_MODELS']['tl_extjs_file'] = 'PBDKN\ExtAssets\Resources\contao\models\ExtJsFileModel';
 
-/**
+/*
  * PurgeData
  */
 $GLOBALS['TL_PURGE']['folders']['less'] = [
@@ -88,7 +103,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
     'callback' => ['PBDKN\ExtAssets\Resources\contao\classes\ExtAutomator', 'purgeLessCache'],
 ];
 
-/**
+/*
  * FRONT END MODULES
  *
  * Front end modules are stored in a global array called "FE_MOD". You can add
@@ -110,8 +125,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * named "ModuleClass1.php" in your module folder.
  */
 
-
-/**
+/*
  * CONTENT ELEMENTS
  *
  * Content elements are stored in a global array called "TL_CTE". You can add
@@ -133,8 +147,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * named "ContentClass1.php" in your module folder.
  */
 
-
-/**
+/*
  * BACK END FORM FIELDS
  *
  * Back end form fields are stored in a global array called "BE_FFL". You can
@@ -153,8 +166,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * "FieldClass1.php" in your module folder.
  */
 
-
-/**
+/*
  * FRONT END FORM FIELDS
  *
  * Front end form fields are stored in a global array called "TL_FFL". You can
@@ -173,8 +185,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * "FieldClass1.php" in your module folder.
  */
 
-
-/**
+/*
  * PAGE TYPES
  *
  * Page types are stored in a global array called "TL_PTY". You can add your own
@@ -193,8 +204,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * "PageType1.php" in your module folder.
  */
 
-
-/**
+/*
  * MODEL MAPPINGS
  *
  * Model names are usually built from the table names, e.g. "tl_user_group"
@@ -210,8 +220,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * You can register your mappings in the config.php file of your extension.
  */
 
-
-/**
+/*
  * MAINTENANCE MODULES
  *
  * Maintenance modules are stored in a global array called "TL_MAINTENANCE". You
@@ -228,8 +237,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * file named "ClearCache.php" in your module folder.
  */
 
-
-/**
+/*
  * PURGE JOBS
  *
  * Purge jobs are stored in a global array called "TL_PURGE". You can add your
@@ -254,8 +262,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * which only trigger a callback function.
  */
 
-
-/**
+/*
  * CRON JOBS
  *
  * Cron jobs are stored in a global array called "TL_CRON". You can add your own
@@ -278,8 +285,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * a real cron job though.
  */
 
-
-/**
+/*
  * HOOKS
  *
  * Hooks are stored in a global array called "TL_HOOKS". You can register your
@@ -299,8 +305,7 @@ $GLOBALS['TL_PURGE']['folders']['less'] = [
  * event. For more information see https://contao.org/manual.html.
  */
 
-
-/**
+/*
  * AUTO ITEMS
  *
  * Auto items are stored in a global array called "TL_AUTO_ITEM". You can

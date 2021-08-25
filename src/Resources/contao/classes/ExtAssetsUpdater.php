@@ -1,71 +1,81 @@
 <?php
-/**
- * Contao Open Source CMS
+
+declare(strict_types=1);
+
+/*
  *
- * Copyright (c) 2014 Heimrich & Hannot GmbH
- * @package extassets
- * @author Rico Kaltofen <r.kaltofen@heimrich-hannot.de>
- * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
+ *  Contao Open Source CMS
+ *
+ *  Copyright (c) 2005-2014 Leo Feyer
+ *
+ *
+ *  Contao Open Source CMS
+ *
+ *  Copyright (C) 2005-2013 Leo Feyer
+ *   @package   Extassets
+ *   @author    r.kaltofen@heimrich-hannot.de
+ *   @license   GNU/LGPL
+ *   @copyright Heimrich & Hannot GmbH
+ *
+ *  The namespaces for psr-4 were revised.
+ *
+ *  @package   contao-extasset-bundle
+ *  @author    Peter Broghammer <pb-contao@gmx.de>
+ *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *  @copyright Peter Broghammer 2021-
+ *
+ *  Bootstrap's selection introduced.
+ *
  */
 
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 class ExtAssetsUpdater
 {
+    public static function run(): void
+    {
+        $objDatabase = \Database::getInstance();
+        \Controller::loadDataContainer('tl_extcss');
 
-	public static function run()
-	{
-		$objDatabase = \Database::getInstance();
-		\Controller::loadDataContainer('tl_extcss');
+        $arrFields = [
+            'tl_extcss' => ['bootstrapVariablesSRC', 'observeFolderSRC'],
+            'tl_extcss_file' => ['src'],
+            'tl_extjs_file' => ['src'],
+        ];
 
-		$arrFields = array
-		(
-			'tl_extcss'      => array('bootstrapVariablesSRC', 'observeFolderSRC'),
-			'tl_extcss_file' => array('src'),
-			'tl_extjs_file'  => array('src'),
-		);
+        if (version_compare(VERSION, '3.2', '>=')) {
+            foreach ($arrFields as $strTable => $arrNames) {
+                if (!$objDatabase->tableExists($strTable)) {
+                    continue;
+                }
+                // convert file fields
+                foreach ($objDatabase->listFields($strTable) as $arrField) {
+                    // with extassets 1.1.1 bootstrapVariablesSRC changed to variablesSRC
+                    if ('bootstrapVariablesSRC' === $arrField['name']) {
+                        if (!$objDatabase->fieldExists('variablesSRC', $strTable)) {
+                            $sql = &$GLOBALS['TL_DCA']['tl_extcss']['fields']['variablesSRC']['sql'];
+                            $objDatabase->query("ALTER TABLE $strTable ADD `variablesSRC` $sql");
 
-		if (version_compare(VERSION, '3.2', '>=')) {
+                            $sql = &$GLOBALS['TL_DCA']['tl_extcss']['fields']['variablesOrderSRC']['sql'];
+                            $objDatabase->query("ALTER TABLE $strTable ADD `variablesOrderSRC` $sql");
+                        }
 
-			foreach ($arrFields as $strTable => $arrNames) {
+                        $objGroups = $objDatabase->execute('SELECT * FROM '.$strTable.' WHERE bootstrapVariablesSRC IS NOT NULL AND variablesSRC IS NULL');
 
-				if (!$objDatabase->tableExists($strTable)) continue;
+                        while ($objGroups->next()) {
+                            $variables = serialize([$objGroups->bootstrapVariablesSRC]);
 
-				// convert file fields
-				foreach ($objDatabase->listFields($strTable) as $arrField)
-				{
-					// with extassets 1.1.1 bootstrapVariablesSRC changed to variablesSRC
-					if($arrField['name'] == 'bootstrapVariablesSRC')
-					{
-						if(!$objDatabase->fieldExists('variablesSRC', $strTable))
-						{
-							$sql = &$GLOBALS['TL_DCA']['tl_extcss']['fields']['variablesSRC']['sql'];
-							$objDatabase->query("ALTER TABLE $strTable ADD `variablesSRC` $sql");
+                            $objDatabase->prepare('UPDATE '.$strTable.' SET variablesSRC = ?, variablesOrderSRC = ? WHERE id = ?')->execute($variables, $variables, $objGroups->id);
+                        }
 
-							$sql = &$GLOBALS['TL_DCA']['tl_extcss']['fields']['variablesOrderSRC']['sql'];
-							$objDatabase->query("ALTER TABLE $strTable ADD `variablesOrderSRC` $sql");
-						}
+                        $objDatabase->query("ALTER TABLE $strTable DROP `bootstrapVariablesSRC`");
+                    }
 
-						$objGroups = $objDatabase->execute('SELECT * FROM ' . $strTable . ' WHERE bootstrapVariablesSRC IS NOT NULL AND variablesSRC IS NULL');
-
-						while($objGroups->next())
-						{
-							$variables = serialize(array($objGroups->bootstrapVariablesSRC));
-
-							$objDatabase->prepare('UPDATE ' . $strTable . ' SET variablesSRC = ?, variablesOrderSRC = ? WHERE id = ?')->execute($variables,$variables,$objGroups->id);
-						}
-
-						$objDatabase->query("ALTER TABLE $strTable DROP `bootstrapVariablesSRC`");
-					}
-
-					if(in_array($arrField['name'], $arrNames)){
-						\Database\Updater::convertSingleField($strTable, $arrField['name']);
-					}
-				}
-
-			}
-		}
-
-		return;
-	}
-} 
+                    if (\in_array($arrField['name'], $arrNames, true)) {
+                        \Database\Updater::convertSingleField($strTable, $arrField['name']);
+                    }
+                }
+            }
+        }
+    }
+}

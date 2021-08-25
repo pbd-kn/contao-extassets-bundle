@@ -8,22 +8,23 @@ declare(strict_types=1);
  *
  *  Copyright (c) 2005-2014 Leo Feyer
  *
- *  @package   Efg
- *  @author    Thomas Kuhn <mail@th-kuhn.de>
- *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *  @copyright Thomas Kuhn 2007-2014
  *
+ *  Contao Open Source CMS
  *
- *  Porting EFG to Contao 4
- *  Based on EFG Contao 3 from Thomas Kuhn
+ *  Copyright (C) 2005-2013 Leo Feyer
+ *   @package   Extassets
+ *   @author    r.kaltofen@heimrich-hannot.de
+ *   @license   GNU/LGPL
+ *   @copyright Heimrich & Hannot GmbH
  *
- *  @package   contao-efg-bundle
- *  @author    Peter Broghammer <mail@pb-contao@gmx.de>
+ *  The namespaces for psr-4 were revised.
+ *
+ *  @package   contao-extasset-bundle
+ *  @author    Peter Broghammer <pb-contao@gmx.de>
  *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *  @copyright Peter Broghammer 2021-
  *
- *  Thomas Kuhn's Efg package has been completely converted to contao 4.9
- *  extended by insert_tag  {{efg_insert::formalias::aliasvalue::column(::format)}}
+ *  Bootstrap's selection introduced.
  *
  */
 
@@ -51,14 +52,17 @@ class AssetsLog
     */
     public static function setAssetDebugmode($key): void
     {
-        if (!is_numeric ($key)) {
-\System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
-          return;
+        if (!is_numeric($key)) {
+            \System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
+
+            return;
         }
-        if ($key == self::$myefgdebuglevel) return;
+        if ($key === self::$myefgdebuglevel) {
+            return;
+        }
         $arrUniqid = StringUtil::trimsplit('.', uniqid('efgc0n7a0', true));
         self::$uniqid = $arrUniqid[1];
-        self::$myefgdebuglevel=$key;
+        self::$myefgdebuglevel = $key;
     }
 
     /**
@@ -71,7 +75,7 @@ class AssetsLog
      */
     public static function ExtAssetWriteLog($level, $method, $line, $value): void
     {
-        if (self::$myefgdebuglevel == 0) {
+        if (0 === self::$myefgdebuglevel) {
             return;
         }
         $method = trim($method);
@@ -85,55 +89,57 @@ class AssetsLog
             self::logMessage(sprintf('[%s] [%s] [%s:%s] %s', self::$uniqid, $level, $vclass, $line, 'PBD '.$value), 'extasset_debug');
         }
     }
+
     /**
      * Write in stack log file, if debug is enabled.
      *
-     * @param int    $level
+     * @param int $level
      */
     public static function ExtAssetStack($level): void
     {
-        if (self::$myefgdebuglevel == 0) {
+        if (0 === self::$myefgdebuglevel) {
             return;
         }
-        if (($level & self::$myefgdebuglevel) === $level) {   
-            $barr=debug_backtrace();
-            foreach ($barr as $k=>$v) { 
-               if (str_contains($v['file'], 'symfony')) {
-                   $str='file: '.$v['file'].' line: '.$v['line'].' function: '.$v['function'];
-               } else {
-                   $str='file: '.$v['file'].' line: '.$v['line'].' function: '.$v['function'];
-                   foreach ($v['args'] as $k1=>$v1)  {
-                       if (is_array($v1)) {
-                           $str.=" isarray[$k1]: [ ";
-                           foreach ($v1 as $k2=>$v2)  {
-                             if (is_string($v2)) {
-                               $str .=" [$k2]:$v2, ";
-                             } else {
-                               if (is_object($v2)) {
-                                 $str .= "value von $k1 ist ein Object class  ".get_class($v2);
-                               } else {
-                                 $str .= "value von $k1 kein string ";
-                               }
-                             }
-                           }
-                           $str.='],  ';
-                       } else {
-                           if (is_string($v1)) {
-                             $str .=" args[$k1]:$v1, ";
-                           } else {
-                             if (is_object($v1)) {
-                               $str .= "value von $k ist ein Object class  ".get_class($v1);
-                             } else {
-                               $str .= "value von $k kein string ";
-                             }
-                           }
-                       } 
-                   }
-               }
-               self::logMessage(sprintf('[%s] [%s] %s', self::$uniqid, $level,'PBD '.$str), 'extasset_debug');
+        if (($level & self::$myefgdebuglevel) === $level) {
+            $barr = debug_backtrace();
+            foreach ($barr as $k => $v) {
+                if (str_contains($v['file'], 'symfony')) {
+                    $str = 'file: '.$v['file'].' line: '.$v['line'].' function: '.$v['function'];
+                } else {
+                    $str = 'file: '.$v['file'].' line: '.$v['line'].' function: '.$v['function'];
+                    foreach ($v['args'] as $k1 => $v1) {
+                        if (\is_array($v1)) {
+                            $str .= " isarray[$k1]: [ ";
+                            foreach ($v1 as $k2 => $v2) {
+                                if (\is_string($v2)) {
+                                    $str .= " [$k2]:$v2, ";
+                                } else {
+                                    if (\is_object($v2)) {
+                                        $str .= "value von $k1 ist ein Object class  ".\get_class($v2);
+                                    } else {
+                                        $str .= "value von $k1 kein string ";
+                                    }
+                                }
+                            }
+                            $str .= '],  ';
+                        } else {
+                            if (\is_string($v1)) {
+                                $str .= " args[$k1]:$v1, ";
+                            } else {
+                                if (\is_object($v1)) {
+                                    $str .= "value von $k ist ein Object class  ".\get_class($v1);
+                                } else {
+                                    $str .= "value von $k kein string ";
+                                }
+                            }
+                        }
+                    }
+                }
+                self::logMessage(sprintf('[%s] [%s] %s', self::$uniqid, $level, 'PBD '.$str), 'extasset_debug');
             }
         }
     }
+
     /**
      * Wrapper for old log_message.
      *

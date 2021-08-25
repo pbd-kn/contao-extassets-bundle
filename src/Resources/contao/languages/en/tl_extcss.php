@@ -1,42 +1,59 @@
 <?php
-/**
- * Contao Open Source CMS
+
+declare(strict_types=1);
+
+/*
  *
- * Copyright (C) 2005-2013 Leo Feyer
+ *  Contao Open Source CMS
  *
- * @package   ExtAssets
- * @author    r.kaltofen@heimrich-hannot.de
- * @license   GNU/LGPL
- * @copyright Heimrich & Hannot GmbH
+ *  Copyright (c) 2005-2014 Leo Feyer
+ *
+ *
+ *  Contao Open Source CMS
+ *
+ *  Copyright (C) 2005-2013 Leo Feyer
+ *   @package   Extassets
+ *   @author    r.kaltofen@heimrich-hannot.de
+ *   @license   GNU/LGPL
+ *   @copyright Heimrich & Hannot GmbH
+ *
+ *  The namespaces for psr-4 were revised.
+ *
+ *  @package   contao-extasset-bundle
+ *  @author    Peter Broghammer <pb-contao@gmx.de>
+ *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *  @copyright Peter Broghammer 2021-
+ *
+ *  Bootstrap's selection introduced.
+ *
  */
 
-
-/**
+/*
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_extcss']['title'] = array('Title', 'Please enter a title.');
-$GLOBALS['TL_LANG']['tl_extcss']['addBootstrapPrint'] = array('Enable print.css', 'Enable twitter bootstrap print.css support.');
-$GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'] = array('Variable sources', 'If global variables, such as the bootstrap variables should be overwritten, add the files here.');
-$GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = array('Sort order ', 'Sort order of the variables sources.');
-$GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = array('Observer folder', 'Specify a folder to be monitored, and new files are added automatically.');
-$GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = array('Add elegant icons', 'Add Elegant Icon Font to group.');
-$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = array('Add Bootstrap', 'Add Bootstrap. (Asset/bootstrap/less as less-src. BOOTSTRAPDISTDIR as compiled version css/bootstrap.min.css). Please clear lesscache');
-$GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = array('set Debug', 'write Debug to var/logs/prod-[Date]-extasset_debug.log');
+$GLOBALS['TL_LANG']['tl_extcss']['title'] = ['Title', 'Please enter a title.'];
+$GLOBALS['TL_LANG']['tl_extcss']['addBootstrapPrint'] = ['Enable print.css', 'Enable twitter bootstrap print.css support.'];
+$GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'] = ['Variable sources', 'If global variables, such as the bootstrap variables should be overwritten, add the files here.'];
+$GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = ['Sort order ', 'Sort order of the variables sources.'];
+$GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = ['Observer folder', 'Specify a folder to be monitored, and new files are added automatically.'];
+$GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = ['Add elegant icons', 'Add Elegant Icon Font to group.'];
+$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = ['Add Bootstrap', 'Add Bootstrap. (Asset/bootstrap/less as less-src. BOOTSTRAPDISTDIR as compiled version css/bootstrap.min.css). Please clear lesscache'];
+$GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = ['set Debug', 'write Debug to var/logs/prod-[Date]-extasset_debug.log'];
 
-/**
+/*
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_extcss']['title_legend'] = 'Title';
 $GLOBALS['TL_LANG']['tl_extcss']['config_legend'] = 'Configuration';
 $GLOBALS['TL_LANG']['tl_extcss']['font_legend'] = 'Icon-Fonts';
 
-/**
+/*
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_extcss']['new']    = array('New group', 'Create a new css group.');
-$GLOBALS['TL_LANG']['tl_extcss']['show']   = array('Group details', 'Show group ID %s details');
-$GLOBALS['TL_LANG']['tl_extcss']['edit']   = array('Edit group', 'Edit group ID %s');
-$GLOBALS['TL_LANG']['tl_extcss']['editheader'] = array('Edit group-settings', 'Edit group ID %s settings');
-$GLOBALS['TL_LANG']['tl_extcss']['cut']    = array('Move group', 'Move group ID %s');
-$GLOBALS['TL_LANG']['tl_extcss']['copy']   = array('Copy group ', 'Copy group ID %s');
-$GLOBALS['TL_LANG']['tl_extcss']['delete'] = array('Delete group', 'Delete group ID %s');
+$GLOBALS['TL_LANG']['tl_extcss']['new'] = ['New group', 'Create a new css group.'];
+$GLOBALS['TL_LANG']['tl_extcss']['show'] = ['Group details', 'Show group ID %s details'];
+$GLOBALS['TL_LANG']['tl_extcss']['edit'] = ['Edit group', 'Edit group ID %s'];
+$GLOBALS['TL_LANG']['tl_extcss']['editheader'] = ['Edit group-settings', 'Edit group ID %s settings'];
+$GLOBALS['TL_LANG']['tl_extcss']['cut'] = ['Move group', 'Move group ID %s'];
+$GLOBALS['TL_LANG']['tl_extcss']['copy'] = ['Copy group ', 'Copy group ID %s'];
+$GLOBALS['TL_LANG']['tl_extcss']['delete'] = ['Delete group', 'Delete group ID %s'];

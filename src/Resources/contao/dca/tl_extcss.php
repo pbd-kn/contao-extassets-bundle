@@ -1,159 +1,173 @@
 <?php
 
-/**
- * Contao Open Source CMS
+declare(strict_types=1);
+
+/*
  *
- * Copyright (C) 2005-2013 Leo Feyer
+ *  Contao Open Source CMS
  *
- * @package   ExtAssets
- * @author    r.kaltofen@heimrich-hannot.de
- * @license   GNU/LGPL
- * @copyright Heimrich & Hannot GmbH
+ *  Copyright (c) 2005-2014 Leo Feyer
+ *
+ *
+ *  Contao Open Source CMS
+ *
+ *  Copyright (C) 2005-2013 Leo Feyer
+ *   @package   Extassets
+ *   @author    r.kaltofen@heimrich-hannot.de
+ *   @license   GNU/LGPL
+ *   @copyright Heimrich & Hannot GmbH
+ *
+ *  The namespaces for psr-4 were revised.
+ *
+ *  @package   contao-extasset-bundle
+ *  @author    Peter Broghammer <pb-contao@gmx.de>
+ *  @license   http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *  @copyright Peter Broghammer 2021-
+ *
+ *  Bootstrap's selection introduced.
+ *
  */
 
-
-/**
+/*
  * Table tl_extcss
  */
-$GLOBALS['TL_DCA']['tl_extcss'] = array(
-
+$GLOBALS['TL_DCA']['tl_extcss'] = [
     // Config
-    'config'      => array(
-        'dataContainer'    => 'Table',
+    'config' => [
+        'dataContainer' => 'Table',
         'enableVersioning' => true,
-        'ctable'           => array('tl_extcss_file'),
-        'sql'              => array(
-            'keys' => array(
+        'ctable' => ['tl_extcss_file'],
+        'sql' => [
+            'keys' => [
                 'id' => 'primary',
-            ),
-        ),
-    ),
+            ],
+        ],
+    ],
 
     // List
-    'list'        => array(
-        'sorting'           => array(
-            'mode'   => 1,
-            'fields' => array('title'),
-            'flag'   => 1,
-        ),
-        'label'             => array(
-            'fields' => array('title'),
+    'list' => [
+        'sorting' => [
+            'mode' => 1,
+            'fields' => ['title'],
+            'flag' => 1,
+        ],
+        'label' => [
+            'fields' => ['title'],
             'format' => '%s',
-        ),
-        'global_operations' => array(
-            'all' => array(
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
+        ],
+        'global_operations' => [
+            'all' => [
+                'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href' => 'act=select',
+                'class' => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"',
-            ),
-        ),
-        'operations'        => array(
-            'edit'       => array(
+            ],
+        ],
+        'operations' => [
+            'edit' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_extcss']['edit'],
-                'href'  => 'table=tl_extcss_file',
-                'icon'  => 'edit.gif',
-            ),
-            'editheader' => array(
+                'href' => 'table=tl_extcss_file',
+                'icon' => 'edit.gif',
+            ],
+            'editheader' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_extcss']['editheader'],
-                'href'  => 'act=edit',
-                'icon'  => 'header.gif',
-            ),
-            'copy'       => array(
+                'href' => 'act=edit',
+                'icon' => 'header.gif',
+            ],
+            'copy' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_extcss']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.gif',
-            ),
-            'delete'     => array(
-                'label'      => &$GLOBALS['TL_LANG']['tl_extcss']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
-            ),
-            'show'       => array(
+                'href' => 'act=copy',
+                'icon' => 'copy.gif',
+            ],
+            'delete' => [
+                'label' => &$GLOBALS['TL_LANG']['tl_extcss']['delete'],
+                'href' => 'act=delete',
+                'icon' => 'delete.gif',
+                'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
+            ],
+            'show' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_extcss']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.gif',
-            ),
-        ),
-    ),
+                'href' => 'act=show',
+                'icon' => 'show.gif',
+            ],
+        ],
+    ],
 
     // Palettes
-    'palettes'    => array(
-        '__selector__' => array('addBootstrap'),
-        'default'      => '{title_legend},title;{config_legend},addingbootstrap,observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;setDebug;',
-    ),
+    'palettes' => [
+        '__selector__' => ['addBootstrap'],
+        'default' => '{title_legend},title;{config_legend},addingbootstrap,observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;setDebug;',
+    ],
     // Subpalettes
-    'subpalettes' => array(),
+    'subpalettes' => [],
     // Fields
-    'fields'      => array(
-        'id'                => array(
-            'sql' => "int(10) unsigned NOT NULL auto_increment",
-        ),
-        'tstamp'            => array(
+    'fields' => [
+        'id' => [
+            'sql' => 'int(10) unsigned NOT NULL auto_increment',
+        ],
+        'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
-        ),
-        'title'             => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['title'],
-            'exclude'   => true,
+        ],
+        'title' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['title'],
+            'exclude' => true,
             'inputType' => 'text',
-            'eval'      => array('mandatory' => true, 'maxlength' => 64),
-            'sql'       => "varchar(64) NOT NULL default ''",
-        ),
-        'addBootstrapPrint' => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['addBootstrapPrint'],
-            'exclude'   => true,
+            'eval' => ['mandatory' => true, 'maxlength' => 64],
+            'sql' => "varchar(64) NOT NULL default ''",
+        ],
+        'addBootstrapPrint' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['addBootstrapPrint'],
+            'exclude' => true,
             'inputType' => 'checkbox',
-            'eval'      => array('submitOnChange' => true),
-            'sql'       => "char(1) NOT NULL default ''",
-        ),
-        'variablesSRC'      => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'],
-            'exclude'   => true,
+            'eval' => ['submitOnChange' => true],
+            'sql' => "char(1) NOT NULL default ''",
+        ],
+        'variablesSRC' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'],
+            'exclude' => true,
             'inputType' => 'fileTree',
-            'eval'      => array('multiple'   => true,
-                                 'fieldType'  => 'checkbox',
-                                 'orderField' => 'variablesOrderSRC',
-                                 'files'      => true,
-                                 'extensions' => 'css, less',
-            ),
-            'sql'       => "blob NULL",
-        ),
-        'variablesOrderSRC' => array(
+            'eval' => ['multiple' => true,
+                'fieldType' => 'checkbox',
+                'orderField' => 'variablesOrderSRC',
+                'files' => true,
+                'extensions' => 'css, less',
+            ],
+            'sql' => 'blob NULL',
+        ],
+        'variablesOrderSRC' => [
             'label' => &$GLOBALS['TL_LANG']['tl_content']['variablesOrderSRC'],
-            'sql'   => "blob NULL",
-        ),
-        'addElegantIcons'   => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'],
-            'exclude'   => true,
+            'sql' => 'blob NULL',
+        ],
+        'addElegantIcons' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'],
+            'exclude' => true,
             'inputType' => 'checkbox',
-            'default'   => true,
-            'sql'       => "char(1) NOT NULL default ''",
-        ),
-        'addingbootstrap'   => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'],
-            'exclude'   => true,
+            'default' => true,
+            'sql' => "char(1) NOT NULL default ''",
+        ],
+        'addingbootstrap' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'],
+            'exclude' => true,
             'inputType' => 'checkbox',
-            'default'   => true,
-            'sql'       => "char(1) NOT NULL default ''",
-        ),
-        
-        'observeFolderSRC'  => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'],
-            'exclude'   => true,
-            'inputType' => 'fileTree',
-            'eval'      => array('fieldType' => 'radio', 'filesOnly' => false, 'extensions' => 'css, less'),
-            'sql'       => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : "binary(16) NULL",
-        ),
-        'setDebug'   => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'default'   => true,
-            'sql'       => "char(1) NOT NULL default '0'",
-        ),
+            'default' => true,
+            'sql' => "char(1) NOT NULL default ''",
+        ],
 
-    ),
-);
+        'observeFolderSRC' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'],
+            'exclude' => true,
+            'inputType' => 'fileTree',
+            'eval' => ['fieldType' => 'radio', 'filesOnly' => false, 'extensions' => 'css, less'],
+            'sql' => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
+        ],
+        'setDebug' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
+            'exclude' => true,
+            'inputType' => 'checkbox',
+            'default' => true,
+            'sql' => "char(1) NOT NULL default '0'",
+        ],
+    ],
+];
 
 \HeimrichHannot\Haste\Dca\General::addDateAddedToDca('tl_extcss');
