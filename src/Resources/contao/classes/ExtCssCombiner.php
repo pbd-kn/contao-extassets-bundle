@@ -248,7 +248,7 @@ class ExtCssCombiner extends \Frontend
 
         foreach ($this->arrData as $key => $value) {
             $value = $value[$strKey];
-
+if(empty($value))continue;
             $varUnserialized = @unserialize($value);
 
             if (\is_array($varUnserialized)) {
