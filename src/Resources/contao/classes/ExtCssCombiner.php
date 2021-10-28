@@ -127,6 +127,8 @@ class ExtCssCombiner extends \Frontend
                 $this->addBootstrap();
                 $this->addBootstrapUtilities();
                 $this->addBootstrapType();
+            } else {
+              \System::log('bootstrap not selected in extern css ', __METHOD__, TL_ERROR);
             }
 
             if ($this->addElegantIcons) {
@@ -153,6 +155,8 @@ class ExtCssCombiner extends \Frontend
             // always add bootstrap
             if ($this->addingbootstrap) {
                 $this->addBootstrap();
+            } else {
+              \System::log('bootstrap not selected in extern css ', __METHOD__, TL_ERROR);
             }
         }
     }
