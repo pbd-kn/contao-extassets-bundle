@@ -53,7 +53,7 @@ class AssetsLog
     public static function setAssetDebugmode($key): void
     {
         if (!is_numeric($key)) {
-            \System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
+//            \System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
 
             return;
         }
