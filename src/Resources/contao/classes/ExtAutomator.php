@@ -34,8 +34,6 @@ class ExtAutomator extends \Automator
 {
     public function purgeLessCache()
     {
-        AssetsLog::setAssetDebugmode(1);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'purgeLessCache ');
 
         if (!\is_array($GLOBALS['TL_PURGE']['folders']['less']['affected'])) {
             return false;
