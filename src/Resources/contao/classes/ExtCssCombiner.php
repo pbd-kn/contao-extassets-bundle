@@ -197,7 +197,8 @@ class ExtCssCombiner extends \Frontend
         $arrReturn = $this->arrReturn;
 
         $strCss = $this->objUserCssFile->getContent();
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\count($strCss));
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strCss path '.$this->objUserCssFile->path);
+        if($strCss) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\count($strCss));
 
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rewrite '.$this->rewrite.' rewriteBootstrap '.$this->rewriteBootstrap);
         if (($this->rewrite || $this->rewriteBootstrap)) {
@@ -374,7 +375,7 @@ if(empty($value))continue;
 
         $strVariables = '';
 
-        if ($objFile->size > 0) {
+        if ($objFile->exists()&&$objFile->size > 0) {
             $strVariables = $objFile->getContent();
         }
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add Bootstrapvariables from '.$this->getBootstrapSrc('variables.less').' lng: '.\strlen($strVariables)); //assets/bootstrap/less/variables.less lng: 0
@@ -423,7 +424,6 @@ if(empty($value))continue;
     protected function addBootstrapMixins(): void
     {
         $objFile = new \File($this->getBootstrapSrc('mixins.less'));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('mixins.less').' lng: '.$objFile->size);
 
         /* obsolet
                 if (str_replace('v', '', BOOTSTRAPVERSION) >= '3.2.0') {
@@ -443,7 +443,8 @@ if(empty($value))continue;
                     return;
                 }
         */
-        if ($objFile->size > 0) {
+        if ($objFile->exists()&&$objFile->size > 0) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('mixins.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }
     }
@@ -454,9 +455,9 @@ if(empty($value))continue;
     protected function addBootstrapAlerts(): void
     {
         $objFile = new \File($this->getBootstrapSrc('alerts.less'));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('alerts.less').' lng: '.$objFile->size);
 
-        if ($objFile->size > 0) {
+        if ($objFile->exists()&&$objFile->size > 0) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('alerts.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }
     }
@@ -474,9 +475,9 @@ if(empty($value))continue;
 
         foreach ($arrUtilities as $strFile) {
             $objFile = new \File($this->getBootstrapSrc($strFile));
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc($strFile).' lng: '.$objFile->size);
 
-            if ($objFile->size > 0) {
+            if ($objFile->exists()&&$objFile->size > 0) {
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc($strFile).' lng: '.$objFile->size);
                 $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
             }
         }
@@ -485,9 +486,9 @@ if(empty($value))continue;
     protected function addBootstrapType(): void
     {
         $objFile = new \File($this->getBootstrapSrc('type.less'));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('type.less').' lng: '.$objFile->size);
 
-        if ($objFile->size > 0) {
+        if ($objFile->exists()&&$objFile->size > 0) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('type.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }
     }
@@ -495,9 +496,9 @@ if(empty($value))continue;
     protected function addFontAwesomeVariables(): void
     {
         $objFile = new \File($this->getFontAwesomeLessSrc('variables.less'));
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add addFontAwesomeVariables from '.$this->getFontAwesomeLessSrc('variables.less').' lng: '.$objFile->size);
 
         if ($objFile->exists() && $objFile->size > 0) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add addFontAwesomeVariables from '.$this->getFontAwesomeLessSrc('variables.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }
     }
