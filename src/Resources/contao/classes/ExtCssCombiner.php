@@ -198,7 +198,7 @@ class ExtCssCombiner extends \Frontend
 
         $strCss = $this->objUserCssFile->getContent();
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strCss path '.$this->objUserCssFile->path);
-        if($strCss) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\count($strCss));
+        if(!empty($strCss)) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\strlen($strCss));
 
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rewrite '.$this->rewrite.' rewriteBootstrap '.$this->rewriteBootstrap);
         if (($this->rewrite || $this->rewriteBootstrap)) {
@@ -393,7 +393,7 @@ if(empty($value))continue;
         if (null !== $objFilesModels) {
             while ($objFilesModels->next()) {
                 $objFile = new \File($objFilesModels->path);
-                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
                 $strContent = $objFile->getContent();
 
                 if ($this->isFileUpdated($objFile, $objTarget)) {
@@ -407,6 +407,8 @@ if(empty($value))continue;
                     $strVariables .= "\n".$strContent;
                 }
             }
+        } else {
+           AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' variablesOrderSRC Not Found '.$this->variablesOrderSRC); // assets/bootstrap/less/custom/variables-pbdlessundcssfiles.less lng: 29555
         }
 
         if ($this->rewriteBootstrap) {
