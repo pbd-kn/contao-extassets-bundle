@@ -131,11 +131,11 @@ $GLOBALS['TL_DCA']['tl_extcss_file'] = [
     // Fields
     'fields' => [
         'id' => [
-            'sql' => 'int(10) unsigned NOT NULL auto_increment',
+            'sql' => 'int unsigned NOT NULL auto_increment',
         ],
         'pid' => [
-            'foreignKey' => 'tl_news_archive.title',
-            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'foreignKey' => 'tl_extcss.id',
+            'sql' => "int unsigned NOT NULL default '0'",
             'relation' => [
                 'type' => 'belongsTo',
                 'load' => 'eager',
@@ -143,11 +143,11 @@ $GLOBALS['TL_DCA']['tl_extcss_file'] = [
         ],
         'sorting' => [
             'sorting' => true,
-            'flag' => 2,
-            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'flag' => 11,
+            'sql' => "int unsigned NOT NULL default '0'",
         ],
         'tstamp' => [
-            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'sql' => "int unsigned NOT NULL default '0'",
         ],
         'src' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss_file']['src'],
@@ -196,6 +196,7 @@ class tl_extcss_file extends Backend
      */
     public function listCSSFiles($arrRow)
     {
+
         $objFiles = FilesModel::findById($arrRow['src']);
 
         // Return if there is no result

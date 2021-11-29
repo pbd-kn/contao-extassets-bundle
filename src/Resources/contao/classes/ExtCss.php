@@ -125,6 +125,7 @@ class ExtCss extends \Frontend
 
     public static function observeCssGroupFolder($groupId)
     {
+
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findByPk($groupId);
 
         if (null === $objCss || '' === $objCss->observeFolderSRC) {

@@ -198,14 +198,14 @@ class ExtCssCombiner extends \Frontend
 
         $strCss = $this->objUserCssFile->getContent();
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strCss path '.$this->objUserCssFile->path);
-        if(!empty($strCss)) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\strlen($strCss));
+        if($strCss) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\strlen($strCss));
 
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rewrite '.$this->rewrite.' rewriteBootstrap '.$this->rewriteBootstrap);
         if (($this->rewrite || $this->rewriteBootstrap)) {
             try {
                 $this->objLess->SetImportDirs($this->arrLessImportDirs);
                 $strCss = $this->objLess->getCss();                           // aufgesammelte Werte im less Parser
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objUserCssFile name '.$this->objUserCssFile->value.' less len strCss '.\count($strCss));
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objUserCssFile name '.$this->objUserCssFile->value.' less len strCss '.\strlen($strCss));
                 $this->objUserCssFile->write($strCss);
                 $this->objUserCssFile->close();
             } catch (\Exception $e) {
@@ -385,7 +385,7 @@ if(empty($value))continue;
         }
 
         $objTarget = new \File($this->getBootstrapCustomSrc($this->variablesSrc));  // Zwischenspeicher fuer user less files
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' getBootstrapCustomSrc from (objTarget)'.$this->getBootstrapCustomSrc($this->variablesSrc).' lng: '.$objTarget->size); // assets/bootstrap/less/custom/variables-pbdlessundcssfiles.less lng: 29555
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' getBootstrapCustomSrc from (objTarget)'.$this->getBootstrapCustomSrc($this->variablesSrc).' lng: '.$objTarget->size); // assets/bootstrap/less/custom/variables-pbdlessundcssfiles.less lng: 29555
 
         // overwrite bootstrap variables with custom variables
         $objFilesModels = \FilesModel::findMultipleByUuids($this->variablesOrderSRC);
@@ -393,7 +393,7 @@ if(empty($value))continue;
         if (null !== $objFilesModels) {
             while ($objFilesModels->next()) {
                 $objFile = new \File($objFilesModels->path);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
+                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
                 $strContent = $objFile->getContent();
 
                 if ($this->isFileUpdated($objFile, $objTarget)) {
@@ -407,8 +407,6 @@ if(empty($value))continue;
                     $strVariables .= "\n".$strContent;
                 }
             }
-        } else {
-           AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' variablesOrderSRC Not Found '.$this->variablesOrderSRC); // assets/bootstrap/less/custom/variables-pbdlessundcssfiles.less lng: 29555
         }
 
         if ($this->rewriteBootstrap) {
