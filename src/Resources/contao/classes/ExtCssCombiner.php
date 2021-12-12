@@ -128,7 +128,7 @@ class ExtCssCombiner extends \Frontend
                 $this->addBootstrapUtilities();
                 $this->addBootstrapType();
             } else {
-              \System::log('bootstrap not selected in extern css ', __METHOD__, TL_ERROR);
+                \System::log('bootstrap not selected in extern css ', __METHOD__, TL_ERROR);
             }
 
             if ($this->addElegantIcons) {
@@ -156,7 +156,7 @@ class ExtCssCombiner extends \Frontend
             if ($this->addingbootstrap) {
                 $this->addBootstrap();
             } else {
-              \System::log('bootstrap not selected in extern css ', __METHOD__, TL_ERROR);
+                \System::log('bootstrap not selected in extern css ', __METHOD__, TL_ERROR);
             }
         }
     }
@@ -174,6 +174,8 @@ class ExtCssCombiner extends \Frontend
             case 'addingbootstrap':
                 return max($this->getEach($strKey));
             case 'setDebug':
+                $arr= $this->getEach($strKey));
+                if (count($arr)==0) return 0;               // debug wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'variablesSRC':
             case 'variablesOrderSRC':
@@ -198,7 +200,9 @@ class ExtCssCombiner extends \Frontend
 
         $strCss = $this->objUserCssFile->getContent();
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strCss path '.$this->objUserCssFile->path);
-        if($strCss) AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\strlen($strCss));
+        if ($strCss) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'len strCss '.\strlen($strCss));
+        }
 
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rewrite '.$this->rewrite.' rewriteBootstrap '.$this->rewriteBootstrap);
         if (($this->rewrite || $this->rewriteBootstrap)) {
@@ -253,7 +257,9 @@ class ExtCssCombiner extends \Frontend
 
         foreach ($this->arrData as $key => $value) {
             $value = $value[$strKey];
-if(empty($value))continue;
+            if (empty($value)) {
+                continue;
+            }
             $varUnserialized = @unserialize($value);
 
             if (\is_array($varUnserialized)) {
@@ -375,7 +381,7 @@ if(empty($value))continue;
 
         $strVariables = '';
 
-        if ($objFile->exists()&&$objFile->size > 0) {
+        if ($objFile->exists() && $objFile->size > 0) {
             $strVariables = $objFile->getContent();
         }
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add Bootstrapvariables from '.$this->getBootstrapSrc('variables.less').' lng: '.\strlen($strVariables)); //assets/bootstrap/less/variables.less lng: 0
@@ -443,7 +449,7 @@ if(empty($value))continue;
                     return;
                 }
         */
-        if ($objFile->exists()&&$objFile->size > 0) {
+        if ($objFile->exists() && $objFile->size > 0) {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('mixins.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }
@@ -456,7 +462,7 @@ if(empty($value))continue;
     {
         $objFile = new \File($this->getBootstrapSrc('alerts.less'));
 
-        if ($objFile->exists()&&$objFile->size > 0) {
+        if ($objFile->exists() && $objFile->size > 0) {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('alerts.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }
@@ -476,7 +482,7 @@ if(empty($value))continue;
         foreach ($arrUtilities as $strFile) {
             $objFile = new \File($this->getBootstrapSrc($strFile));
 
-            if ($objFile->exists()&&$objFile->size > 0) {
+            if ($objFile->exists() && $objFile->size > 0) {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc($strFile).' lng: '.$objFile->size);
                 $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
             }
@@ -487,7 +493,7 @@ if(empty($value))continue;
     {
         $objFile = new \File($this->getBootstrapSrc('type.less'));
 
-        if ($objFile->exists()&&$objFile->size > 0) {
+        if ($objFile->exists() && $objFile->size > 0) {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, $this->getBootstrapSrc('type.less').' lng: '.$objFile->size);
             $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
         }

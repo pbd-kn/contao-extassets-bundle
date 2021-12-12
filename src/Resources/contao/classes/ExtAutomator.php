@@ -34,7 +34,6 @@ class ExtAutomator extends \Automator
 {
     public function purgeLessCache()
     {
-
         if (!\is_array($GLOBALS['TL_PURGE']['folders']['less']['affected'])) {
             return false;
         }

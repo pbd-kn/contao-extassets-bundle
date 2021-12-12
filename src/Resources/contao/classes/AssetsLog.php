@@ -54,7 +54,7 @@ class AssetsLog
     {
         if (!is_numeric($key)) {
 //            \System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
-           $key=0;
+            $key = 0;
         }
         if ($key === self::$myefgdebuglevel) {
             return;

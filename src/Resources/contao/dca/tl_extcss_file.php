@@ -196,7 +196,6 @@ class tl_extcss_file extends Backend
      */
     public function listCSSFiles($arrRow)
     {
-
         $objFiles = FilesModel::findById($arrRow['src']);
 
         // Return if there is no result
