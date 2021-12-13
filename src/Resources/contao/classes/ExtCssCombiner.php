@@ -174,7 +174,7 @@ class ExtCssCombiner extends \Frontend
             case 'addingbootstrap':
                 return max($this->getEach($strKey));
             case 'setDebug':
-                $arr= $this->getEach($strKey));
+                $arr= $this->getEach($strKey);
                 if (count($arr)==0) return 0;               // debug wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'variablesSRC':
