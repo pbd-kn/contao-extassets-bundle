@@ -260,7 +260,7 @@ class ExtCssCombiner extends \Frontend
             if (empty($value)) {
                 continue;
             }
-            $varUnserialized = @unserialize($value);
+            $varUnserialized = @unserialize((string)$value);
 
             if (\is_array($varUnserialized)) {
                 // flatten array
