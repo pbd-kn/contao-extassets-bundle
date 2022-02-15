@@ -31,7 +31,6 @@ declare(strict_types=1);
 /**
  * Namespace.
  */
-
 namespace PBDKN\ExtAssets\Resources\contao\models;
 
 /**
@@ -51,6 +50,7 @@ class ExtJsModel extends \Model
      */
     public static function findMultipleByIds($arrIds, array $arrOptions = [])
     {
+
         if (!\is_array($arrIds) || empty($arrIds)) {
             return null;
         }

@@ -37,7 +37,7 @@ $GLOBALS['TL_LANG']['tl_extcss']['variablesSRC'] = ['Variablen Quellen', 'Sollen
 $GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = ['Sortierreihenfolge ', 'Sortierreihenfolge der Variablen Quellen.'];
 $GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = ['Ordner überwachen', 'Geben Sie einen Ordner an, der überwacht werden soll, und neue Dateien automatisch hinzugefügt werden.'];
 $GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = ['Elegant Icons hinzufügen', 'Elegant Icon Font der Gruppe hinzufügen.'];
-$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = ['Bootstrap hinzufügen', 'Bootstrap hinzufügen (Asset/bootstrap/less als less-src. BOOTSTRAPDISTDIR als compiled Version css/bootstrap.min.css). Bitte less cache leeren'];
+$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = ['Bootstrap hinzufügen', 'Bootstrap hinzufügen aus '.BOOTSTRAPDISTDIR.'css/bootstrap.min.css. Bitte less cache leeren. Bootstrap javascript bitte in extJs hinzufügen und extJs im Layout aktivieren'];
 $GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = ['set Debug', 'write Debug to var/logs/prod-[Date]-extasset_debug.log'];
 
 /*
