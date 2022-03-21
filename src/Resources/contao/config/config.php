@@ -39,12 +39,14 @@ if (version_compare(VERSION.'.'.BUILD, '4.0.0', '>=')) {
     $componentsDir = 'assets';
 }
 
-\define('BOOTSTRAPDIR', $componentsDir.'/bootstrap/');
-\define('BOOTSTRAPLESSDIR', $componentsDir.'/bootstrap/less/');
+//\define('BOOTSTRAPDIR', $componentsDir.'/bootstrap/');
+//\define('BOOTSTRAPLESSDIR', $componentsDir.'/bootstrap/less/');
 \define('BOOTSTRAPDISTDIR', 'vendor/twbs/bootstrap/dist/');
 \define('BOOTSTRAPLESSCUSTOMDIR', $componentsDir.'/bootstrap/less/custom/');
+\define('BOOTSTRAPCSSDIR', $componentsDir.'/bootstrap/css/');
 \define('BOOTSTRAPJSDIR', $componentsDir.'/bootstrap/js/');
 
+\define('FONTAWESOMEVERSION', 'v4.7.0');
 \define('FONTAWESOMEDIR', $componentsDir.'/font-awesome/');
 \define('FONTAWESOMECSSDIR', FONTAWESOMEDIR.'css/');
 \define('FONTAWESOMELESSDIR', FONTAWESOMEDIR.'less/');

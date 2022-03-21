@@ -94,12 +94,20 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
     ],
 
     // Palettes
+	//	'default' => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addingbootstrap;setDebug;'
+	//	'default' => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addingbootstrap;{font_awesome_legend},addFontAwesome,setDebug;'
+ 	//			'__selector__'				=> array('addBootstrap'),
+	//			'default'                   => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addBootstrap;{font_awesome_legend},addFontAwesome;'
+
     'palettes' => [
-        '__selector__' => ['addBootstrap'],
-        'default' => '{title_legend},title;{config_legend},addingbootstrap,observeFolderSRC,variablesSRC,addBootstrapPrint;{font_legend},addElegantIcons;setDebug;',
+        '__selector__' => array('addBootstrap'),
+		'default' => '{title_legend},title,observeFolderSRC,variablesSRC;{bootstrap_legend},addbootstrap;{font_awesome_legend},addFontAwesome;setDebug;'
     ],
-    // Subpalettes
-    'subpalettes' => [],
+	// Subpalettes
+	'subpalettes' => array
+	(
+		'addBootstrap'				=> 'variablesSRC',
+	),
     // Fields
     'fields' => [
         'id' => [
@@ -145,7 +153,7 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
             'default' => true,
             'sql' => "char(1) NOT NULL default ''",
         ],
-        'addingbootstrap' => [
+        'addbootstrap' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'],
             'exclude' => true,
             'inputType' => 'checkbox',
@@ -153,6 +161,13 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
             'sql' => "char(1) NOT NULL default ''",
         ],
 
+		'bootstrapVariablesSRC'	=> array(
+					'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['bootstrapVariablesSRC'],
+					'exclude'                 => true,
+					'inputType'               => 'fileTree',
+					'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'css, less'),
+					'sql'                     => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : "binary(16) NULL"
+		),
         'observeFolderSRC' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'],
             'exclude' => true,
@@ -160,6 +175,15 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
             'eval' => ['fieldType' => 'radio', 'filesOnly' => false, 'extensions' => 'css, less'],
             'sql' => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
         ],
+       
+        'addFontAwesome' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'default'                 => true,
+			'sql'                     => "char(1) NOT NULL default ''",
+		),
+
         'setDebug' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
             'exclude' => true,

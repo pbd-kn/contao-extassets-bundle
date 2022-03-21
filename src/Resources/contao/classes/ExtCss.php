@@ -42,8 +42,9 @@ require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/conta
  * Class ExtCss.
  *
  * @copyright  Heimrich & Hannot GmbH
+ * @copyright Peter Broghammer 2021-
  */
-class ExtCss extends \Frontend
+class ExtCss extends \Frontend                      
 {
     /**
      * If is in live mode.
@@ -250,7 +251,7 @@ class ExtCss extends \Frontend
 
     public function hookReplaceDynamicScriptTags($strBuffer)
     {
-        // strbuffer enthält di aktuelle Seite
+        // strbuffer enthält die aktuelle Seite
 
         global $objPage;
 
@@ -338,6 +339,7 @@ class ExtCss extends \Frontend
 
     protected function parseExtCss($objLayout, &$arrReplace)
     {
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'parseExtCss');
         $arrCss = [];
 
         $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
@@ -433,9 +435,24 @@ class ExtCss extends \Frontend
                 $arrHashs[] = $arrCss['hash'];
             }
         }
+        // TODO: Refactor equal logic…
+        // at first collect bootstrap to prevent overwrite of usercss
+        if (isset($arrReturn[ExtCssCombiner::$fontAwesomeCssKey]) && \is_array($arrReturn[ExtCssCombiner::$fontAwesomeCssKey])) {
+            $arrHashs = [];
 
+            foreach ($arrReturn[ExtCssCombiner::$fontAwesomeCssKey] as $arrCss) {
+                if (\in_array($arrCss['hash'], $arrHashs, true)) {
+                    continue;
+                }
+                $arrBaseCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
+                $arrHashs[] = $arrCss['hash'];
+            }
+        }
+
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'arrBaseCss len '.count($arrBaseCss));
+ 
         $GLOBALS['TL_CSS'] = array_merge(\is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
-        $GLOBALS['TL_USER_CSS'] = array_merge(\is_array($GLOBALS['TL_USER_CSS']) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
+        $GLOBALS['TL_USER_CSS'] = array_merge((isset($GLOBALS['TL_USER_CSS'])&&\is_array($GLOBALS['TL_USER_CSS'])) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
         foreach ($GLOBALS['TL_CSS'] as $k => $v) {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
         }
