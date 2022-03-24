@@ -129,30 +129,27 @@ class ExtCssCombiner extends \Frontend
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs');
               }
             }
-            if ($this->addFontAwesome) {             // add full awesome  copy from vendor assets
-              $awecssFile=$this->getFontAwesomeCssSrc('font-awesome.min.css');
-              $aweFontDir=$this->getFontAwesomeFontSrc('');
+            if ($this->addFontAwesome) {             // add full awesome css fonts  copy from vendor assets
+              $awecssFile=$this->getFontAwesomeCss('font-awesome.min.css');     // destination
+              $aweFontDir=$this->getFontAwesomeFont('');                        // destination
+              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile '.$awecssFile.' aweFontDir '.$aweFontDir); 
               $objOut = new \File($awecssFile, true);
               if (!$objOut->exists()) {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile not exist '); 
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile not exist '.$awecssFile); 
                 \System::log('install default font-awesome.min.css 4.7 to '.TL_ROOT.'/'.FONTAWESOMEDIR.'css', __METHOD__,TL_GENERAL);
                 $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/css/font-awesome.min.css';
-                $target=FONTAWESOMEDIR.'css/font-awesome.min.css';
                 $awefile= new \File($src,true);
-                $awefile->copyTo($target);
+                $awefile->copyTo($awecssFile);
               } else {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile dir exist '); 
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile  exist '); 
               }
-              $objOut = new \File($aweFontDir.'./.', true);             // check datei in fonts
+              $objOut = new \File($aweFontDir.'./.', true);             // check destination datei in fonts
               if (!$objOut->exists()) {
-                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts';
+                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts/';
                 $fontFiles = scan(TL_ROOT.'/'.$src, true);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'scan '.TL_ROOT.'/'.$src.' count '.count($fontFiles), __METHOD__,TL_ERROR);
                 foreach ($fontFiles as $strFile) {
-                  $srcf=$src.$strFile;
-                  $targetf=FONTAWESOMEDIR.'fonts/'.$strFile;
-                  $awefile= new \File($srcf,true);
-                  $awefile->copyTo($targetf);                    
+                  $awefile= new \File($src.$strFile,true);
+                  $awefile->copyTo($aweFontDir.$strFile);
                 }
               } else {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fonts dir exist '); 
@@ -422,12 +419,12 @@ class ExtCssCombiner extends \Frontend
 
     protected function addFontAwesome(): void
     {
-      $awecssFile=$this->getFontAwesomeCssSrc('font-awesome.min.css');
-      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile '.$this->getFontAwesomeCssSrc('font-awesome.min.css')); 
+      $awecssFile=$this->getFontAwesomeCss('font-awesome.min.css');
+      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile '.$this->getFontAwesomeCss('font-awesome.min.css')); 
       $objOut = new \File($awecssFile, true);
       if (!$objOut->exists()) {
-            \System::log('fontawesome not in  '.$this->getFontAwesomeCssSrc('font-awesome.min.css').' please install purge less files', __METHOD__, TL_ERROR);
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in  '.$this->getFontAwesomeCssSrc('font-awesome.min.css').' please install twbs');
+            \System::log('fontawesome not in  '.$this->getFontAwesomeCss('font-awesome.min.css').' please install purge less files', __METHOD__, TL_ERROR);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in  '.$this->getFontAwesomeCss('font-awesome.min.css').' please install twbs');
             return;
       }
       $this->arrReturn[self::$fontAwesomeCssKey][] = [              // css-file fuer return merken
@@ -524,11 +521,11 @@ class ExtCssCombiner extends \Frontend
         return BOOTSTRAPLESSCUSTOMDIR.$src;
     }
 
-    protected function getFontAwesomeCssSrc($src)
+    protected function getFontAwesomeCss($src)
     {
         return FONTAWESOMECSSDIR.$src;
     }
-    protected function getFontAwesomeFontSrc($src)
+    protected function getFontAwesomeFont($src)
     {
         return FONTAWESOMEFONTDIR.$src;
     }
