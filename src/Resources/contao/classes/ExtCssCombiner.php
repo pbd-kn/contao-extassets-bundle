@@ -116,11 +116,9 @@ class ExtCssCombiner extends \Frontend
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Kein cache vorhanden neu aufbauen');
             $this->objLess = new \Less_Parser($this->arrLessOptions);      // geparste Files werden in less zwischengespeichert
 
-            $this->addBootstrapVariables();
+            $this->addBootstrapVariables();        // parse it to objLess
             if ($this->addbootstrap) {             // add full bootstrap  copy from twbs
               $objOut = new \File($this->getBootstrapCss('bootstrap.min.css'), true);    // assets/bootstrap/css
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objOut Bootstrap css '.$objOut->value); 
-
               $objFiledist = new \File($this->getBootstrapDist('css/bootstrap.min.css'));
               if ($objFiledist->exists()) {           // bootstrap liegt in min.css vor
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy bootstrap dist from '.$objFiledist->value.' copy to '.$objOut->value);
@@ -133,31 +131,31 @@ class ExtCssCombiner extends \Frontend
             }
             if ($this->addFontAwesome) {             // add full awesome  copy from vendor assets
               $awecssFile=$this->getFontAwesomeCssSrc('font-awesome.min.css');
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile '.$this->getFontAwesomeCssSrc('font-awesome.min.css')); 
+              $aweFontDir=$this->getFontAwesomeFontSrc('');
               $objOut = new \File($awecssFile, true);
               if (!$objOut->exists()) {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile not exist '); 
-                \System::log('install default font-awesome.min.css 4.7 to '.TL_ROOT.'/'.FONTAWESOMEDIR.'css', __METHOD__,TL_ERROR);
+                \System::log('install default font-awesome.min.css 4.7 to '.TL_ROOT.'/'.FONTAWESOMEDIR.'css', __METHOD__,TL_GENERAL);
                 $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/css/font-awesome.min.css';
                 $target=FONTAWESOMEDIR.'css/font-awesome.min.css';
                 $awefile= new \File($src,true);
                 $awefile->copyTo($target);
-
+              } else {
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile dir exist '); 
+              }
+              $objOut = new \File($aweFontDir.'./.', true);             // check datei in fonts
+              if (!$objOut->exists()) {
                 $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts';
-                $target=FONTAWESOMEDIR.'fonts';
-            
                 $fontFiles = scan(TL_ROOT.'/'.$src, true);
-                //\System::log('nach scan count'.count($fontFiles), __METHOD__,TL_ERROR);
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'scan '.TL_ROOT.'/'.$src.' count '.count($fontFiles), __METHOD__,TL_ERROR);
                 foreach ($fontFiles as $strFile) {
-                  $srcf='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts/'.$strFile;
+                  $srcf=$src.$strFile;
                   $targetf=FONTAWESOMEDIR.'fonts/'.$strFile;
                   $awefile= new \File($srcf,true);
                   $awefile->copyTo($targetf);                    
-                  //\System::log('srcf '.$srcf, __METHOD__,TL_ERROR);
-                  //\System::log('targetf '.$targetf, __METHOD__,TL_ERROR);
                 }
               } else {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile exist '); 
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fonts dir exist '); 
               }
               $this->addFontAwesome();
             }
@@ -529,6 +527,10 @@ class ExtCssCombiner extends \Frontend
     protected function getFontAwesomeCssSrc($src)
     {
         return FONTAWESOMECSSDIR.$src;
+    }
+    protected function getFontAwesomeFontSrc($src)
+    {
+        return FONTAWESOMEFONTDIR.$src;
     }
 
     protected function getFontAwesomeLessSrc($src)
