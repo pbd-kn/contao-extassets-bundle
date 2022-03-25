@@ -36,7 +36,8 @@ namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use Contao\Dbafs;
 
-require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
+//require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
+require_once \System::getContainer()->getParameter('kernel.project_dir').'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
 
 /**
  * Class ExtCss.
@@ -133,12 +134,13 @@ class ExtCss extends \Frontend
         }
 
         $objObserveModel = \FilesModel::findByUuid($objCss->observeFolderSRC);
+        $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
 
-        if (null === $objObserveModel || !is_dir(TL_ROOT.'/'.$objObserveModel->path)) {
+        if (null === $objObserveModel || !is_dir($rootDir.'/'.$objObserveModel->path)) {
             return false;
         }
 
-        $lastUpdate = filemtime(TL_ROOT.'/'.$objObserveModel->path);
+        $lastUpdate = filemtime($rootDir.'/'.$objObserveModel->path);
 
         // check if folder content has updated
         if ($lastUpdate <= $objObserveModel->tstamp) {
@@ -275,12 +277,14 @@ class ExtCss extends \Frontend
 
     protected static function scanLessFiles($path, $arrReturn = [])
     {
-        $arrFileNames = scan(TL_ROOT.'/'.$path);
+        $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
+
+        $arrFileNames = scan($rootDir.'/'.$path);
 
         foreach ($arrFileNames as $key => $name) {
             $src = $path.'/'.$name;
 
-            if (is_dir(TL_ROOT.'/'.$src)) {
+            if (is_dir($rootDir.'/'.$src)) {
                 array_insert($arrReturn, $key, static::scanLessFiles($src));
             } else {
                 $arrReturn[] = $src;

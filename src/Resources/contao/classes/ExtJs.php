@@ -126,6 +126,7 @@ class ExtJs extends \Frontend
     protected function parseExtJs($objLayout, &$arrReplace)
     {
         $arrJs = [];
+        $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
 
         $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
 
@@ -152,8 +153,8 @@ class ExtJs extends \Frontend
             $strFileMinified = str_replace('.js', '.min.js', $strFile);
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strFile: '.$strFile.' strFileMinified: '.$strFileMinified);
 
-            $objGroup = new \File($strFile, file_exists(TL_ROOT.'/'.$strFile));
-            $objGroupMinified = new \File($strFileMinified, file_exists(TL_ROOT.'/'.$strFile));
+            $objGroup = new \File($strFile, file_exists($rootDir.'/'.$strFile));
+            $objGroupMinified = new \File($strFileMinified, file_exists($rootDir.'/'.$strFile));
 
             if (!$objGroupMinified->exists()) {
                 $objGroupMinified->write('');
@@ -170,7 +171,7 @@ class ExtJs extends \Frontend
             while ($objFiles->next()) {
                 $objFileModel = \FilesModel::findByPk($objFiles->src);
 
-                if (null === $objFileModel || !file_exists(TL_ROOT.'/'.$objFileModel->path)) {
+                if (null === $objFileModel || !file_exists($rootDir.'/'.$objFileModel->path)) {
                     continue;
                 }
                 $objFile = new \File($objFileModel->path);

@@ -30,7 +30,8 @@ declare(strict_types=1);
 
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
-require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
+//require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
+require_once \System::getContainer()->getParameter('kernel.project_dir').'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
 
 class ExtCssCombiner extends \Frontend
 {
@@ -71,6 +72,8 @@ class ExtCssCombiner extends \Frontend
     protected $arrLessImportDirs = [];
 
     protected $cache = true;
+    
+    protected $rootDir="";                            // entspricht TL_ROOT
 
     public function __construct(\Model\Collection $objCss, $arrReturn, $blnCache)
     {
@@ -80,8 +83,11 @@ class ExtCssCombiner extends \Frontend
         while ($objCss->next()) {
             $this->arrData[] = $objCss->row();
         }
+        $this->rootDir = \System::getContainer()->getParameter('kernel.project_dir');
+
         AssetsLog::setAssetDebugmode($this->setDebug);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' blnCache '.$blnCache.' Debug '.$this->setDebug);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rootdir (TL_ROOT) '.$this->rootDir);
         $this->start = microtime(true);
         $this->cache = $blnCache;
 
@@ -109,7 +115,7 @@ class ExtCssCombiner extends \Frontend
 
         $this->arrLessOptions = [
             'compress' => !\Config::get('bypassCache'),
-            'cache_dir' => TL_ROOT.'/assets/css/lesscache',
+            'cache_dir' => $this->rootDir.'/assets/css/lesscache',
         ];
 
         if (!$this->cache) {
@@ -130,24 +136,30 @@ class ExtCssCombiner extends \Frontend
               }
             }
             if ($this->addFontAwesome) {             // add full awesome css fonts  copy from vendor assets
-              $awecssFile=$this->getFontAwesomeCss('font-awesome.min.css');     // destination
+              //$awecssFile=$this->getFontAwesomeCss('font-awesome.min.css');     // destination
+              $awecssDir=$this->getFontAwesomeCss('');     // destination
               $aweFontDir=$this->getFontAwesomeFont('');                        // destination
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile '.$awecssFile.' aweFontDir '.$aweFontDir); 
-              $objOut = new \File($awecssFile, true);
+              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssDir '.$awecssDir.' aweFontDir '.$aweFontDir); 
+              $objOut = new \File($awecssDir.'./.', true);
               if (!$objOut->exists()) {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile not exist '.$awecssFile); 
-                \System::log('install default font-awesome.min.css 4.7 to '.TL_ROOT.'/'.FONTAWESOMEDIR.'css', __METHOD__,TL_GENERAL);
-                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/css/font-awesome.min.css';
-                $awefile= new \File($src,true);
-                $awefile->copyTo($awecssFile);
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssDir not exist '.$awecssDir); 
+                \System::log('install default font-awesome.min.css 4.7 to '.$this->rootDir.'/'.FONTAWESOMEDIR.'css', __METHOD__,TL_GENERAL);
+                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/css/';
+                $scanFiles = scan($this->rootDir.'/'.$src, true);
+                foreach ($scanFiles as $strFile) {
+                  if (substr($strFile,0,1) == '.')  continue;
+                  $awefile= new \File($src.$strFile,true);
+                  $awefile->copyTo($awecssDir.$strFile);
+                }
               } else {
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile  exist '); 
               }
               $objOut = new \File($aweFontDir.'./.', true);             // check destination datei in fonts
               if (!$objOut->exists()) {
                 $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts/';
-                $fontFiles = scan(TL_ROOT.'/'.$src, true);
-                foreach ($fontFiles as $strFile) {
+                $scanFiles = scan($this->rootDir.'/'.$src, true);
+                foreach ($scanFiles as $strFile) {
+                  if (substr($strFile,0,1) == '.')  continue;
                   $awefile= new \File($src.$strFile,true);
                   $awefile->copyTo($aweFontDir.$strFile);
                 }
@@ -318,7 +330,7 @@ class ExtCssCombiner extends \Frontend
                 continue;
             }
 
-            if (!file_exists(TL_ROOT.'/'.$objFileModel->path)) {
+            if (!file_exists($this->rootDir.'/'.$objFileModel->path)) {
                 continue;
             }
 
@@ -333,7 +345,7 @@ class ExtCssCombiner extends \Frontend
                 $this->rewrite = true;
             }
 
-            $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
+            $this->objLess->parseFile($this->rootDir.'/'.$objFile->value);
         }
     }
 
@@ -442,7 +454,7 @@ class ExtCssCombiner extends \Frontend
         $objFile = new \File($this->getElegentIconsLessSrc('variables.less'));
 
         if ($objFile->exists() && $objFile->size > 0) {
-            $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);
+            $this->objLess->parseFile($this->rootDir.'/'.$objFile->value);
         }
     }
 
@@ -485,7 +497,7 @@ class ExtCssCombiner extends \Frontend
             }
 
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add \'TL_USER_CSS\' addCustomLessFiles from '.$objFile->value);
-            $this->objLess->parseFile(TL_ROOT.'/'.$objFile->value);  // muss da nicht TL_ROOT\    dazu ???
+            $this->objLess->parseFile($this->rootDir.'/'.$objFile->value);  // muss da nicht TL_ROOT\    dazu ???
 
             unset($GLOBALS['TL_USER_CSS'][$key]);
         }
