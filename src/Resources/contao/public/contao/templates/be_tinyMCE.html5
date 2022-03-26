@@ -8,9 +8,10 @@ if ($GLOBALS['TL_CONFIG']['useRTE']):
 ?>
 <script>window.tinymce || document.write('<script src="<?= $this->asset('js/tinymce.min.js', 'contao-components/tinymce4') ?>">\x3C/script>')</script>
 <script>
-console.log('version: '+tinymce.majorVersion + '.' + tinymce.minorVersion);
+console.log('versionmain: '+tinymce.majorVersion + '.' + tinymce.minorVersion);
 console.log('src '+"<?= $this->asset('js/tinymce.min.js', 'contao-components/tinymce4') ?>");
 console.log('valid_elements: '+"<?php $this->block('valid_elements'); ?>");
+console.log('theme '+"<?= Backend::getTheme() ?>");
 window.tinymce && tinymce.init({
   selector: '#<?= $this->selector ?>',
   min_height: 336,
@@ -46,6 +47,8 @@ window.tinymce && tinymce.init({
 
   <?php $this->block('content_css'); ?>
     content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css',
+    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css, assets/font-awesome/css/font-awesome.min.css',
+    font_awesome_path: "assets/font-awesome/css/font-awesome.min.css",               // variable for plugin
   <?php $this->endblock(); ?>
 
   <?php $this->block('plugins'); ?>
@@ -65,8 +68,6 @@ window.tinymce && tinymce.init({
   <?php $this->block('toolbar'); ?>
     toolbar: 'link unlink | image | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | code | AttributeOldName | Attribute | fontawesome',
   <?php $this->endblock(); ?>
-  content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css, assets/font-awesome/css/font-awesome.css',
-  font_awesome_path: "assets/font-awesome/css/font-awesome.css",               // variable for plugin
 
   <?php $this->block('custom'); ?>
   <?php $this->endblock(); ?>
