@@ -33,11 +33,7 @@ declare(strict_types=1);
  */
 \define('CSSDIR', 'assets/css/');
 
-$componentsDir = 'assets/components';
-
-if (version_compare(VERSION.'.'.BUILD, '4.0.0', '>=')) {
-    $componentsDir = 'assets';
-}
+$componentsDir = 'assets';
 
 //\define('BOOTSTRAPDIR', $componentsDir.'/bootstrap/');
 //\define('BOOTSTRAPLESSDIR', $componentsDir.'/bootstrap/less/');
@@ -59,6 +55,9 @@ if (version_compare(VERSION.'.'.BUILD, '4.0.0', '>=')) {
 \define('ELEGANTICONSFONTDIR', ELEGANTICONSDIR.'fonts/');
 
 \define('LESSCSSCACHEDIR', 'assets/css/lesscache/');
+
+\define('TINYMCEDIR',$componentsDir.'/tinymce4/');
+\define('TINYMCEPLUGINDIR',TINYMCEDIR.'js/plugins/');
 
 /*
  * BACK END MODULES

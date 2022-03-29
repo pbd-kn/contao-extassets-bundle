@@ -136,37 +136,24 @@ class ExtCssCombiner extends \Frontend
               }
             }
             if ($this->addFontAwesome) {             // add full awesome css fonts  copy from vendor assets
-              //$awecssFile=$this->getFontAwesomeCss('font-awesome.min.css');     // destination
-              $awecssDir=$this->getFontAwesomeCss('');     // destination
-              $aweFontDir=$this->getFontAwesomeFont('');                        // destination
-              AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssDir '.$awecssDir.' aweFontDir '.$aweFontDir); 
-              $objOut = new \File($awecssDir.'./.', true);
-              if (!$objOut->exists()) {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssDir not exist '.$awecssDir); 
-                \System::log('install default font-awesome.min.css 4.7 to '.$this->rootDir.'/'.FONTAWESOMEDIR.'css', __METHOD__,TL_GENERAL);
-                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/css/';
-                $scanFiles = scan($this->rootDir.'/'.$src, true);
-                foreach ($scanFiles as $strFile) {
-                  if (substr($strFile,0,1) == '.')  continue;
-                  $awefile= new \File($src.$strFile,true);
-                  $awefile->copyTo($awecssDir.$strFile);
-                }
-              } else {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awecssFile  exist '); 
-              }
-              $objOut = new \File($aweFontDir.'./.', true);             // check destination datei in fonts
-              if (!$objOut->exists()) {
-                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts/';
-                $scanFiles = scan($this->rootDir.'/'.$src, true);
-                foreach ($scanFiles as $strFile) {
-                  if (substr($strFile,0,1) == '.')  continue;
-                  $awefile= new \File($src.$strFile,true);
-                  $awefile->copyTo($aweFontDir.$strFile);
-                }
-              } else {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fonts dir exist '); 
-              }
+              $destDir=$this->getFontAwesomeCss('');     // destination
+              $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/css/';
+              $this->copyAll($src,$destDir);
+              $destDir=$this->getFontAwesomeFont('');                        // destination
+              $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome/fonts/';
+              $this->copyAll($src,$destDir);
               $this->addFontAwesome();
+              
+              // TinyMCE Plugins installieren allerdings nur ab Contao 4.13
+              if (version_compare(VERSION.'.'.BUILD, '4.13.0', '>=')) {
+                $destDir=$this->getTinymcePlugin('fontawesome/');                       
+                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome/';
+                $this->copyAll($src,$destDir);
+                $destDir=$this->getTinymcePlugin('attribute/');                       
+                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/attribute/';
+                $this->copyAll($src,$destDir);
+
+              }
             }
             // HOOK: add custom asset
             if (isset($GLOBALS['TL_HOOKS']['addCustomAssets']) && \is_array($GLOBALS['TL_HOOKS']['addCustomAssets'])) {
@@ -313,6 +300,27 @@ class ExtCssCombiner extends \Frontend
         }
 
         return $return;
+    }
+    
+    protected function copyAll ($srcDir,$destDir) {
+      if (is_dir($this->rootDir.'/'.$destDir)) {;
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'destdir exist '.$this->rootDir.'/'.$destDir); 
+        return;
+      }
+      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> srcDir '.$srcDir.' $destDir '.$destDir); 
+      $scanFiles = scan($this->rootDir.'/'.$srcDir, true);
+      foreach ($scanFiles as $strFile) {
+        if (substr($strFile,0,1) == '.')  continue;
+        $src=$srcDir.$strFile;
+        if (is_dir($this->rootDir.'/'.$src.'/')) {
+          $this->copyAll($src.'/',$destDir.$strFile.'/');
+        } else {
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy file '.$srcDir.$strFile.' to '.$destDir.$strFile); 
+          $srcfile= new \File($srcDir.$strFile,true);
+          $srcfile->copyTo($destDir.$strFile);
+        }
+      }    
+      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '<- srcDir '.$srcDir.' $destDir '.$destDir); 
     }
 
     protected function addCssFiles()
@@ -540,6 +548,10 @@ class ExtCssCombiner extends \Frontend
     protected function getFontAwesomeFont($src)
     {
         return FONTAWESOMEFONTDIR.$src;
+    }
+    protected function getTinymcePlugin($src)
+    {
+        return TINYMCEPLUGINDIR.$src;
     }
 
     protected function getFontAwesomeLessSrc($src)
