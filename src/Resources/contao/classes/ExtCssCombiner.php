@@ -307,7 +307,6 @@ class ExtCssCombiner extends \Frontend
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'destdir exist '.$this->rootDir.'/'.$destDir); 
         return;
       }
-      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '-> srcDir '.$srcDir.' $destDir '.$destDir); 
       $scanFiles = scan($this->rootDir.'/'.$srcDir, true);
       foreach ($scanFiles as $strFile) {
         if (substr($strFile,0,1) == '.')  continue;
@@ -315,12 +314,10 @@ class ExtCssCombiner extends \Frontend
         if (is_dir($this->rootDir.'/'.$src.'/')) {
           $this->copyAll($src.'/',$destDir.$strFile.'/');
         } else {
-          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy file '.$srcDir.$strFile.' to '.$destDir.$strFile); 
           $srcfile= new \File($srcDir.$strFile,true);
           $srcfile->copyTo($destDir.$strFile);
         }
       }    
-      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '<- srcDir '.$srcDir.' $destDir '.$destDir); 
     }
 
     protected function addCssFiles()

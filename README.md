@@ -6,7 +6,7 @@ this bundle has been completely converted from heimrichhannot/contao-extassets t
 The namespaces for psr-4 were revised.
 
 Bootstrap's selection introduced.
-Either bootstrap-less is recompiled or taken over from the twbs package. 
+its  taken over from the twbs package. 
 
 Create your own css & js groups and add them to your contao theme layouts.
 
@@ -15,22 +15,33 @@ Create your own css & js groups and add them to your contao theme layouts.
 - Backend Module for external js 
 - Add multiple CSS & JS groups to contao layout 
 - Select Bootstrap framework support (for css by default, enable within js group)
-  compile the less version or take min version from twbs
-- Font-Awesome added by default (availability of all variables and mixins)
+  take min version from twbs
+- Font-Awesome added by default 
+  take default Version 4.7
 - Elegant Icons can be added (availability of all variables and mixins)
 - Css file caching for production mode (disable byPassCache in contao settings)
 
 ## External CSS
 
 ### Features
-- Complete lesscss support, automatically compile all your less files within a external css group to css
+- Complete lesscss support, automatically compile all your less files within a external css group to cs
+- refresh: clear the less cache 
 - Observer folders (recursive) within your external css groups
 - Add multiple custom variable files, to overwrite for example bootstrap variables.less (like @brand-primary)
-- With bootstrap selected make use of all bootstrap mixins and variables within your own less files (See: http://getbootstrap.com/customize/#less-variables)
-  or take botstrap mibn from twbs package
-  bootstrap print.css support
+- With bootstrap selected install bootstrap min from twbs package
+- bootstrap print.css support
 - Internet Explorer 6-9 - 4096 css-selector handling (Internet Explorer 6 - 9 has only a maximum of 4096 css-selectors possible per file. Extassets make usage of https://github.com/zweilove/css_splitter ans solve this problem by splitting aggregated files into parts.)
 - all files within $GLOBALS['TL_USER_CSS'] will be parsed within external css groups
+
+### Font Awesome (http://fontawesome.io/)
+- when selected  check assets/font-awesome/css if is empty install the default awesome 4.7
+  if contao version min 4.13 install plugins for tinymce
+  
+
+### Elegant Icon Font (http://www.elegantthemes.com/blog/resources/elegant-icon-font)
+
+### debug
+- set debug for mor information
 
 ### Installation
 
@@ -95,36 +106,4 @@ public function addCustomAssetsHook(\Less_Parser $objLess, $arrData, \ExtAssets\
 
 ```
 
-### Font Awesome (http://fontawesome.io/)
 
-Use font-awesome mixins and variables right inside your less files.
-
-```
-// my-styles.less
-.my-button{
-  .fa;
-  .fa-lg;
-  &:before{
-    content: @fa-var-github;
-  }
-}
-```
-
-List of all font-awesome variables, see (https://github.com/heimrichhannot/font-awesome/blob/master/less/variables.less). 
-
-
-### Elegant Icon Font (http://www.elegantthemes.com/blog/resources/elegant-icon-font)
-
-Use elegant-icon mixins and variables right inside your less files.
-
-```
-// my-styles.less
-.my-button{
-  .ei;
-  &:before{
-    content: @ei-var-info;
-  }
-}
-```
-
-List of all elegant-icon variables, see (https://github.com/heimrichhannot/elegant-icons/blob/master/less/variables.less). 
