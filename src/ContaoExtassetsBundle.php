@@ -32,7 +32,7 @@ namespace PBDKN\ExtAssets;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ContaoExtassets extends Bundle
+class ContaoExtassetsBundle extends Bundle
 {
     public function __construct()
     {
