@@ -48,6 +48,8 @@ $GLOBALS['TL_LANG']['tl_extcss']['title_legend'] = 'Title';
 $GLOBALS['TL_LANG']['tl_extcss']['config_legend'] = 'Configuration';
 $GLOBALS['TL_LANG']['tl_extcss']['font_legend'] = 'Icon-Fonts';
 $GLOBALS['TL_LANG']['tl_extcss']['font_awesome_legend'] = 'Font Awesome';
+$GLOBALS['TL_LANG']['tl_extcss']['bootstrap_legend'] = 'bootstrap config';
+
 
 
 /*

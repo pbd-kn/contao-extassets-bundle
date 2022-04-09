@@ -48,6 +48,9 @@ $GLOBALS['TL_LANG']['tl_extcss']['bootstrapVariablesSRC'] = array('Variablen Que
 $GLOBALS['TL_LANG']['tl_extcss']['title_legend'] = 'Titel';
 $GLOBALS['TL_LANG']['tl_extcss']['config_legend'] = 'Konfiguration';
 $GLOBALS['TL_LANG']['tl_extcss']['font_legend'] = 'Icon-Fonts';
+$GLOBALS['TL_LANG']['tl_extcss']['font_awesome_legend'] = 'Font Awesome';
+$GLOBALS['TL_LANG']['tl_extcss']['bootstrap_legend'] = 'Bootstrap Konfiguration';
+
 
 /*
  * Buttons
