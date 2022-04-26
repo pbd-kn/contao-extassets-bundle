@@ -25,38 +25,36 @@ declare(strict_types=1);
  *  @copyright Peter Broghammer 2021-
  *
  *  Bootstrap's selection introduced.
+ *  awesomeselection introduced.
  *
  */
 
 /*
  * Custom Variables
  */
+
 \define('CSSDIR', 'assets/css/');
 
-$componentsDir = 'assets';
-
-//\define('BOOTSTRAPDIR', $componentsDir.'/bootstrap/');
-//\define('BOOTSTRAPLESSDIR', $componentsDir.'/bootstrap/less/');
 \define('BOOTSTRAPDISTDIR', 'vendor/twbs/bootstrap/dist/');
-\define('BOOTSTRAPLESSCUSTOMDIR', $componentsDir.'/bootstrap/less/custom/');
-\define('BOOTSTRAPCSSDIR', $componentsDir.'/bootstrap/css/');
-\define('BOOTSTRAPJSDIR', $componentsDir.'/bootstrap/js/');
+\define('BOOTSTRAPLESSCUSTOMDIR', 'assets/bootstrap/less/custom/');
+\define('BOOTSTRAPCSSDIR', 'assets/bootstrap/css/');
+\define('BOOTSTRAPJSDIR', 'assets/bootstrap/js/');
 
 \define('FONTAWESOMEVERSION', 'v4.7.0');
-\define('FONTAWESOMEDIR', $componentsDir.'/font-awesome/');
+\define('FONTAWESOMEDIR', 'assets/font-awesome/');
 \define('FONTAWESOMECSSDIR', FONTAWESOMEDIR.'css/');
 \define('FONTAWESOMELESSDIR', FONTAWESOMEDIR.'less/');
 \define('FONTAWESOMELESSCUSTOMDIR', FONTAWESOMEDIR.'less/custom/');
 \define('FONTAWESOMEFONTDIR', FONTAWESOMEDIR.'fonts/');
 
-\define('ELEGANTICONSDIR', $componentsDir.'/elegant-icons/');
+\define('ELEGANTICONSDIR', 'assets/elegant-icons/');
 \define('ELEGANTICONSCSSDIR', ELEGANTICONSDIR.'css/');
 \define('ELEGANTICONSLESSDIR', ELEGANTICONSDIR.'less/');
 \define('ELEGANTICONSFONTDIR', ELEGANTICONSDIR.'fonts/');
 
 \define('LESSCSSCACHEDIR', 'assets/css/lesscache/');
 
-\define('TINYMCEDIR',$componentsDir.'/tinymce4/');
+\define('TINYMCEDIR','assets/tinymce4/');
 \define('TINYMCEPLUGINDIR',TINYMCEDIR.'js/plugins/');
 
 /*

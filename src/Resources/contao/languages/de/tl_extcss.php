@@ -38,9 +38,11 @@ $GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = ['Sortierreihenfolge ', 
 $GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = ['Ordner überwachen', 'Geben Sie einen Ordner an, der überwacht werden soll, und neue Dateien automatisch hinzugefügt werden.'];
 $GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = ['Elegant Icons hinzufügen', 'Elegant Icon Font der Gruppe hinzufügen.'];
 $GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = ['Bootstrap hinzufügen', 'Bootstrap hinzufügen aus '.BOOTSTRAPDISTDIR.'css/bootstrap.min.css. Bitte less cache leeren. Bootstrap javascript bitte in extJs hinzufügen und extJs im Layout aktivieren'];
-$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'] = array('Font Awesome aktivieren', 'CSS Gruppe (assets/font-awefonts) hinzufügen. Existiert das Directory nicht, so wird Font Awesome 4.7 aus bundle hinzugefügt.');
+$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'] = array('Font Awesome aktivieren', 'CSS Gruppe (assets/font-awefonts) hinzufügen. Existiert das Directory nicht, so wird der Font aus bundle hinzugefügt.');
 $GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = ['set Debug', 'write Debug to var/logs/prod-[Date]-extasset_debug.log'];
 $GLOBALS['TL_LANG']['tl_extcss']['bootstrapVariablesSRC'] = array('Variablen Quelle', 'Falls vorhanden, werden die Bootstap Variablen aus variables.less mit den Variablen dieser Datei überschrieben.');
+$GLOBALS['TL_LANG']['tl_extcss']['selectFontAwesome'] = array('Version', 'Auswahl Awesome'); 
+$GLOBALS['TL_LANG']['tl_extcss']['setTinymce'] = array('Tinymce', 'Ersetzt das Tempate für Tinymce');
 
 /*
  * Legends
@@ -48,8 +50,9 @@ $GLOBALS['TL_LANG']['tl_extcss']['bootstrapVariablesSRC'] = array('Variablen Que
 $GLOBALS['TL_LANG']['tl_extcss']['title_legend'] = 'Titel';
 $GLOBALS['TL_LANG']['tl_extcss']['config_legend'] = 'Konfiguration';
 $GLOBALS['TL_LANG']['tl_extcss']['font_legend'] = 'Icon-Fonts';
-$GLOBALS['TL_LANG']['tl_extcss']['font_awesome_legend'] = 'Font Awesome';
+$GLOBALS['TL_LANG']['tl_extcss']['font_awesome_legend'] = 'Font Awesome Konfiguration';
 $GLOBALS['TL_LANG']['tl_extcss']['bootstrap_legend'] = 'Bootstrap Konfiguration';
+$GLOBALS['TL_LANG']['tl_extcss']['less_legend'] = 'Lessfiles Konfiguration';
 
 
 /*

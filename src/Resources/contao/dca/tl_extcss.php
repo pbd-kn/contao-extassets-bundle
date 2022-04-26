@@ -100,13 +100,15 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
 	//			'default'                   => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addBootstrap;{font_awesome_legend},addFontAwesome;'
 
     'palettes' => [
-        '__selector__' => array('addBootstrap'),
-		'default' => '{title_legend},title,observeFolderSRC,variablesSRC;{bootstrap_legend},addbootstrap;{font_awesome_legend},addFontAwesome;setDebug;'
+//        '__selector__' => array('addBootstrap','addFontAwesome'),
+        '__selector__' => array('addBootstrap','addFontAwesome'),
+		'default' => '{title_legend},title;{less_legend},observeFolderSRC,variablesSRC;{bootstrap_legend},addbootstrap;{font_awesome_legend},addFontAwesome;setDebug;'
     ],
 	// Subpalettes
 	'subpalettes' => array
 	(
-		'addBootstrap'				=> 'variablesSRC',
+//		'addBootstrap'				=> 'variablesSRC',
+        'addFontAwesome'            => 'selectAweSome,setTinymce',
 	),
     // Fields
     'fields' => [
@@ -181,8 +183,29 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'default'                 => true,
+            'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'long'),
 			'sql'                     => "char(1) NOT NULL default ''",
 		),
+        'selectAweSome' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['selectFontAwesome'],
+			'exclude'                 => true,
+            'inputType'               => 'select',
+            'options'                 => array('4' => 'Version 4.7', '5' => 'Version 5'),
+            'default'                 => "Version 4.7",
+//            'eval'                    => ['tl_class'=>'w50'],
+            'eval'                    => array('submitOnChange'=>true, 'maxlength'=>16),
+			'sql'                     => "char(10) NOT NULL default '4.7'",
+		),
+        'setTinymce' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['setTinymce'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'default'                 => true,
+//            'eval'                    => ['tl_class'=>'w50'],
+            'eval'                    => array('submitOnChange'=>true),
+			'sql'                     => "char(1) NOT NULL default ''",
+		),
+        
 
         'setDebug' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],

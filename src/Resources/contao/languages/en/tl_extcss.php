@@ -38,8 +38,10 @@ $GLOBALS['TL_LANG']['tl_extcss']['variablesOrderSRC'] = ['Sort order ', 'Sort or
 $GLOBALS['TL_LANG']['tl_extcss']['observeFolderSRC'] = ['Observer folder', 'Specify a folder to be monitored, and new files are added automatically.'];
 $GLOBALS['TL_LANG']['tl_extcss']['addElegantIcons'] = ['Add elegant icons', 'Add Elegant Icon Font to group.'];
 $GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'] = ['Add Bootstrap', 'Add Bootstrap from '.BOOTSTRAPDISTDIR.'css/bootstrap.min.css. Please clear less cache. Bootstrap javascript please add in extJs and enable extJs in layout'];
-$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'] = array('Add Font Awesome', 'Add CSS group (assets/font-awefonts). If the directory does not exist, Font Awesome 4.7 from bundle will be added.');
+$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'] = array('Add Font Awesome', 'Add CSS group (assets/font-awefonts). If the directory does not exist, Font Awesome from bundle will be added.');
 $GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = ['set Debug', 'write Debug to var/logs/prod-[Date]-extasset_debug.log'];
+$GLOBALS['TL_LANG']['tl_extcss']['selectFontAwesome'] = array('version', 'select awesome version');
+$GLOBALS['TL_LANG']['tl_extcss']['setTinymce'] = array('tinymce', 'replace the template for tinymce');
 
 /*
  * Legends
@@ -47,8 +49,10 @@ $GLOBALS['TL_LANG']['tl_extcss']['setDebug'] = ['set Debug', 'write Debug to var
 $GLOBALS['TL_LANG']['tl_extcss']['title_legend'] = 'Title';
 $GLOBALS['TL_LANG']['tl_extcss']['config_legend'] = 'Configuration';
 $GLOBALS['TL_LANG']['tl_extcss']['font_legend'] = 'Icon-Fonts';
-$GLOBALS['TL_LANG']['tl_extcss']['font_awesome_legend'] = 'Font Awesome';
+$GLOBALS['TL_LANG']['tl_extcss']['font_awesome_legend'] = 'Font Awesome config';
 $GLOBALS['TL_LANG']['tl_extcss']['bootstrap_legend'] = 'bootstrap config';
+$GLOBALS['TL_LANG']['tl_extcss']['less_legend'] = 'lessfiles config';
+
 
 
 

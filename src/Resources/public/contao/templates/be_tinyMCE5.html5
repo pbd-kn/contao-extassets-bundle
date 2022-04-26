@@ -12,6 +12,8 @@ console.log('versionmain: '+tinymce.majorVersion + '.' + tinymce.minorVersion);
 console.log('src '+"<?= $this->asset('js/tinymce.min.js', 'contao-components/tinymce4') ?>");
 console.log('valid_elements: '+"<?php $this->block('valid_elements'); ?>");
 console.log('theme '+"<?= Backend::getTheme() ?>");
+console.log('be_tinyMCE.html for fontawesome 5');
+
 window.tinymce && tinymce.init({
   selector: '#<?= $this->selector ?>',
   min_height: 336,
@@ -46,9 +48,9 @@ window.tinymce && tinymce.init({
   <?php $this->endblock(); ?>
 
   <?php $this->block('content_css'); ?>
-    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css',
-    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css, assets/font-awesome/css/font-awesome.min.css',
-    font_awesome_path: "assets/font-awesome/css/font-awesome.min.css",               // variable for plugin
+    //content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css',
+    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css, assets/font-awesome/css/all.min.css',
+    font_awesome_path: "assets/font-awesome/css/all.min.css",               // variable for plugin
   <?php $this->endblock(); ?>
 
   <?php $this->block('plugins'); ?>
