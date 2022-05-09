@@ -150,7 +150,7 @@ class ExtCssCombiner extends \Frontend
                 //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile2 ');
                 $this->removeFiles ($destDir);
                 $this->copyAll($src,$destDir);
-                $this->addFontAwesome();
+                //$this->addFontAwesome();
                 // TinyMCE Plugins installieren allerdings nur ab Contao 4.13 tinimce 5.0
                 if (version_compare(VERSION.'.'.BUILD, '4.13.0', '>=')) {
                   //$destDir=$this->getTinymcePlugin('fontawesome/');    
@@ -183,7 +183,7 @@ class ExtCssCombiner extends \Frontend
                 //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile2 ');
                 $this->removeFiles ($destDir);
                 $this->copyAll($src,$destDir);
-                $this->addFontAwesome();
+                //$this->addFontAwesome();
                 if (version_compare(VERSION.'.'.BUILD, '4.13.0', '>=')) {
                   //$destDir=$this->getTinymcePlugin('fontawesome/');                       
                   $destDir='assets/tinymce4/js/plugins/fontawesome/';
@@ -516,18 +516,19 @@ class ExtCssCombiner extends \Frontend
 
     protected function addFontAwesome(): void
     {
+      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'selectAweSome '.$this->selectAweSome.' setTinymce '.$this->setTinymce);
       $awpath='assets/font-awesome/css/';
-      $awecssFile=$awpath.'font-awesome.min.css';
+      if ($this->selectAweSome == 4) {
+        $awecssFile=$awpath.'font-awesome.min.css';
+      } else {
+        $awecssFile=$awpath.'all.min.css';
+      }
+
       $objOut = new \File($awecssFile, true);
       if (!$objOut->exists()) {
-          // check for all   
-          $awecssFile=$awpath.'all.min.css';
-          $objOut = new \File($awecssFile, true);
-          if (!$objOut->exists()) {
-            \System::log('fontawesome not in  assets/font-awesome/css/ please purge less files', __METHOD__, TL_ERROR);
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in  assets/font-awesome/css/  purge less files');
-            return;
-          }
+        \System::log('fontawesome not in  assets/font-awesome/css/ please purge less files', __METHOD__, TL_ERROR);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in  assets/font-awesome/css/  purge less files');
+        return;
       }
       AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'include awecssFile '.$objOut->value); 
       $this->arrReturn[self::$fontAwesomeCssKey][] = [              // css-file fuer return merken

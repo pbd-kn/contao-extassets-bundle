@@ -191,10 +191,10 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
 			'exclude'                 => true,
             'inputType'               => 'select',
             'options'                 => array('4' => 'Version 4.7', '5' => 'Version 5'),
-            'default'                 => "Version 4.7",
+            'default'                 => "Version 5",
 //            'eval'                    => ['tl_class'=>'w50'],
             'eval'                    => array('submitOnChange'=>true, 'maxlength'=>16),
-			'sql'                     => "char(10) NOT NULL default '4.7'",
+			'sql'                     => "char(10) NOT NULL default '5'",
 		),
         'setTinymce' => array(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['setTinymce'],
@@ -203,7 +203,7 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
 			'default'                 => true,
 //            'eval'                    => ['tl_class'=>'w50'],
             'eval'                    => array('submitOnChange'=>true),
-			'sql'                     => "char(1) NOT NULL default ''",
+			'sql'                     => "char(1) NOT NULL default '1'",
 		),
         
 
