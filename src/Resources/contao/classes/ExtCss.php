@@ -443,7 +443,7 @@ class ExtCss extends \Frontend
         // at first collect bootstrap to prevent overwrite of usercss
         if (isset($arrReturn[ExtCssCombiner::$fontAwesomeCssKey]) && \is_array($arrReturn[ExtCssCombiner::$fontAwesomeCssKey])) {
             $arrHashs = [];
-
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awesome staticx |'.$static.'|');
             foreach ($arrReturn[ExtCssCombiner::$fontAwesomeCssKey] as $arrCss) {
                 if (\in_array($arrCss['hash'], $arrHashs, true)) {
                     continue;

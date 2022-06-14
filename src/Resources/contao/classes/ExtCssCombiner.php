@@ -74,6 +74,8 @@ class ExtCssCombiner extends \Frontend
     protected $cache = true;
     
     protected $rootDir="";                            // entspricht TL_ROOT
+    protected $vendorPath = 'vendor/pbd-kn/contao-extassets-bundle/';
+
 
     public function __construct(\Model\Collection $objCss, $arrReturn, $blnCache)
     {
@@ -135,77 +137,48 @@ class ExtCssCombiner extends \Frontend
                 \System::log('bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs', __METHOD__, TL_ERROR);
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs');
               }
-            }
-            if ($this->addFontAwesome) {             // add full awesome css fonts  copy from vendor assets
+            }            
+            if ($this->addFontAwesome) {             // add tinymce
               AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'selectAweSome '.$this->selectAweSome.' setTinymce '.$this->setTinymce);
-              if ($this->selectAweSome == 4) {
-                $destDir="assets/font-awesome/css/";
-                $src="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/css/";
-                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile1 ');
-                $this->removeFiles ($destDir);
-                $this->copyAll($src,$destDir);
-                //$destDir=$this->getFontAwesomeFont('');                        // destination
-                $destDir="assets/font-awesome/fonts/";
-                $src="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/fonts/";
-                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile2 ');
-                $this->removeFiles ($destDir);
-                $this->copyAll($src,$destDir);
-                //$this->addFontAwesome();
                 // TinyMCE Plugins installieren allerdings nur ab Contao 4.13 tinimce 5.0
-                if (version_compare(VERSION.'.'.BUILD, '4.13.0', '>=')) {
-                  //$destDir=$this->getTinymcePlugin('fontawesome/');    
-                  $destDir='assets/tinymce4/js/plugins/fontawesome/';
-                  $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome4/';
-                  //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile3 destDir '.$destDir);
-                  $this->removeFiles ($destDir);
-                  $this->copyAll($src,$destDir);
-                  //$destDir=$this->getTinymcePlugin('attribute/');                       
-                  $destDir='assets/tinymce4/js/plugins/attribute/';
-                  $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/attribute/';
-                  //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile4 ');
-                  $this->removeFiles ($destDir);
-                  $this->copyAll($src,$destDir);
-                  if ($this->setTinymce) {   // copy template fuer tinymce
-                    $objFilesrc = new \File('web/bundles/contaoextassets/contao/templates/be_tinyMCE4.html5');
-                    $objFilesrc->copyTo('templates/be_tinyMCE.html5');               
-                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'template tiny copy objFilesrc '.$objFilesrc->path.' size '.$objFilesrc->size.' to '.'templates/be_tinyMCE.html5');
-                  }
-                }
+              $srccss='';
+              $srcfont='';
+              $srctinyplugin='';
+              $srctinytmpl='';
+              if ($this->selectAweSome == 4) {
+                $srccss="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/css/";
+                $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/fonts/";
+                $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome4/';
+                $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE4.html5';
               } elseif ($this->selectAweSome == 5) {
-                $destDir="assets/font-awesome/css/";
-                $src="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome5/css/";
-                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile1 ');
-                $this->removeFiles ($destDir);
-                $this->copyAll($src,$destDir);
-                //$destDir=$this->getFontAwesomeFont('');                        // destination
-                $destDir="assets/font-awesome/webfonts/";
-                $src="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome5/webfonts/";
-                //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile2 ');
-                $this->removeFiles ($destDir);
-                $this->copyAll($src,$destDir);
-                //$this->addFontAwesome();
-                if (version_compare(VERSION.'.'.BUILD, '4.13.0', '>=')) {
-                  //$destDir=$this->getTinymcePlugin('fontawesome/');                       
-                  $destDir='assets/tinymce4/js/plugins/fontawesome/';
-                  $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome5/';
-                  //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile3 destDir '.$destDir);
-                  $this->removeFiles ($destDir);
-                  $this->copyAll($src,$destDir);
-                  //$destDir=$this->getTinymcePlugin('attribute/');                       
-                  $destDir='assets/tinymce4/js/plugins/attribute/';
-                  $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/attribute/';
-                  //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile4 ');
-                  $this->removeFiles ($destDir);
-                  $this->copyAll($src,$destDir);
-                  if ($this->setTinymce) {   // copy template fuer tinymce
-                    $objFilesrc = new \File('web/bundles/contaoextassets/contao/templates/be_tinyMCE5.html5');
-                    $objFilesrc->copyTo('templates/be_tinyMCE.html5');               
-                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'template tiny copy objFilesrc '.$objFilesrc->path.' size '.$objFilesrc->size.' to '.'templates/be_tinyMCE.html5');
-                  }
-                }
+                $srccss="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome5/css/";
+                $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome5/webfonts/";
+                $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome5/';
+                $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE5.html5';
               }
-              
+              $destDir="assets/font-awesome/css/";
+              $this->removeFiles ($destDir);
+              $this->copyAll($srccss,$destDir);
+              $this->copyAll($srcfont,$destDir);
+              if (version_compare(VERSION.'.'.BUILD, '4.13.0', '>=')) {
+                $destDir='assets/tinymce4/js/plugins/fontawesome/';
+                $this->removeFiles ($destDir);
+                $this->copyAll($srctinyplugin,$destDir);
+                $destDir='assets/tinymce4/js/plugins/attribute/';
+                $src='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/attribute/';
+                $this->removeFiles ($destDir);
+                $this->copyAll($src,$destDir);
+                if ($this->setTinymce) {   // copy template fuer tinymce
+                  AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'tinyTempl src '.$srctinytmpl.' dest '.'templates/be_tinyMCE.html5');
+                  $objFilesrc = new \File($srctinytmpl);
+                  $objFilesrc->copyTo('templates/be_tinyMCE.html5');               
+                }
+              } else {
+                \System::log('Tinymce wird erst ab timymce 5 (ab contao 4.13) unterstuetzt',__METHOD__, TL_ERROR);
+              }
+              $this->addFontAwesome();   // add fontawesome css
             }
+            
             // HOOK: add custom asset
             if (isset($GLOBALS['TL_HOOKS']['addCustomAssets']) && \is_array($GLOBALS['TL_HOOKS']['addCustomAssets'])) {
                 foreach ($GLOBALS['TL_HOOKS']['addCustomAssets'] as $callback) {
@@ -378,7 +351,7 @@ class ExtCssCombiner extends \Frontend
         } else {
           $srcfile= new \File($srcDir.$strFile,true);
           $srcfile->copyTo($destDir.$strFile);
-          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy '.$srcDir.$strFile.' to '.$destDir.$strFile);
+          //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy '.$srcDir.$strFile.' to '.$destDir.$strFile);
         }
       }    
     }
@@ -523,14 +496,14 @@ class ExtCssCombiner extends \Frontend
       } else {
         $awecssFile=$awpath.'all.min.css';
       }
-
       $objOut = new \File($awecssFile, true);
       if (!$objOut->exists()) {
         \System::log('fontawesome not in  assets/font-awesome/css/ please purge less files', __METHOD__, TL_ERROR);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in  assets/font-awesome/css/  purge less files');
         return;
       }
-      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'include awecssFile '.$objOut->value); 
+      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'include awecssFile mode '.$this->mode.' src '.$objOut->value.' hash '.$objOut->hash.' time '.$objOut->mtime); 
+      AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Aenderungsdatum '.date('F d Y H:i:s'. $objOut->mtime));
       $this->arrReturn[self::$fontAwesomeCssKey][] = [              // css-file fuer return merken
             'src' => $objOut->value,
             'type' => 'all', // 'all' is required for .hidden-print class, not 'screen'
