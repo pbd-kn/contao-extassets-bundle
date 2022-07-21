@@ -4,7 +4,8 @@ tinymce.addI18n('de', {
     'File Type': 'Dateitypen',
     'Spinner': 'Drehend',
     'Form Control': 'Formularfelder',
-    'Currency': 'W&auml;hrungen',
+    'Currency': 'currency',
+    'Arrows': 'arrows',
     'Text Editor': 'Texteditor',
     'Directional': 'Richtung',
     'Video Player': 'Videoplayer',
@@ -16,5 +17,6 @@ tinymce.addI18n('de', {
     'Chart': 'Diagramm',
     'Hand': 'Hand',
     'Search': 'Suchen',
+    'Brand': 'brands',
     'No icons matched your search': 'Keine Icons entsprechen Ihrer Suche'
 });

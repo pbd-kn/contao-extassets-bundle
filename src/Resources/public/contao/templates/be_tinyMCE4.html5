@@ -59,7 +59,7 @@ window.tinymce && tinymce.init({
 
   <?php $this->block('valid_elements'); ?>
     //extended_valid_elements: 'q[cite|class|title],article,section,hgroup,figure,figcaption',
-    extended_valid_elements: 'q[cite|class|title],article,section,hgroup,figure,figcaption,button,span[*],p[*]', 
+    extended_valid_elements: 'q[cite|class|title],article,section,hgroup,figure,figcaption,button,span[*],p[*],i[*]', 
   <?php $this->endblock(); ?>
 
   <?php $this->block('menubar'); ?>

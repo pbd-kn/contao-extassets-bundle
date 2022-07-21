@@ -56,14 +56,15 @@
     overflow: hidden;
 }
 
-.mce-fontawesome-panel .mce-icon-cell {
+.mce-fontawesome-panel-content .mce-icon-cell {
     position: relative;
     float: left;
+    margin-left:0.3rem;
     /*width: 40px;
     height: 40px;
     */
-    width: 2em;
-    height: 2em;
+    //width: 2em;
+    //height: 2em;
 }
 
 .mce-fontawesome-panel .faclass {

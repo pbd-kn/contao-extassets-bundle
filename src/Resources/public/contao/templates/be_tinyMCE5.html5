@@ -23,8 +23,17 @@ window.tinymce && tinymce.init({
   //entities: '160,nbsp,60,lt,62,gt,173,shy',
   branding: false,
   setup: function(editor) {
-    console.debug("setup in editor");
+    console.debug("setup in editor for fontawesome 5");
     editor.getElement().removeAttribute('required');
+/*
+          editor.on("PreInit", function () {
+        console.log('preinit me full');
+        //tinymce.activeEditor.schema.addValidElements("i[class|contenteditable|style]");
+        //tinymce.activeEditor.schema.addValidElements("i[*]");
+        if (tinymce.activeEditor.schema.isValidChild('i', 'style')) alert('class is valid child of i.');
+        if (tinymce.activeEditor.schema.getElementRule('i')) console.log('i ist bekannt.');
+      });
+*/
   },   // ende setup
   init_instance_callback: function(editor) {
     if (document.activeElement && document.activeElement.id && document.activeElement.id == editor.id) {
@@ -60,7 +69,7 @@ window.tinymce && tinymce.init({
 
   <?php $this->block('valid_elements'); ?>
     //extended_valid_elements: 'q[cite|class|title],article,section,hgroup,figure,figcaption',
-    extended_valid_elements: 'q[cite|class|title],article,section,hgroup,figure,figcaption,button,span[*],p[*]', 
+    extended_valid_elements: 'q[cite|class|title],article,section,hgroup,figure,figcaption,button,span[*],p[*],i[*]', 
   <?php $this->endblock(); ?>
 
   <?php $this->block('menubar'); ?>
