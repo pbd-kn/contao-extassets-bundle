@@ -215,9 +215,12 @@ class ExtCssCombiner extends \Frontend
             case 'title':
                 return standardize(\StringUtil::restoreBasicEntities(implode('-', $this->getEach('title'))));
             case 'addBootstrapPrint':
+                $arr= $this->getEach($strKey);
+                if (count($arr)==0) return 0;               // addBootstrapPrint wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'addFontAwesome':
-                //return 0;
+                $arr= $this->getEach($strKey);
+                if (count($arr)==0) return 0;               // addFontAwesome wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'selectAweSome':
                 $arr= $this->getEach($strKey);
@@ -228,6 +231,8 @@ class ExtCssCombiner extends \Frontend
                 if (count($arr)==0) return 0;               // setTinymce wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'addbootstrap':
+                $arr= $this->getEach($strKey);
+                if (count($arr)==0) return 0;               // addbootstrap wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'setDebug':
                 $arr= $this->getEach($strKey);
