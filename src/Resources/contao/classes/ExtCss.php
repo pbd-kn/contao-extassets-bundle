@@ -454,14 +454,17 @@ class ExtCss extends \Frontend
         }
 
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'arrBaseCss len '.count($arrBaseCss));
- 
-        $GLOBALS['TL_CSS'] = array_merge(\is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
-        $GLOBALS['TL_USER_CSS'] = array_merge((isset($GLOBALS['TL_USER_CSS'])&&\is_array($GLOBALS['TL_USER_CSS'])) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
+        //$GLOBALS['TL_CSS'] = array_merge(\is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
+
+        $GLOBALS['TL_CSS'] = array_merge(!empty($GLOBALS['TL_CSS']) && \is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
         foreach ($GLOBALS['TL_CSS'] as $k => $v) {
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_CSS'][$k]: [$v]");
         }
+
+        $GLOBALS['TL_USER_CSS'] = array_merge(!empty($GLOBALS['TL_USER_CSS'])&&\is_array($GLOBALS['TL_USER_CSS']) ? $GLOBALS['TL_USER_CSS'] : [], $arrUserCss);
         foreach ($GLOBALS['TL_USER_CSS'] as $k => $v) {
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "GLOBALS['TL_USER_CSS'][$k]: [$v]");
         }
     }
+     
 }

@@ -111,7 +111,7 @@ class ExtCssCombiner extends \Frontend
             $this->rewrite = true;
             $this->rewriteBootstrap = true;
             $this->cache = false;
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'reset cache this->objUserCssFile->size'.$this->this->objUserCssFile->size);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'reset cache this->objUserCssFile->size'.$this->objUserCssFile->size);
         }
 
         $this->uriRoot = (TL_ASSETS_URL ?: \Environment::get('url')).'/assets/css/';
@@ -141,11 +141,12 @@ class ExtCssCombiner extends \Frontend
             if ($this->addFontAwesome) {             // add tinymce
               AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'selectAweSome '.$this->selectAweSome.' setTinymce '.$this->setTinymce);
                 // TinyMCE Plugins installieren allerdings nur ab Contao 4.13 tinimce 5.0
-              $srccss='';
-              $srcfont='';
-              $srctinyplugin='';
-              $srctinytmpl='';
-              if ($this->selectAweSome == 4) {
+                // defaultwerte einstellen
+              $srccss="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/css/";
+              $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/fonts/";
+              $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome4/';
+              $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE4.html5';
+              if ($this->selectAweSome == '4.7') {
                 $srccss="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/css/";
                 $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/fonts/";
                 $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome4/';
@@ -215,10 +216,9 @@ class ExtCssCombiner extends \Frontend
             case 'title':
                 return standardize(\StringUtil::restoreBasicEntities(implode('-', $this->getEach('title'))));
             case 'addBootstrapPrint':
-                $arr= $this->getEach($strKey);
-                if (count($arr)==0) return 0;               // addBootstrapPrint wurde noch nie gesetzt
                 return max($this->getEach($strKey));
             case 'addFontAwesome':
+                //return 0;
                 $arr= $this->getEach($strKey);
                 if (count($arr)==0) return 0;               // addFontAwesome wurde noch nie gesetzt
                 return max($this->getEach($strKey));
@@ -543,7 +543,7 @@ class ExtCssCombiner extends \Frontend
     {
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'addCustomLessFiles ');
 
-        if (!\is_array($GLOBALS['TL_USER_CSS']) || empty($GLOBALS['TL_USER_CSS'])) {
+        if ( empty($GLOBALS['TL_USER_CSS'])||!\is_array($GLOBALS['TL_USER_CSS'])) {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'keine TL_USER_CSS ');
             return false;
         }
