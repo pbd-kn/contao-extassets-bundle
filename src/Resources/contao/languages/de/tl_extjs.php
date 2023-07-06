@@ -33,12 +33,16 @@ declare(strict_types=1);
  */
 $GLOBALS['TL_LANG']['tl_extjs']['title'] = ['Titel', 'Bitte geben Sie einen Titel an.'];
 $GLOBALS['TL_LANG']['tl_extjs']['addBootstrap'] = ['Bootstrap javascript aktivieren', 'Fügen Sie der Javascript Gruppe Bootstrap javascript hinzu.'];
+$GLOBALS['TL_LANG']['tl_extjs']['position'] = ['Javascript einfügen', 'Javascript wird an der Position eingefügt'];
 
 /*
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_extjs']['title_legend'] = 'Titel';
 $GLOBALS['TL_LANG']['tl_extjs']['bootstrap_legend'] = 'Bootstrap';
+$GLOBALS['TL_LANG']['tl_extjs']['head']='head';
+$GLOBALS['TL_LANG']['tl_extjs']['body']='body';
+
 
 /*
  * Buttons

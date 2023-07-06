@@ -146,18 +146,23 @@ class ExtCssCombiner extends \Frontend
               $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/fonts/";
               $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome4/';
               $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE4.html5';
+              $srctinytmpl='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/templates/be_tinyMCE4.html5';
+              $destDir="assets/font-awesome/fonts/";             // im web-space
               if ($this->selectAweSome == '4.7') {
                 $srccss="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/css/";
                 $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome4.7/fonts/";
                 $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome4/';
                 $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE4.html5';
+                $srctinytmpl='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/templates/be_tinyMCE4.html5';
+                $destDir="assets/font-awesome/fonts/";             // im web-space
               } elseif ($this->selectAweSome == 5) {
                 $srccss="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome5/css/";
                 $srcfont="vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/font-awesome5/webfonts/";
                 $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome5/';
                 $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE5.html5';
+                $srctinytmpl='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/templates/be_tinyMCE5.html5';
+                $destDir="assets/font-awesome/webfonts/";             // im web-space
               }
-              $destDir="assets/font-awesome/css/";
               $this->removeFiles ($destDir);
               $this->copyAll($srccss,$destDir);
               $this->copyAll($srcfont,$destDir);
@@ -177,7 +182,7 @@ class ExtCssCombiner extends \Frontend
               } else {
                 \System::log('Tinymce wird erst ab timymce 5 (ab contao 4.13) unterstuetzt',__METHOD__, TL_ERROR);
               }
-              $this->addFontAwesome();   // add fontawesome css
+              $this->addFontAwesome();   // add fontawesome css  erwartet css-files in assets im webspace
             }
             
             // HOOK: add custom asset
@@ -417,14 +422,23 @@ class ExtCssCombiner extends \Frontend
 
     protected function addBootstrap(): void
     {
+        $fn='bootstrap'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.css';
+        $distnm = BOOTSTRAPDISTDIR.'css/'.$fn;
 
-        $objOut = new \File($this->getBootstrapCss('bootstrap.min.css'), true);    
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objOut '.$objOut->value); 
+        $distobj = new \File($distnm);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap css distname '.$distobj->value);
+        $ret='';
 
-        if (!$objOut->exists()) {
-            \System::log('bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs', __METHOD__, TL_ERROR);
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs');
+        if (!$distobj->exists()) {
+            \System::log('bootstrap not in  '.$distobj->value.' please install twbs', __METHOD__, TL_ERROR);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$distobj->value.' please install twbs');
             return;
+        }
+        $objOut = new \File(BOOTSTRAPCSSDIR.$fn, true);   // File in asset des webzugriffs 
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap js asset objOut '.$objOut->value);
+        if (!$objOut->exists()) {
+            $distobj->copyTo($objOut->value); // copy File to assets im web Bereich
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy js '.$distobj->value.' to '.$objOut->value);
         }
 
         $this->arrReturn[self::$bootstrapCssKey][] = [              // css-file fuer return merken
@@ -498,16 +512,18 @@ class ExtCssCombiner extends \Frontend
     protected function addFontAwesome(): void
     {
       AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'selectAweSome '.$this->selectAweSome.' setTinymce '.$this->setTinymce);
-      $awpath='assets/font-awesome/css/';
+      $awpath='assets/font-awesome/fonts/';
       if ($this->selectAweSome == 4) {
+        $awpath='assets/font-awesome/fonts/';
         $awecssFile=$awpath.'font-awesome.min.css';
       } else {
+        $awpath='assets/font-awesome/webfonts/';
         $awecssFile=$awpath.'all.min.css';
       }
       $objOut = new \File($awecssFile, true);
       if (!$objOut->exists()) {
-        \System::log('fontawesome not in  assets/font-awesome/css/ please purge less files', __METHOD__, TL_ERROR);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in  assets/font-awesome/css/  purge less files');
+        \System::log('fontawesome not in '.$awecssFile.' please purge less files', __METHOD__, TL_ERROR);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in $awpath file '.$awecssFile.'  purge less files');
         return;
       }
       AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'include awecssFile mode '.$this->mode.' src '.$objOut->value.' hash '.$objOut->hash.' time '.$objOut->mtime); 

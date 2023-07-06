@@ -12,8 +12,7 @@ console.log('versionmain: '+tinymce.majorVersion + '.' + tinymce.minorVersion);
 console.log('src '+"<?= $this->asset('js/tinymce.min.js', 'contao-components/tinymce4') ?>");
 console.log('valid_elements: '+"<?php $this->block('valid_elements'); ?>");
 console.log('theme '+"<?= Backend::getTheme() ?>");
-console.log('be_tinyMCE.html for fontawesome 5');
-
+console.log('be_tinyMCE.html for fontawesome 4');
 window.tinymce && tinymce.init({
   selector: '#<?= $this->selector ?>',
   min_height: 336,
@@ -23,17 +22,8 @@ window.tinymce && tinymce.init({
   //entities: '160,nbsp,60,lt,62,gt,173,shy',
   branding: false,
   setup: function(editor) {
-    console.debug("setup in editor for fontawesome 5");
+    console.debug("setup in editor");
     editor.getElement().removeAttribute('required');
-/*
-          editor.on("PreInit", function () {
-        console.log('preinit me full');
-        //tinymce.activeEditor.schema.addValidElements("i[class|contenteditable|style]");
-        //tinymce.activeEditor.schema.addValidElements("i[*]");
-        if (tinymce.activeEditor.schema.isValidChild('i', 'style')) alert('class is valid child of i.');
-        if (tinymce.activeEditor.schema.getElementRule('i')) console.log('i ist bekannt.');
-      });
-*/
   },   // ende setup
   init_instance_callback: function(editor) {
     if (document.activeElement && document.activeElement.id && document.activeElement.id == editor.id) {
@@ -57,9 +47,9 @@ window.tinymce && tinymce.init({
   <?php $this->endblock(); ?>
 
   <?php $this->block('content_css'); ?>
-    //content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css',
-    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css, assets/font-awesome/css/all.min.css',
-    font_awesome_path: "assets/font-awesome/css/all.min.css",               // variable for plugin
+    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css',
+    content_css: 'system/themes/<?= Backend::getTheme() ?>/tinymce.min.css, assets/font-awesome/fonts/font-awesome.min.css',
+    font_awesome_path: "assets/font-awesome/fonts/font-awesome.min.css",               // variable for plugin
   <?php $this->endblock(); ?>
 
   <?php $this->block('plugins'); ?>

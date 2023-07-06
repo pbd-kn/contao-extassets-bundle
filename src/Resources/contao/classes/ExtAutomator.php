@@ -44,8 +44,8 @@ class ExtAutomator extends \Automator
             $objFolder->purge();
 
             // Restore the index.html file
-            $objFile = new \File('templates/index.html', true);
-            $objFile->copyTo($folder.'index.html');
+            @$objFile = new \File('templates/index.html', true);
+            @$objFile->copyTo($folder.'index.html');
         }
 
         // Also empty the page cache so there are no links to deleted scripts

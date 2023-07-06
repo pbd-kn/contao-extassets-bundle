@@ -32,6 +32,7 @@ declare(strict_types=1);
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_extjs']['title'] = ['Title', 'Please enter a title.'];
+$GLOBALS['TL_LANG']['tl_extjs']['position'] = ['insert js', 'insert js at position'];
 $GLOBALS['TL_LANG']['tl_extjs']['addBootstrap'] = ['Enable bootstrap javascript', 'Add bootstrap javascript to this group.'];
 
 /*
@@ -39,6 +40,8 @@ $GLOBALS['TL_LANG']['tl_extjs']['addBootstrap'] = ['Enable bootstrap javascript'
  */
 $GLOBALS['TL_LANG']['tl_extjs']['title_legend'] = 'Title';
 $GLOBALS['TL_LANG']['tl_extjs']['bootstrap_legend'] = 'Bootstrap';
+$GLOBALS['TL_LANG']['tl_extjs']['head']='head';
+$GLOBALS['TL_LANG']['tl_extjs']['body']='body';
 
 /*
  * Buttons

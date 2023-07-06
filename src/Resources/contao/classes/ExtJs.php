@@ -35,6 +35,8 @@ declare(strict_types=1);
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use HeimrichHannot\Haste\Util\StringUtil;
+//use Contao;
+
 
 class ExtJs extends \Frontend
 {
@@ -80,21 +82,44 @@ class ExtJs extends \Frontend
         return $strBuffer;
     }
 
-    public function addTwitterBootstrap()
+    public function getTwitterBootstrapjs()
     {
-        $arrJs = $GLOBALS['TL_JAVASCRIPT'];
 
         // do not include more than once
+        /*
         if (isset($arrJs['bootstrap'])) {
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap doppelt');
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap js doppelt');
             return false;
         }
+        */
         // im debugfall not .min.
-        $in = BOOTSTRAPDISTDIR.'js/bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
+        //$rootDir = \System::getContainer()->getParameter('kernel.project_dir');;
+        //$in = $rootDir.'\\'.BOOTSTRAPDISTDIR.'js/bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
+        //$in = '../vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/bootstrap5/'.'js/bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
+        $fn='bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
+        $distnm = BOOTSTRAPDISTDIR.'js/'.$fn;
+        $distobj = new \File($distnm);
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap js distname '.$distobj->value);
+        $ret='';
+        if ($distobj->exists()) {           // bootstrap liegt in  vor
+            $objOut = new \File(BOOTSTRAPJSDIR.$fn, true);   // File in asset des webzugriffs 
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap js asset objOut '.$objOut->value);
+            if (!$objOut->exists()) {
+               $distobj->copyTo($objOut->value); // copy File to assets im web Bereich
+               AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy js '.$distobj->value.' to '.$objOut->value);
+            }
+            $ret=$objOut->value;
+        } else {
+            \System::log('js/bootstrap.bundle.. js not in '.BOOTSTRAPDISTDIR.' please install twbs', __METHOD__, TL_ERROR);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'not exist '.$distobj->path);
+        }
+
+        return $ret;
+        /*
         $objFiledist = new \File($in);
         if ($objFiledist->exists()) {           // bootstrap liegt in  vor
-        	array_insert($GLOBALS['TL_JAVASCRIPT'], 1, array('bootstrap' => "$objFiledist->path|none"));
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap js insert in globals[TL_JAVASCRIPT] '.$objFiledist->path);
+        	array_insert($GLOBALS[$jsPosition], 1, array('bootstrap' => "$objFiledist->path|none"));
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "bootstrap js insert in globals[$jsPosition] ".$objFiledist->path);
         } else {
             \System::log('js/bootstrap.bundle.. js not in '.BOOTSTRAPDISTDIR.' please install twbs', __METHOD__, TL_ERROR);
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'not exist '.$objFiledist->path);
@@ -116,7 +141,8 @@ class ExtJs extends \Frontend
         }
 
         array_insert($arrJs, $intJqueryIndex, ['bootstrap' => $in.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '|static' : '')]);
-        $GLOBALS['TL_JAVASCRIPT'] = $arrJs;
+        $GLOBALS[$jsPosition] = $arrJs;
+        */
     }
     /*
      * objLayout pointer auf zugehoeriges Layout
@@ -125,82 +151,65 @@ class ExtJs extends \Frontend
 
     protected function parseExtJs($objLayout, &$arrReplace)
     {
+        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD);
         $arrJs = [];
         $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
-
+        // alle aktivierten Objekte aus dem Layout
         $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
-
+        AssetsLog::setAssetDebugmode($objJs->setDebug);            // debug aus der ersten Gruppe
         if (null === $objJs) {
             // extjs ist in Layout nicht gesetzt
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'extjs nicht in Layouts enthalten');
             return false;
         }
-        AssetsLog::setAssetDebugmode($objJs->setDebug);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' Debug '.$objJs->setDebug);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Layout extjs '.$objLayout->extjs);
-
+        // position head oder body
         $cache = !$GLOBALS['TL_CONFIG']['debugMode'];
-
+        // nochmals da der erste zugriff schon eine Gruppe weiter schaltet 
         $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
+//        $rewrite = false;
+        $headCombiner = new \Contao\Combiner();
+        $bodyCombiner = new \Contao\Combiner();
+        $bootsTrapHead=false;
+        $bootsTrapBody=false;
         while ($objJs->next()) {
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Title: '.$objJs->title.' Position: '.$objJs->jsPosition);
+            // muss das Asset-File neu geschrieben werden
+            //$rewrite = ($objJs->tstamp > $objGroup->mtime || 0 === $objGroup->size || ($cache && 0 === $objGroupMinified->size));
+            //$strrewrite = $rewrite ? 'true' : 'false';
+            //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'REWRITE: '.$strrewrite);
+            
+            // bootstrap nur einmal im Body hinzufuegen
+            if ($objJs->addBootstrap) {
+                if ($objJs->jsPosition == 'head') {
+                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '!!Boottrapjs NICHT im Header einfuegen');
+                } else { 
+                  if ($bootsTrapBody) {
+                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap Body js doppelt');
+                  } else {
+                    $bootstrapjs=$this->getTwitterBootstrapjs(); // default
+                    AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add Boottrapjs to body '.$bootstrapjs);
+                    $bodyCombiner->add($bootstrapjs);
+                    $bootsTrapBody=true;
+                  }
+                }
+            }
+
             $objFiles = \PBDKN\ExtAssets\Resources\contao\models\ExtJsFileModel::findMultipleByPid($objJs->id);
-            if (null === $objFiles) {
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'keine files');
-                continue;
-            }
-            $strChunk = '';
-
-            $strFile = 'assets/js/'.$objJs->title.'.js';
-            $strFileMinified = str_replace('.js', '.min.js', $strFile);
-            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strFile: '.$strFile.' strFileMinified: '.$strFileMinified);
-
-            $objGroup = new \File($strFile, file_exists($rootDir.'/'.$strFile));
-            $objGroupMinified = new \File($strFileMinified, file_exists($rootDir.'/'.$strFile));
-
-            if (!$objGroupMinified->exists()) {
-                $objGroupMinified->write('');
-                $objGroupMinified->close();
-            }
-
-            if (!$objGroup->exists()) {
-                $objGroup->write('');
-                $objGroup->close();
-            }
-
-            $rewrite = ($objJs->tstamp > $objGroup->mtime || 0 === $objGroup->size || ($cache && 0 === $objGroupMinified->size));
-
-            while ($objFiles->next()) {
+            if ($objFiles) {
+              while ($objFiles->next()) {            // ueber alle Gruppen
                 $objFileModel = \FilesModel::findByPk($objFiles->src);
-
                 if (null === $objFileModel || !file_exists($rootDir.'/'.$objFileModel->path)) {
                     continue;
                 }
                 $objFile = new \File($objFileModel->path);
-                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add objFile: '.$objFileModel->path);
-
-                $strChunk .= $objFile->getContent()."\n";
-
-                if ($objFile->mtime > $objGroup->mtime) {
-                    $rewrite = true;
-                }
+                AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add '.$objJs->jsPosition.' file '.$objFile->path);
+                if ($objJs->jsPosition == 'head') $headCombiner->add($objFile->path);
+                else $bodyCombiner->add($objFile->path);
+              }
             }
-
-            // simple file caching
-            if ($rewrite) {
-                $objGroup->write($strChunk);
-                $objGroup->close();
-
-                // minify js
-                if ($cache) {
-                    $objGroup = new \File($strFileMinified);
-                    $objMinify = new \MatthiasMullie\Minify\JS();
-                    $objMinify->add($strChunk);
-                    $objGroup->write(rtrim($objMinify->minify(), ';').';'); // append semicolon, otherwise "(intermediate value)(...) is not a function"
-                    $objGroup->close();
-                }
-            }
-
-            $arrJs[] = $cache ? ("$strFileMinified|static") : "$strFile";
         }
+/*
         // HOOK: add custom css
         if (isset($GLOBALS['TL_HOOKS']['parseExtJs']) && \is_array($GLOBALS['TL_HOOKS']['parseExtJs'])) {
             foreach ($GLOBALS['TL_HOOKS']['parseExtJs'] as $callback) {
@@ -208,12 +217,25 @@ class ExtJs extends \Frontend
                 $arrJs = static::importStatic($callback[0])->{$callback[1]}($arrJs);
             }
         }
-        if ($objJs->addBootstrap) {
-            $this->addTwitterBootstrap();
+*/
+//
+        if ($headCombiner->hasEntries()) {
+            $headFile=$headCombiner->getCombinedFile();
+            $GLOBALS['TL_JAVASCRIPT'][]=$headFile;
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "Add JS aus extjs im Header ".$headFile);
+            foreach ($GLOBALS['TL_JAVASCRIPT'] as $k=>$v) {AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "TL_JAVASCRIPT[$k]: $v");}
+        } else {
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "Keine JS aus extjs im Header");
         }
-        // inject extjs before other plugins, otherwise bootstrap may not work
-        $GLOBALS['TL_JAVASCRIPT'] = \is_array($GLOBALS['TL_JAVASCRIPT']) ? array_merge($GLOBALS['TL_JAVASCRIPT'], $arrJs) : $arrJs;
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'files in GLOBALS[TL_JAVASCRIPT]');
-        foreach ($GLOBALS['TL_JAVASCRIPT'] as $k=>$v) {AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "arrJs[$k]: $v");}
+        foreach ($GLOBALS['TL_JAVASCRIPT'] as $k=>$v) {AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "TL_JAVASCRIPT[$k]: $v");}
+        if ($bodyCombiner->hasEntries()) {
+          $bodyFile=$bodyCombiner->getCombinedFile();
+          $GLOBALS['TL_BODY'][] = \Contao\Template::generateScriptTag($bodyFile, false, null);
+          //$GLOBALS['TL_BODY'][]=$bodyFile;
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "Add JS aus extjs im Body ".$bodyFile);
+        } else {
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "Keine JS aus extjs im Body");
+        }
+        foreach ($GLOBALS['TL_BODY'] as $k=>$v) {AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, "TL_BODY[$k]: $v");}
     }
 }

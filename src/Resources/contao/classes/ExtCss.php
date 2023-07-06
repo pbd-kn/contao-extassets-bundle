@@ -424,6 +424,8 @@ class ExtCss extends \Frontend
                 $arrBaseCss[] = sprintf('%s|%s|%s|%s', $arrCss['src'], $arrCss['type'], !$static ? $static : $arrCss['mode'], $arrCss['hash']);
                 $arrHashs[] = $arrCss['hash'];
             }
+        } else {
+          AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'no bootstrapkey'); //achtung wird erst im extcsscombiner gesetzt
         }
 
         // TODO: Refactor equal logic…

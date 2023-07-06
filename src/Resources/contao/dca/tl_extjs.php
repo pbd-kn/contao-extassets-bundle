@@ -90,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_extjs'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{title_legend},title;{bootstrap_legend},addBootstrap;setDebug;',
+        'default' => '{title_legend},title;{bootstrap_legend},addBootstrap;jsPosition;setDebug;',
     ],
     // Fields
     'fields' => [
@@ -114,6 +114,17 @@ $GLOBALS['TL_DCA']['tl_extjs'] = [
             'default' => true,
             'sql' => "char(1) NOT NULL default ''",
         ],
+        'jsPosition' => array(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_extjs']['position'],
+			'exclude'                 => true,
+            'inputType'               => 'select',
+            'options'                 => array('0' => 'head','1'=> 'body'),
+            'default'                 => 'body',
+//            'eval'                    => array('submitOnChange'=>true,'tl_class'=>'w50'),
+            'eval'                    => array('tl_class'=>'w50'),
+			'sql'                     => "varchar(64) NOT NULL default '1'",
+		),
+        
         'setDebug' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
             'exclude' => true,

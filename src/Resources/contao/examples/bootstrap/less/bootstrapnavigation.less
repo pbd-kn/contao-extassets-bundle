@@ -1,0 +1,64 @@
+
+
+        ul.navbar-nav li.dropdown:hover > ul.dropdown-menu,
+        ul.nav li.dropdown:hover > ul.dropdown-menu,
+        ul.navbar-nav li.dropdown:active > ul.dropdown-menu,
+        ul.nav li.dropdown:active > ul.dropdown-menu,
+        ul.navbar-nav li.dropdown:hover div.dropdown-menu,
+        ul.nav li.dropdown:hover div.dropdown-menu,
+        ul.navbar-nav li.dropdown:hover div.dropdown-menu,
+        ul.nav li.dropdown:hover div.dropdown-menu
+        {
+            display: block;
+        }
+
+        ul.navbar-nav li.dropdown:focus > ul.dropdown-menu,
+        ul.nav li.dropdown:focus > ul.dropdown-menu,
+        ul.navbar-nav li.dropdown:focus > ul.dropdown-menu,
+        ul.nav li.dropdown:focus > ul.dropdown-menu,
+        ul.navbar-nav li.dropdown:focus div.dropdown-menu,
+        ul.nav li.dropdown:focus div.dropdown-menu,
+        ul.navbar-nav li.dropdown:focus div.dropdown-menu,
+        ul.nav li.dropdown:focus div.dropdown-menu
+        {
+            display: block;
+        }
+.sr-only { display:none; }
+.dropdown-menu {
+  background-color: @link-color-navigation-bg;
+}
+
+.navbar {
+  padding:0;
+}
+.nav-link {
+  color: @link-color-navigation;
+  background: @link-color-navigation-bg;
+}  
+strong.active.nav-link {
+  color: @component-active-color;
+  background-color: @component-active-bg;
+}
+.dropdown-item.active {
+  color: @component-active-color;
+  background-color: @component-active-bg;
+}
+.nav-item.activ .nav-link {                    // noch offen geht nicht das uebergeordnete nav-link sollte auch gaendert sein
+  background-color: @component-active-bg;
+  background-color: yellow !important;
+  background: blue !important;
+}
+.navbar-brand {
+  background: @link-color-navigation-bg;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+[id^="navbar-responsive-"] { 
+  background: @link-color-navigation-bg;   // fuellt background der dargestellten Items
+}
+nav.bg-light {
+  background-color: @link-color-navigation-bg !important;    // fuellt den Zwischenraum bei der flex-zeile auf
+}
+
+
