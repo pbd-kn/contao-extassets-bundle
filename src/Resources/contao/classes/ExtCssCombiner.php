@@ -161,7 +161,7 @@ class ExtCssCombiner extends \Frontend
                 $srctinyplugin='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/js/plugins/fontawesome5/';
                 $srctinytmpl='web/bundles/contaoextassets/contao/templates/be_tinyMCE5.html5';
                 $srctinytmpl='vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/tinymce4/templates/be_tinyMCE5.html5';
-                $destDir="assets/font-awesome/webfonts/";             // im web-space
+                $destDir="assets/font-awesome/webfonts/";             // im web-space muss webfonts heissen, da in den css-files dies verwendet wird
               }
               $this->removeFiles ($destDir);
               $this->copyAll($srccss,$destDir);
