@@ -1,20 +1,24 @@
 // JavaScript Document
 // hilfsroutinen für Bootstrap js
 // 1. Toggle Click ereignis
-  $(document).ready(function() {
-    // Toggle-Klickereignis für den Navbar-Toggler
+console.log('pbboottrap.js gerufen');
+if (typeof jQuery !== 'undefined') {
+    console.log('jQuery is loaded');
+    console.log(jQuery.fn.jquery);  
+  } else {
+    console.log('jQuery is not loaded');
+  }
+var myAlias = jQuery.noConflict();
+
+myAlias(function($) {    // Toggle-Klickereignis für den Navbar-Toggler
+console.log('funktion gerufen');
+    $('.dropdown-toggle').dropdown();
     $(".navbar-toggler").click(function() {    
       $(".navbar-collapse").toggleClass("show");
       console.log ('click gerufen');
-      if ($(".navbar-collapse").hasClass('show')) {
-        console.log('show');
-        $('ul.nav').css('flex-direction', 'column');
-      } else {
-        console.log('not show');
-        $('ul.nav').css('flex-direction', 'row');
-      }
     });                // Handler, wenn dropdown geklickt wird, damit submenus aufgehen
                        // angeblich ist das in bootstrap.bundle enthalten
+/*
     document.querySelectorAll('[data-toggle="dropdown"]').forEach(function (dropdown) {
 //console.log('eventlistener fuer dropdown');
         dropdown.addEventListener('click', function () {
@@ -31,6 +35,7 @@
         });        
       });
     });
+*/
 });
 
 

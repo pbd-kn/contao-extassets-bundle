@@ -1,64 +1,64 @@
+@media screen {
+  li.dropdown:hover .dropdown-menu,
+  li.dropdown:focus .dropdown-menu
+  {
+    display: block;
+  }
 
+  .sr-only { display:none; }
+  .dropdown-menu {
+    //background-color: @link-color-navigation-bg;
+  }
+  .navbar {
+    padding:0;
+  }
+  .nav-link {
+    color: @link-color-navigation;
+    background: @link-color-navigation-bg;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }  
+  strong.active.nav-link {
+    color: @component-active-color;
+    background-color: @component-active-bg;
+  }
+  .dropdown-item.active {
+    color: @component-active-color;
+    background-color: @component-active-bg;
+  }
+  .active.nav-item .nav-link {                  // uebergeordnet Link auch einfaerben
+    background-color: @component-active-bg;
+    color: @component-active-color;
+  }
+  .navbar-brand {
+    background: @link-color-navigation-bg;
+    margin: 0;
+  }
+  [id^="navbar-responsive-"] { 
+    background: @link-color-navigation-bg;   // fuellt background der dargestellten Items
+  }
+  nav.bg-light {
+    background-color: @link-color-navigation-bg !important;    // fuellt den Zwischenraum bei der flex-zeile auf
+  }
 
-        ul.navbar-nav li.dropdown:hover > ul.dropdown-menu,
-        ul.nav li.dropdown:hover > ul.dropdown-menu,
-        ul.navbar-nav li.dropdown:active > ul.dropdown-menu,
-        ul.nav li.dropdown:active > ul.dropdown-menu,
-        ul.navbar-nav li.dropdown:hover div.dropdown-menu,
-        ul.nav li.dropdown:hover div.dropdown-menu,
-        ul.navbar-nav li.dropdown:hover div.dropdown-menu,
-        ul.nav li.dropdown:hover div.dropdown-menu
-        {
-            display: block;
-        }
+  nav {
+    overflow: unset !important;                  // damit dropdown ueber die begrenzung gehen
+  }
 
-        ul.navbar-nav li.dropdown:focus > ul.dropdown-menu,
-        ul.nav li.dropdown:focus > ul.dropdown-menu,
-        ul.navbar-nav li.dropdown:focus > ul.dropdown-menu,
-        ul.nav li.dropdown:focus > ul.dropdown-menu,
-        ul.navbar-nav li.dropdown:focus div.dropdown-menu,
-        ul.nav li.dropdown:focus div.dropdown-menu,
-        ul.navbar-nav li.dropdown:focus div.dropdown-menu,
-        ul.nav li.dropdown:focus div.dropdown-menu
-        {
-            display: block;
-        }
-.sr-only { display:none; }
-.dropdown-menu {
-  background-color: @link-color-navigation-bg;
+  // Konfiguration des toggle windows
+  .navbar-collapse.show {
+    .nav { 
+      flex-direction: column;
+     }
+    .nav-link {
+      //background:yellow;
+      //color: purple;
+      padding-top: 0rem;
+      padding-bottom: 0rem;
+    }
+    .nav-item {
+      border: 1px solid @navbar-default-border;
+    }
+  }
 }
-
-.navbar {
-  padding:0;
-}
-.nav-link {
-  color: @link-color-navigation;
-  background: @link-color-navigation-bg;
-}  
-strong.active.nav-link {
-  color: @component-active-color;
-  background-color: @component-active-bg;
-}
-.dropdown-item.active {
-  color: @component-active-color;
-  background-color: @component-active-bg;
-}
-.nav-item.activ .nav-link {                    // noch offen geht nicht das uebergeordnete nav-link sollte auch gaendert sein
-  background-color: @component-active-bg;
-  background-color: yellow !important;
-  background: blue !important;
-}
-.navbar-brand {
-  background: @link-color-navigation-bg;
-  margin: 0;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-[id^="navbar-responsive-"] { 
-  background: @link-color-navigation-bg;   // fuellt background der dargestellten Items
-}
-nav.bg-light {
-  background-color: @link-color-navigation-bg !important;    // fuellt den Zwischenraum bei der flex-zeile auf
-}
-
 
