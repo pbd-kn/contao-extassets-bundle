@@ -93,23 +93,11 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
         ],
     ],
 
-    // Palettes
-	//	'default' => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addingbootstrap;setDebug;'
-	//	'default' => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addingbootstrap;{font_awesome_legend},addFontAwesome,setDebug;'
- 	//			'__selector__'				=> array('addBootstrap'),
-	//			'default'                   => '{title_legend},title,observeFolderSRC;{bootstrap_legend},addBootstrap;{font_awesome_legend},addFontAwesome;'
 
     'palettes' => [
-//        '__selector__' => array('addBootstrap','addFontAwesome'),
-        '__selector__' => array('addBootstrap','addFontAwesome'),
-		'default' => '{title_legend},title;{less_legend},observeFolderSRC,variablesSRC;{bootstrap_legend},addbootstrap;{font_awesome_legend},addFontAwesome;setDebug;'
+        '__selector__' => array('addBootstrap'),
+		'default' => '{title_legend},title;{less_legend},observeFolderSRC,variablesSRC;{bootstrap_legend},addbootstrap;addFontAwesome;setDebug;'
     ],
-	// Subpalettes
-	'subpalettes' => array
-	(
-//		'addBootstrap'				=> 'variablesSRC',
-        'addFontAwesome'            => 'selectAweSome,setTinymce',
-	),
     // Fields
     'fields' => [
         'id' => [
@@ -177,36 +165,14 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
             'eval' => ['fieldType' => 'radio', 'filesOnly' => false, 'extensions' => 'css, less'],
             'sql' => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
         ],
-       
         'addFontAwesome' => array(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'],
 			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'default'                 => true,
-            'eval'                    => array('submitOnChange'=>true, 'tl_class'=>'long'),
+			'inputType'               => 'text',
+			'default'                 => &$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'],
+            'eval'                    => array('disabled'=>true,'placeholder'=>$GLOBALS['TL_LANG']['tl_extcss']['addFontAwesome'][1]),
 			'sql'                     => "char(1) NOT NULL default ''",
 		),
-        'selectAweSome' => array(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['selectFontAwesome'],
-			'exclude'                 => true,
-            'inputType'               => 'select',
-            'options'                 => array('4' => 'Version 4.7', '5' => 'Version 5'),
-            'default'                 => "Version 5",
-//            'eval'                    => ['tl_class'=>'w50'],
-            'eval'                    => array('submitOnChange'=>true, 'maxlength'=>16),
-			'sql'                     => "char(10) NOT NULL default '5'",
-		),
-        'setTinymce' => array(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_extcss']['setTinymce'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'default'                 => true,
-//            'eval'                    => ['tl_class'=>'w50'],
-            'eval'                    => array('submitOnChange'=>true),
-			'sql'                     => "char(1) NOT NULL default '1'",
-		),
-        
-
         'setDebug' => [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['setDebug'],
             'exclude' => true,

@@ -27,7 +27,9 @@ declare(strict_types=1);
  *  Bootstrap's selection introduced.
  *
  */
-
+use Contao\Controller;
+Controller::loadDataContainer('tl_content');
+$tlContentDCA = &$GLOBALS['TL_DCA']['tl_content'];
 /*
  * Table tl_extjs
  */
@@ -132,5 +134,13 @@ $GLOBALS['TL_DCA']['tl_extjs'] = [
             'default' => true,
             'sql' => "char(1) NOT NULL default '0'",
         ],
+
     ],
 ];
+
+//echo 'vor insert'."\n";
+// Merge the 'palettes' and 'subpalettes' from tl_content to tl_my_custom_element
+//echo 'vor insert1 '.$tlContentDCA['palettes']."\n";
+$GLOBALS['TL_DCA']['tl_extjs']['palettes'] += $tlContentDCA['palettes'];
+//$GLOBALS['TL_DCA']['tl_extjs']['subpalettes'] += $tlContentDCA['subpalettes'];
+//echo 'nach insert'."\n";

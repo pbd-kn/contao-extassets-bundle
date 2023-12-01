@@ -99,7 +99,7 @@ $GLOBALS['TL_DCA']['tl_extjs_file'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{src_legend},src;',
+        'default' => '{src_legend},src;fontawesomeIconPicker;',
     ],
 
     // Fields

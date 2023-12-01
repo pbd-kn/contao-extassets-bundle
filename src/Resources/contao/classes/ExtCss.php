@@ -443,6 +443,7 @@ class ExtCss extends \Frontend
         }
         // TODO: Refactor equal logic…
         // at first collect bootstrap to prevent overwrite of usercss
+        /*
         if (isset($arrReturn[ExtCssCombiner::$fontAwesomeCssKey]) && \is_array($arrReturn[ExtCssCombiner::$fontAwesomeCssKey])) {
             $arrHashs = [];
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'awesome staticx |'.$static.'|');
@@ -454,7 +455,7 @@ class ExtCss extends \Frontend
                 $arrHashs[] = $arrCss['hash'];
             }
         }
-
+        */
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'arrBaseCss len '.count($arrBaseCss));
         //$GLOBALS['TL_CSS'] = array_merge(\is_array($GLOBALS['TL_CSS']) ? $GLOBALS['TL_CSS'] : [], $arrBaseCss);
 

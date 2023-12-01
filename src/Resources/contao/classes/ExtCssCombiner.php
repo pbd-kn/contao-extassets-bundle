@@ -43,7 +43,7 @@ class ExtCssCombiner extends \Frontend
 
     public static $bootstrapResponsiveCssKey = 'bootstrap-responsive';
 
-    public static $fontAwesomeCssKey = 'font-awesome';
+//    public static $fontAwesomeCssKey = 'font-awesome';
 
     public $debug = false;
 
@@ -138,6 +138,7 @@ class ExtCssCombiner extends \Frontend
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs');
               }
             }            
+/*
             if ($this->addFontAwesome) {             // add tinymce
               AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'selectAweSome '.$this->selectAweSome.' setTinymce '.$this->setTinymce);
                 // TinyMCE Plugins installieren allerdings nur ab Contao 4.13 tinimce 5.0
@@ -184,7 +185,7 @@ class ExtCssCombiner extends \Frontend
               }
               $this->addFontAwesome();   // add fontawesome css  erwartet css-files in assets im webspace
             }
-            
+ */           
             // HOOK: add custom asset
             if (isset($GLOBALS['TL_HOOKS']['addCustomAssets']) && \is_array($GLOBALS['TL_HOOKS']['addCustomAssets'])) {
                 foreach ($GLOBALS['TL_HOOKS']['addCustomAssets'] as $callback) {
@@ -206,12 +207,14 @@ class ExtCssCombiner extends \Frontend
             } else {
                 \System::log('bootstrap not selected', __METHOD__, TL_GENERAL);
             }
+/*
 		    if($this->addFontAwesome)
 		    {
 			  $this->addFontAwesome();
             } else {
                 \System::log('fontawesome not selected', __METHOD__, TL_GENERAL);
             }
+*/
         }
     }
 
@@ -224,11 +227,13 @@ class ExtCssCombiner extends \Frontend
                 $arr= $this->getEach($strKey);
                 if (count($arr)==0) return 0;               // addBootstrapPrint wurde noch nie gesetzt
                 return max($this->getEach($strKey));
+/*
             case 'addFontAwesome':
                 //return 0;
                 $arr= $this->getEach($strKey);
                 if (count($arr)==0) return 0;               // addFontAwesome wurde noch nie gesetzt
                 return max($this->getEach($strKey));
+*/ 
             case 'selectAweSome':
                 $arr= $this->getEach($strKey);
                 if (count($arr)==0) return 0;               // selectAweSome wurde noch nie gesetzt
@@ -508,7 +513,7 @@ class ExtCssCombiner extends \Frontend
         $this->objLess->parse($strVariables);
     }
 
-
+/*
     protected function addFontAwesome(): void
     {
       AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'selectAweSome '.$this->selectAweSome.' setTinymce '.$this->setTinymce);
@@ -536,7 +541,7 @@ class ExtCssCombiner extends \Frontend
       ];
 
     }
-
+*/
     protected function addElegantIconsVariables(): void
     {
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add addElegantIconsVariables from '.$this->getElegentIconsLessSrc('variables.less'));
@@ -621,10 +626,12 @@ class ExtCssCombiner extends \Frontend
     {
         return BOOTSTRAPLESSCUSTOMDIR.$src;
     }
+/*
     protected function getFontAwesomeFont($src)
     {
         return FONTAWESOMEFONTDIR.$src;
     }
+
     protected function getTinymcePlugin($src)
     {
         return TINYMCEPLUGINDIR.$src;
@@ -639,7 +646,7 @@ class ExtCssCombiner extends \Frontend
     {
         return FONTAWESOMELESSCUSTOMDIR.$src;
     }
-
+*/
     protected function getElegentIconsCssSrc($src)
     {
         return ELEGANTICONSCSSDIR.$src;
