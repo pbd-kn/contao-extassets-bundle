@@ -37,8 +37,8 @@
         }
     },
     "support":{
-        "issues":"https://github.com/pbd-kn/contao-extassets/issues",
-        "source": "https://github.com/pbd-kn/contao-extassets"
+        "issues":"https://github.com/pbd-kn/contao-extassets-bundle/issues",
+        "source": "https://github.com/pbd-kn/contao-extassets-bundle"
     },
     "scripts": {
         "cs-fixer": [
