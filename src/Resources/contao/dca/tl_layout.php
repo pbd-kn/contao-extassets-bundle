@@ -27,7 +27,7 @@ declare(strict_types=1);
  *  Bootstrap's selection introduced.
  *
  */
-
+use Contao\CoreBundle\DataContainer\PaletteManipulator;
 $dc = &$GLOBALS['TL_DCA']['tl_layout'];
 
 /*
@@ -55,5 +55,12 @@ $dc['fields']['extjs'] = [
 /*
  * palettes
  */
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace('stylesheet', 'stylesheet,extcss', $GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
-$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace('script', 'script,extjs', $GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
+
+PaletteManipulator::create()
+    // apply the field "extcss" after the field "stylesheet"
+    ->addField('extcss', 'stylesheet')
+    ->addField('extjs', 'script')
+    // now the field is registered in the PaletteManipulator
+    // but it still has to be registered in the globals array:
+    ->applyToPalette('default', 'tl_layout') 
+;

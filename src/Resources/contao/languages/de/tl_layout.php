@@ -31,5 +31,5 @@ declare(strict_types=1);
 /*
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_layout']['extcss'] = ['Externes CSS', 'Weisen Sie dem Layout eine Gruppe externer Css oder Less Dateien zu.'];
-$GLOBALS['TL_LANG']['tl_layout']['extjs'] = ['Externes Javascript', 'Weisen Sie dem Layout eine Gruppe externer Javascript Dateien zu.'];
+$GLOBALS['TL_LANG']['tl_layout']['extcss'] = ['Externes CSS(Extassets)', 'Weisen Sie dem Layout eine Gruppe externer Css oder Less Dateien zu.'];
+$GLOBALS['TL_LANG']['tl_layout']['extjs'] = ['Externes Javascript(Extassets)', 'Weisen Sie dem Layout eine Gruppe externer Javascript Dateien zu.'];
