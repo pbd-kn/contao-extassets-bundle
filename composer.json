@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "contao/core-bundle": "^4.9",
+        "contao/core-bundle": "^4.9 || ^5.0",
         "twbs/bootstrap": "^5.1",
 	    "heimrichhannot/contao-haste_plus": ">=1.4.0",
         "matthiasmullie/minify": "~1.3"
