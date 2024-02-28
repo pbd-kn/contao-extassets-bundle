@@ -35,9 +35,14 @@ declare(strict_types=1);
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use Contao\Dbafs;
+use Contao\System;
+use Contao\Frontend;
+use Contao\FilesModel;
+use Contao\Input;
+use Contao\LayoutModel;
 
 //require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
-require_once \System::getContainer()->getParameter('kernel.project_dir').'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
+require_once System::getContainer()->getParameter('kernel.project_dir').'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
 
 /**
  * Class ExtCss.
@@ -45,7 +50,7 @@ require_once \System::getContainer()->getParameter('kernel.project_dir').'/vendo
  * @copyright  Heimrich & Hannot GmbH
  * @copyright Peter Broghammer 2021-
  */
-class ExtCss extends \Frontend                      
+class ExtCss extends Frontend                      
 {
     /**
      * If is in live mode.
@@ -78,16 +83,17 @@ class ExtCss extends \Frontend
             self::$instance = new self();
 
             // remember cookie FE_PREVIEW state
-            $fePreview = \Input::cookie('FE_PREVIEW');
+            $fePreview = Input::cookie('FE_PREVIEW');
 
             // set into preview mode
-            \Input::setCookie('FE_PREVIEW', true);
+            Input::setCookie('FE_PREVIEW', true);
 
             // request the BE_USER_AUTH login status
-            static::setDesignerMode(self::$instance->getLoginStatus('BE_USER_AUTH'));
+            //static::setDesignerMode(self::$instance->getLoginStatus('BE_USER_AUTH'));
+            static::setDesignerMode();
 
             // restore previous FE_PREVIEW state
-            \Input::setCookie('FE_PREVIEW', $fePreview);
+            Input::setCookie('FE_PREVIEW', $fePreview);
         }
 
         return self::$instance;
@@ -133,8 +139,8 @@ class ExtCss extends \Frontend
             return false;
         }
 
-        $objObserveModel = \FilesModel::findByUuid($objCss->observeFolderSRC);
-        $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
+        $objObserveModel = FilesModel::findByUuid($objCss->observeFolderSRC);
+        $rootDir=System::getContainer()->getParameter('kernel.project_dir');
 
         if (null === $objObserveModel || !is_dir($rootDir.'/'.$objObserveModel->path)) {
             return false;
@@ -218,7 +224,8 @@ class ExtCss extends \Frontend
         //AssetsLog::setAssetDebugmode(1); achtung wird erst im extcsscombiner gesetzt
         //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'strBuffer '.$strBuffer);
 
-        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));
+        //$objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(deserialize($objLayout->extcss));  
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleBootstrapByIds(unserialize($objLayout->extcss));
 
         if (null === $objCss) {
             return false;
@@ -261,7 +268,7 @@ class ExtCss extends \Frontend
             return $strBuffer;
         }
 
-        $objLayout = \LayoutModel::findByPk($objPage->layout);
+        $objLayout = LayoutModel::findByPk($objPage->layout);
 
         if (!$objLayout) {
             return $strBuffer;
@@ -346,7 +353,8 @@ class ExtCss extends \Frontend
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'parseExtCss');
         $arrCss = [];
 
-        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
+        //$objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(deserialize($objLayout->extcss));
+        $objCss = \PBDKN\ExtAssets\Resources\contao\models\ExtCssModel::findMultipleByIds(unserialize($objLayout->extcss));
 
         if (null === $objCss) {
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objCss null '); //achtung wird erst im extcsscombiner gesetzt
@@ -380,7 +388,8 @@ class ExtCss extends \Frontend
 
         $objCss->reset();
 
-        $combiner = new ExtCssCombiner($objCss, $arrReturn, !$GLOBALS['TL_CONFIG']['bypassCache']);
+        //$combiner = new ExtCssCombiner($objCss, $arrReturn, !$GLOBALS['TL_CONFIG']['bypassCache']);
+        $combiner = new ExtCssCombiner($objCss, $arrReturn, false);                   // PBD das gibt es wohl in Contao 5 nicht mehr die Abfrage auf debugmod muss anders geschehen
 
         $arrReturn = $combiner->getUserCss();
 

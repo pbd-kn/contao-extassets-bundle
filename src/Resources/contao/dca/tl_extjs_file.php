@@ -27,16 +27,20 @@ declare(strict_types=1);
  *  Bootstrap's selection introduced.
  *
  */
+use Contao\Backend;
+use Contao\DC_Table;
+use Contao\Image;
 
 $this->loadLanguageFile('tl_files');
-
+$Myversion = (method_exists(\Contao\CoreBundle\ContaoCoreBundle::class, 'getVersion') ? \Contao\CoreBundle\ContaoCoreBundle::getVersion() : VERSION); 
 /*
  * Table tl_extjs_file
+        'dataContainer' => 'Table',
  */
 $GLOBALS['TL_DCA']['tl_extjs_file'] = [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'ptable' => 'tl_extjs',
         'enableVersioning' => true,
         'sql' => [
@@ -125,7 +129,7 @@ $GLOBALS['TL_DCA']['tl_extjs_file'] = [
             'exclude' => true,
             'inputType' => 'fileTree',
             'eval' => ['fieldType' => 'radio', 'filesOnly' => true, 'mandatory' => true, 'extensions' => 'js'],
-            'sql' => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
+            'sql' => (version_compare($Myversion, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
         ],
     ],
 ];
@@ -156,10 +160,12 @@ class tl_extjs_file extends Backend
 
         // Show files and folders
         if ('folder' === $objFiles->type) {
-            $thumbnail = $this->generateImage('folderC.gif');
+            //$thumbnail = $this->generateImage('folderC.gif');
+            $thumbnail = Image::getHtml('folderC.gif');
         } else {
             $objFile = new \File($objFiles->path, true);
-            $thumbnail = $this->generateImage($objFile->icon);
+            //$thumbnail = $this->generateImage($objFile->icon);
+            $thumbnail = Image::getHtml($objFile->icon);
         }
 
         return '<div class="tl_content_left" style="line-height:21px"><div style="float:left; margin-right:2px;">'.$thumbnail.'</div>'.$objFiles->name

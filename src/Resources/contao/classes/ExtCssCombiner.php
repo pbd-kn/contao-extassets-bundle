@@ -29,11 +29,17 @@ declare(strict_types=1);
  */
 
 namespace PBDKN\ExtAssets\Resources\contao\classes;
+use Contao\System;
+use Contao\Frontend;
+use Contao\StringUtil;
+use Contao\File;
+use Contao\FilesModel;
+
 
 //require_once TL_ROOT.'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
-require_once \System::getContainer()->getParameter('kernel.project_dir').'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
+require_once System::getContainer()->getParameter('kernel.project_dir').'/vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/classes/vendor/php_css_splitter/src/Splitter.php';
 
-class ExtCssCombiner extends \Frontend
+class ExtCssCombiner extends Frontend
 {
     public static $userCssKey = 'usercss';
 
@@ -77,7 +83,8 @@ class ExtCssCombiner extends \Frontend
     protected $vendorPath = 'vendor/pbd-kn/contao-extassets-bundle/';
 
 
-    public function __construct(\Model\Collection $objCss, $arrReturn, $blnCache)
+    //public function __construct(\Model\Collection $objCss, $arrReturn, $blnCache)
+    public function __construct($objCss, $arrReturn, $blnCache)
     {
         parent::__construct();
 
@@ -85,10 +92,12 @@ class ExtCssCombiner extends \Frontend
         while ($objCss->next()) {
             $this->arrData[] = $objCss->row();
         }
-        $this->rootDir = \System::getContainer()->getParameter('kernel.project_dir');
+        $this->rootDir = System::getContainer()->getParameter('kernel.project_dir');
 
         AssetsLog::setAssetDebugmode($this->setDebug);
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' blnCache '.$blnCache.' Debug '.$this->setDebug);
+        
+        AssetsLog::setAssetDebugmode(1);
+        //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' blnCache '.$blnCache.' Debug '.$this->setDebug);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rootdir (TL_ROOT) '.$this->rootDir);
         $this->start = microtime(true);
         $this->cache = $blnCache;
@@ -99,7 +108,7 @@ class ExtCssCombiner extends \Frontend
 
         $this->arrReturn = $arrReturn;
 
-        $this->objUserCssFile = new \File($this->getSrc($this->title.'.css'));      // in diesem File werden die usercss file zwischengespeichert. incl den compilierten less-Files
+        $this->objUserCssFile = new File($this->getSrc($this->title.'.css'));      // in diesem File werden die usercss file zwischengespeichert. incl den compilierten less-Files
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'this->objUserCssFile '.$this->getSrc($this->title.'.css'));
 
         if (!$this->objUserCssFile->exists()) {
@@ -113,11 +122,13 @@ class ExtCssCombiner extends \Frontend
             $this->cache = false;
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'reset cache this->objUserCssFile->size'.$this->objUserCssFile->size);
         }
+	    	\define('TL_ASSETS_URL', System::getContainer()->get('contao.assets.assets_context')->getStaticUrl());
 
         $this->uriRoot = (TL_ASSETS_URL ?: \Environment::get('url')).'/assets/css/';
-
+        //$cmpr = !$GLOBALS['TL_CONFIG']['bypassCache'])                  // PBD das gibt es wohl in Contao 5 nicht mehr die Abfrage auf debugmod muss anders geschehen
+        $cmpr=false;
         $this->arrLessOptions = [
-            'compress' => !\Config::get('bypassCache'),
+            'compress' => $cmpr,
             'cache_dir' => $this->rootDir.'/assets/css/lesscache',
         ];
 
@@ -127,14 +138,14 @@ class ExtCssCombiner extends \Frontend
 
             $this->addBootstrapVariables();        // parse it to objLess
             if ($this->addbootstrap) {             // add full bootstrap  copy from twbs
-              $objOut = new \File($this->getBootstrapCss('bootstrap.min.css'), true);    // assets/bootstrap/css
-              $objFiledist = new \File($this->getBootstrapDist('css/bootstrap.min.css'));
+              $objOut = new File($this->getBootstrapCss('bootstrap.min.css'), true);    // assets/bootstrap/css
+              $objFiledist = new File($this->getBootstrapDist('css/bootstrap.min.css'));
               if ($objFiledist->exists()) {           // bootstrap liegt in min.css vor
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy bootstrap dist from '.$objFiledist->value.' copy to '.$objOut->value);
                 $objFiledist->copyTo($objOut->value);
                 $this->addBootstrap();  //add bootstrap css
               } else {
-                \System::log('bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs', __METHOD__, TL_ERROR);
+                System::log('bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs', __METHOD__, TL_ERROR);
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$this->getBootstrapDist('css/bootstrap.min.css').' please install twbs');
               }
             }            
@@ -177,11 +188,11 @@ class ExtCssCombiner extends \Frontend
                 $this->copyAll($src,$destDir);
                 if ($this->setTinymce) {   // copy template fuer tinymce
                   AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'tinyTempl src '.$srctinytmpl.' dest '.'templates/be_tinyMCE.html5');
-                  $objFilesrc = new \File($srctinytmpl);
+                  $objFilesrc = new File($srctinytmpl);
                   $objFilesrc->copyTo('templates/be_tinyMCE.html5');               
                 }
               } else {
-                \System::log('Tinymce wird erst ab timymce 5 (ab contao 4.13) unterstuetzt',__METHOD__, TL_ERROR);
+                System::log('Tinymce wird erst ab timymce 5 (ab contao 4.13) unterstuetzt',__METHOD__, TL_ERROR);
               }
               $this->addFontAwesome();   // add fontawesome css  erwartet css-files in assets im webspace
             }
@@ -205,14 +216,14 @@ class ExtCssCombiner extends \Frontend
             if ($this->addbootstrap) {
                 $this->addBootstrap();  //add bootstrap css
             } else {
-                \System::log('bootstrap not selected', __METHOD__, TL_GENERAL);
+                System::log('bootstrap not selected', __METHOD__, TL_GENERAL);
             }
 /*
 		    if($this->addFontAwesome)
 		    {
 			  $this->addFontAwesome();
             } else {
-                \System::log('fontawesome not selected', __METHOD__, TL_GENERAL);
+                System::log('fontawesome not selected', __METHOD__, TL_GENERAL);
             }
 */
         }
@@ -222,7 +233,9 @@ class ExtCssCombiner extends \Frontend
     {
         switch ($strKey) {
             case 'title':
-                return standardize(\StringUtil::restoreBasicEntities(implode('-', $this->getEach('title'))));
+                $arr= $this->getEach('title');
+                return $arr[0];
+                //return standardize(StringUtil::restoreBasicEntities(implode('-', $this->getEach('title'))));
             case 'addBootstrapPrint':
                 $arr= $this->getEach($strKey);
                 if (count($arr)==0) return 0;               // addBootstrapPrint wurde noch nie gesetzt
@@ -304,7 +317,7 @@ class ExtCssCombiner extends \Frontend
         if ($count > 0) {
             $parts = ceil($count / 4095);
             for ($i = 1; $i <= $parts; ++$i) {
-                $objFile = new \File("assets/css/$this->title-part-{$i}.css");
+                $objFile = new File("assets/css/$this->title-part-{$i}.css");
                 $objFile->write($splitter->split($strCss, $i));
                 $objFile->close();
 
@@ -312,7 +325,7 @@ class ExtCssCombiner extends \Frontend
                     'src' => $objFile->value,
                     'type' => 'all', // 'all' is required by print media css
                     'mode' => '', // mustn't be static, otherwise contao will aggregate the files again (splitting not working)
-                    'hash' => version_compare(VERSION, '3.4', '>=') ? $this->objUserCssFile->mtime : $this->objUserCssFile->hash,
+                    'hash' => $this->objUserCssFile->mtime,
                 ];
             }
         } else {
@@ -367,7 +380,7 @@ class ExtCssCombiner extends \Frontend
         if (is_dir($this->rootDir.'/'.$src.'/')) {
           $this->copyAll($src.'/',$destDir.$strFile.'/');
         } else {
-          $srcfile= new \File($srcDir.$strFile,true);
+          $srcfile= new File($srcDir.$strFile,true);
           $srcfile->copyTo($destDir.$strFile);
           //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'copy '.$srcDir.$strFile.' to '.$destDir.$strFile);
         }
@@ -384,7 +397,7 @@ class ExtCssCombiner extends \Frontend
           AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,'removeFile5 src '.$src);
           $this->removeFiles($src.'/');
         } else {
-          $srcfile= new \File($src,true);
+          $srcfile= new File($src,true);
           //$srcfile->delete();
           AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'remove '.$src);
         }
@@ -401,7 +414,7 @@ class ExtCssCombiner extends \Frontend
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'add less files and parse it ');
 
         while ($objFiles->next()) {                     // alle lessfiles
-            $objFileModel = \FilesModel::findByPk($objFiles->src);
+            $objFileModel = FilesModel::findByPk($objFiles->src);
             if (null === $objFileModel) {
                 continue;
             }
@@ -410,7 +423,7 @@ class ExtCssCombiner extends \Frontend
                 continue;
             }
 
-            $objFile = new \File($objFileModel->path);
+            $objFile = new File($objFileModel->path);
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'objFileModel->path '.$objFileModel->path.' len: '.$objFile->size);
 
             if (0 === $objFile->size) {
@@ -427,19 +440,19 @@ class ExtCssCombiner extends \Frontend
 
     protected function addBootstrap(): void
     {
-        $fn='bootstrap'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.css';
+        $fn='bootstrap.min.css';
         $distnm = BOOTSTRAPDISTDIR.'css/'.$fn;
 
-        $distobj = new \File($distnm);
+        $distobj = new File($distnm);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap css distname '.$distobj->value);
         $ret='';
 
         if (!$distobj->exists()) {
-            \System::log('bootstrap not in  '.$distobj->value.' please install twbs', __METHOD__, TL_ERROR);
+            System::log('bootstrap not in  '.$distobj->value.' please install twbs', __METHOD__, TL_ERROR);
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap not in  '.$distobj->value.' please install twbs');
             return;
         }
-        $objOut = new \File(BOOTSTRAPCSSDIR.$fn, true);   // File in asset des webzugriffs 
+        $objOut = new File(BOOTSTRAPCSSDIR.$fn, true);   // File in asset des webzugriffs 
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'bootstrap js asset objOut '.$objOut->value);
         if (!$objOut->exists()) {
             $distobj->copyTo($objOut->value); // copy File to assets im web Bereich
@@ -450,7 +463,7 @@ class ExtCssCombiner extends \Frontend
             'src' => $objOut->value,
             'type' => 'all', // 'all' is required for .hidden-print class, not 'screen'
             'mode' => $this->mode,
-            'hash' => version_compare(VERSION, '3.4', '>=') ? $objOut->mtime : $objOut->hash,
+            'hash' => $objOut->mtime ,
         ];
     }
 
@@ -461,7 +474,7 @@ class ExtCssCombiner extends \Frontend
      */
     protected function addBootstrapVariables(): void
     {
-        $objFile = new \File($this->getBootstrapSrc('variables.less'));  // assets/bootstrap/less/variables.less  gibts wohl nicht mehr
+        $objFile = new File($this->getBootstrapSrc('variables.less'));  // assets/bootstrap/less/variables.less  gibts wohl nicht mehr
 
         $strVariables = '';            // aufgesammelte Variablen
 
@@ -475,18 +488,18 @@ class ExtCssCombiner extends \Frontend
             return;
         }
 
-        $objTarget = new \File($this->getBootstrapCustomSrc($this->variablesSrc));  // assets/bootstrap/less/custom/variables-twitter-bootstrap.less
+        $objTarget = new File($this->getBootstrapCustomSrc($this->variablesSrc));  // assets/bootstrap/less/custom/variables-twitter-bootstrap.less
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' getBootstrapCustomSrc to (objTarget) '.$this->getBootstrapCustomSrc($this->variablesSrc)); // assets/bootstrap/less/custom/variables-pbdlessundcssfiles.less lng: 29555
         // $this->variablesSrc = 'variables-'.$this->title.'.less' title leerzeichen werden im getter durch - ersetzt
 
         // overwrite bootstrap variables with custom variables
         // lies die variables
-        $objFilesModels = \FilesModel::findMultipleByUuids($this->variablesSRC);  // es können mehrere Variablenfiles angegeben werden s. dca
+        $objFilesModels = FilesModel::findMultipleByUuids($this->variablesSRC);  // es können mehrere Variablenfiles angegeben werden s. dca
                                                                                   // Reihenfolge ??
 
         if (null !== $objFilesModels) {
             while ($objFilesModels->next()) {
-                $objFile = new \File($objFilesModels->path);
+                $objFile = new File($objFilesModels->path);
                 AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__,' fileContent from '.$objFilesModels->path.' lng: '.$objFile->size);//files/co4-rawFiles/themes/standard/bootstrap/myvariables.less lng: 29554
                 $strContent = $objFile->getContent();
 
@@ -525,9 +538,9 @@ class ExtCssCombiner extends \Frontend
         $awpath='assets/font-awesome/webfonts/';
         $awecssFile=$awpath.'all.min.css';
       }
-      $objOut = new \File($awecssFile, true);
+      $objOut = new File($awecssFile, true);
       if (!$objOut->exists()) {
-        \System::log('fontawesome not in '.$awecssFile.' please purge less files', __METHOD__, TL_ERROR);
+        System::log('fontawesome not in '.$awecssFile.' please purge less files', __METHOD__, TL_ERROR);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in $awpath file '.$awecssFile.'  purge less files');
         return;
       }
@@ -545,7 +558,7 @@ class ExtCssCombiner extends \Frontend
     protected function addElegantIconsVariables(): void
     {
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add addElegantIconsVariables from '.$this->getElegentIconsLessSrc('variables.less'));
-        $objFile = new \File($this->getElegentIconsLessSrc('variables.less'));
+        $objFile = new File($this->getElegentIconsLessSrc('variables.less'));
 
         if ($objFile->exists() && $objFile->size > 0) {
             $this->objLess->parseFile($this->rootDir.'/'.$objFile->value);
@@ -555,7 +568,7 @@ class ExtCssCombiner extends \Frontend
     protected function addElegantIcons(): void
     {
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add addElegantIcons from '.$this->getElegentIconsCssSrc('elegant-icons.less'));
-        $objFile = new \File($this->getElegentIconsCssSrc('elegant-icons.css'), true);
+        $objFile = new File($this->getElegentIconsCssSrc('elegant-icons.css'), true);
         if ($objFile->exists() && $objFile->size > 0) {
             $strCss = $objFile->getContent();
             $strCss = str_replace('../fonts', '/'.rtrim(ELEGANTICONSFONTDIR, '/'), $strCss);
@@ -575,7 +588,7 @@ class ExtCssCombiner extends \Frontend
         foreach ($GLOBALS['TL_USER_CSS'] as $key => $css) {
             $arrCss = trimsplit('|', $css);
 
-            $objFile = new \File($arrCss[0]);
+            $objFile = new File($arrCss[0]);
 
             if ($this->isFileUpdated($objFile, $this->objUserCssFile)) {
                 $this->rewrite = true;
@@ -597,7 +610,7 @@ class ExtCssCombiner extends \Frontend
         }
     }
 
-    protected function isFileUpdated(\File $objFile, \File $objTarget)
+    protected function isFileUpdated(File $objFile, File $objTarget)
     {
         return $objFile->size > 0 && ($this->rewrite || $this->rewriteBootstrap || $objFile->mtime > $objTarget->mtime);
     }

@@ -29,8 +29,11 @@ declare(strict_types=1);
  */
 
 namespace PBDKN\ExtAssets\Resources\contao\classes;
+use Contao\Automator;
+use Contao\Folder;
+use Contao\File;
 
-class ExtAutomator extends \Automator
+class ExtAutomator extends Automator
 {
     public function purgeLessCache()
     {
@@ -40,11 +43,11 @@ class ExtAutomator extends \Automator
 
         foreach ($GLOBALS['TL_PURGE']['folders']['less']['affected'] as $folder) {
             // Purge folder
-            $objFolder = new \Folder($folder);
+            $objFolder = new Folder($folder);
             $objFolder->purge();
 
             // Restore the index.html file
-            @$objFile = new \File('templates/index.html', true);
+            @$objFile = new File('templates/index.html', true);
             @$objFile->copyTo($folder.'index.html');
         }
 
@@ -52,6 +55,6 @@ class ExtAutomator extends \Automator
         $this->purgePageCache();
 
         // Add a log entry
-        $this->log('Purged the less cache', 'ExtAssets purgeLessCache()', TL_CRON);
+//        $this->log('Purged the less cache', 'ExtAssets purgeLessCache()', TL_CRON);
     }
 }

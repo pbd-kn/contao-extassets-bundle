@@ -31,6 +31,7 @@ declare(strict_types=1);
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
 use Contao\StringUtil;
+use Contao\System;
 
 /**
  * Class EfgLog.
@@ -53,7 +54,7 @@ class AssetsLog
     public static function setAssetDebugmode($key): void
     {
         if (!is_numeric($key)) {
-//            \System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
+//            System::log('PBD setAssetDebugmode not numeric "'.$key, __METHOD__, TL_ERROR);
             $key = 0;
         }
         if ($key === self::$myefgdebuglevel) {
@@ -157,12 +158,12 @@ class AssetsLog
 
         $strLogsDir = null;
 
-        if (($container = \System::getContainer()) !== null) {
+        if (($container = System::getContainer()) !== null) {
             $strLogsDir = $container->getParameter('kernel.logs_dir');
         }
 
         if (!$strLogsDir) {
-            $strLogsDir = \System::getContainer()->getParameter('kernel.project_dir').'/var/logs';
+            $strLogsDir = System::getContainer()->getParameter('kernel.project_dir').'/var/logs';
         }
 
         error_log(sprintf("[%s] %s\n", date('d-M-Y H:i:s'), $strMessage), 3, $strLogsDir.'/'.$strLog);

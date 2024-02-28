@@ -34,11 +34,16 @@ declare(strict_types=1);
 
 namespace PBDKN\ExtAssets\Resources\contao\classes;
 
-use HeimrichHannot\Haste\Util\StringUtil;
+//use HeimrichHannot\Haste\Util\StringUtil;
+use Contao\System;
+use Contao\Frontend;
+use Contao\LayoutModel;
+
+
 //use Contao;
 
 
-class ExtJs extends \Frontend
+class ExtJs extends Frontend
 {
     /**
      * Singleton.
@@ -68,7 +73,7 @@ class ExtJs extends \Frontend
         }
 
         // zugehoeriges Layout zur Seite
-        $objLayout = \LayoutModel::findByPk($objPage->layout);
+        $objLayout = LayoutModel::findByPk($objPage->layout);
 
         if (!$objLayout) {
             return $strBuffer;
@@ -151,22 +156,23 @@ class ExtJs extends \Frontend
 
     protected function parseExtJs($objLayout, &$arrReplace)
     {
-        AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD);
         $arrJs = [];
-        $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
+        $rootDir=System::getContainer()->getParameter('kernel.project_dir');
         // alle aktivierten Objekte aus dem Layout
-        $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
-        AssetsLog::setAssetDebugmode($objJs->setDebug);            // debug aus der ersten Gruppe
+        //$objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
+        $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(unserialize($objLayout->extjs));
         if (null === $objJs) {
             // extjs ist in Layout nicht gesetzt
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'extjs nicht in Layouts enthalten');
             return false;
         }
+        AssetsLog::setAssetDebugmode($objJs->setDebug);            // debug aus der ersten Gruppe
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Layout extjs '.$objLayout->extjs);
         // position head oder body
         $cache = !$GLOBALS['TL_CONFIG']['debugMode'];
         // nochmals da der erste zugriff schon eine Gruppe weiter schaltet 
-        $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
+        //$objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(deserialize($objLayout->extjs));
+        $objJs = \PBDKN\ExtAssets\Resources\contao\models\ExtJsModel::findMultipleByIds(unserialize($objLayout->extjs));
 //        $rewrite = false;
         $headCombiner = new \Contao\Combiner();
         $bodyCombiner = new \Contao\Combiner();

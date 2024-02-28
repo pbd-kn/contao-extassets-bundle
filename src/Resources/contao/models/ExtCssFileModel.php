@@ -33,12 +33,13 @@ declare(strict_types=1);
  */
 
 namespace PBDKN\ExtAssets\Resources\contao\models;
+use Contao\Model;
 
 if (!class_exists('ExtCssFileModel')) {
     /**
      * Class ExtCssFileModel.
      */
-    class ExtCssFileModel extends \Model
+    class ExtCssFileModel extends Model
     {
         protected static $strTable = 'tl_extcss_file';
 

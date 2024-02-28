@@ -32,11 +32,12 @@ declare(strict_types=1);
  * Namespace.
  */
 namespace PBDKN\ExtAssets\Resources\contao\models;
+use Contao\Model;
 
 /**
  * Class ExtJsModel.
  */
-class ExtJsModel extends \Model
+class ExtJsModel extends Model
 {
     protected static $strTable = 'tl_extjs';
 
