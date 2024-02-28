@@ -31,5 +31,5 @@ declare(strict_types=1);
 /*
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_layout']['extcss'] = ['External css', 'Add a group of external less or css files to your layout.'];
-$GLOBALS['TL_LANG']['tl_layout']['extjs'] = ['External javascript', 'Add a group of external javascript files to your layout.'];
+$GLOBALS['TL_LANG']['tl_layout']['extcss'] = ['External css(Extassets)', 'Add a group of external less or css files to your layout.'];
+$GLOBALS['TL_LANG']['tl_layout']['extjs'] = ['External javascript(Extassets)', 'Add a group of external javascript files to your layout.'];
