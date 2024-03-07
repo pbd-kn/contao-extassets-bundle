@@ -29,7 +29,10 @@ declare(strict_types=1);
  */
 
 use PBDKN\ExtAssets\Resources\contao\models\ExtCssModel;
-
+//use Contao\Backend; 
+use Contao\BackendUser;
+use Contao\FilesModel;
+use Contao\Image;
 /*
  * Contao Open Source CMS
  *
@@ -40,15 +43,23 @@ use PBDKN\ExtAssets\Resources\contao\models\ExtCssModel;
  * @license   GNU/LGPL
  * @copyright Heimrich & Hannot GmbH
  */
+use Contao\Backend;
+use Contao\DC_Table;
+use Contao\File;
+
+
+$Myversion = (method_exists(\Contao\CoreBundle\ContaoCoreBundle::class, 'getVersion') ? \Contao\CoreBundle\ContaoCoreBundle::getVersion() : VERSION);
+
 $this->loadLanguageFile('tl_files');
 
 /*
  * Table tl_extcss_file
+        'dataContainer' => 'Table',
  */
 $GLOBALS['TL_DCA']['tl_extcss_file'] = [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,  
         'ptable' => 'tl_extcss',
         'enableVersioning' => true,
         'sql' => [
@@ -89,7 +100,7 @@ $GLOBALS['TL_DCA']['tl_extcss_file'] = [
                 'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
                 'href' => 'act=select',
                 'class' => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"',
+                'attributes' => 'onclick="Backend.getScrollOffset();" accesskey="e"',      
             ],
         ],
         'operations' => [
@@ -159,7 +170,7 @@ $GLOBALS['TL_DCA']['tl_extcss_file'] = [
                 'mandatory' => true,
                 'extensions' => 'css, less',
             ],
-            'sql' => (version_compare(VERSION, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
+            'sql' => (version_compare($Myversion, '3.2', '<')) ? "varchar(255) NOT NULL default ''" : 'binary(16) NULL',
         ],
     ],
 ];
@@ -169,7 +180,7 @@ class tl_extcss_file extends Backend
     public function __construct()
     {
         parent::__construct();
-        $this->import('BackendUser', 'User');
+        $this->import(BackendUser::class, 'User');
     }
 
     public function observeFolder($dc)
@@ -205,10 +216,12 @@ class tl_extcss_file extends Backend
 
         // Show files and folders
         if ('folder' === $objFiles->type) {
-            $thumbnail = $this->generateImage('folderC.gif');
+            //$thumbnail = $this->generateImage('folderC.gif');
+            $thumbnail = Image::getHtml('folderC.gif');
         } else {
-            $objFile = new \File($objFiles->path, true);
-            $thumbnail = $this->generateImage($objFile->icon);
+            $objFile = new File($objFiles->path, true);
+            //$thumbnail = $this->generateImage($objFile->icon);
+            $thumbnail = Image::getHtml($objFile->icon);
         }
 
         return '<div class="tl_content_left" style="line-height:21px"><div style="float:left; margin-right:2px;">'.$thumbnail.'</div>'.$objFiles->name

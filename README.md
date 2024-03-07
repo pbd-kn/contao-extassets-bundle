@@ -41,65 +41,16 @@ Create your own css & js groups and add them to your contao theme layouts.
 
 ### Installation
 
-#### Contao 4.0
+#### Contao
 
-1. Install via Contao Manager
+1. Install via Contao Manager Contao 4
 
 ```
 composer require pbd-kn/contao-extassets-bundle
+Version 1.6..
 ```
-
-2. Add the following to lines to the `$bundles` array in your `app/AppKernel.php` 
-
+1. Install via Contao Manager Contao 4 und 5
 ```
-/**
-     * {@inheritdoc}
-     */
-    public function registerBundles()
-    {
-        $bundles = [
-            …
-            new ContaoModuleBundle('extassets', $this->getRootDir()),
-            new ContaoModuleBundle('haste_plus', $this->getRootDir()),
-        ];
-
-        …
-    }
+composer require pbd-kn/contao-extassets-bundle
+Version 2...
 ```
-
-3. Clear app chache
- 
-```
-bin/console cache:clear -e prod
-```
-
-
-
-### Hooks
-
-#### addCustomAssets
-
-Attach custom fonts or css libraries to extassets combiner. 
-
-```
-// config.php
-$GLOBALS['TL_HOOKS']['addCustomAssets'][] = array('MyClass', 'addCustomAssetsHook');
-
-
-// MyClass.php
-
-public function addCustomAssetsHook(\Less_Parser $objLess, $arrData, \ExtAssets\ExtCssCombiner $objCombiner)
-{
-    // example: add custom less variables to your css group to provide acces to mixins or variables in your external css files
-    $this->objLess->parseFile('/assets/components/my-library/less/my-variables.less'));
-    
-    // example: add custom font to your css group
-    $objFile = new \File('/assets/components/my-library/css/my-font.css, true);
-    $strCss = $objFile->getContent();
-    $strCss = str_replace("../fonts", '/assets/components/my-library/'), $strCss); // make font path absolut, mostly required
-    $this->objLess->parse($strCss);
-}
-
-```
-
-

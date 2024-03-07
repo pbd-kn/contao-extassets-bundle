@@ -28,15 +28,18 @@ declare(strict_types=1);
  *
  */
 use Contao\Controller;
+use Contao\DC_Table;
+//use Contao\Backend;
 Controller::loadDataContainer('tl_content');
 $tlContentDCA = &$GLOBALS['TL_DCA']['tl_content'];
 /*
  * Table tl_extjs
+        'dataContainer' => 'Table',
  */
 $GLOBALS['TL_DCA']['tl_extjs'] = [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
         'ctable' => ['tl_extjs_file'],
         'sql' => [

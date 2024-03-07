@@ -35,11 +35,13 @@ declare(strict_types=1);
 namespace PBDKN\ExtAssets\Resources\contao\models;
 
 use PBDKN\ExtAssets\Resources\contao\classes\AssetsLog;
+use Contao\Model;
+use Contao\Database;
 
 /**
  * Class ExtcssModel.
  */
-class ExtCssModel extends \Model
+class ExtCssModel extends Model
 {
     protected static $strTable = 'tl_extcss';
 
@@ -64,7 +66,7 @@ class ExtCssModel extends \Model
         //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'table '.$t);
 
         if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = \Database::getInstance()->findInSet("$t.id", $arrIds);
+            $arrOptions['order'] = Database::getInstance()->findInSet("$t.id", $arrIds);
         }
 
         return static::findBy(["$t.id IN(".implode(',', array_map('intval', $arrIds)).')'], null, $arrOptions);
@@ -82,7 +84,7 @@ class ExtCssModel extends \Model
 
         if (!isset($arrOptions['order'])) {
             //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'order not set');
-            $arrOptions['order'] = \Database::getInstance()->findInSet("$t.id", $arrIds);
+            $arrOptions['order'] = Database::getInstance()->findInSet("$t.id", $arrIds);
         }
 
         //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'vor return array ' . "$t.id IN(" . implode(',', array_map('intval', $arrIds)) . ")");

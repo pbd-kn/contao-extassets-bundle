@@ -77,7 +77,8 @@ $GLOBALS['BE_MOD']['design']['extjs'] = [
 /*
  * Mime types
  */
-$GLOBALS['TL_MIME']['less'] = ['text/css', 'iconCSS.gif'];
+//$GLOBALS['TL_MIME']['less'] = ['text/css', 'iconCSS.gif'];
+$GLOBALS['TL_MIME']['less'] = ['text/x-less', 'iconLESS.svg'];
 
 /*
  * Hooks
