@@ -96,7 +96,7 @@ class ExtCssCombiner extends Frontend
 
         AssetsLog::setAssetDebugmode($this->setDebug);
         
-        AssetsLog::setAssetDebugmode(1);
+        //AssetsLog::setAssetDebugmode(1);
         //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Contao VERSION '.VERSION.' BUILD '.BUILD.' blnCache '.$blnCache.' Debug '.$this->setDebug);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'rootdir (TL_ROOT) '.$this->rootDir);
         $this->start = microtime(true);
@@ -122,9 +122,10 @@ class ExtCssCombiner extends Frontend
             $this->cache = false;
             AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'reset cache this->objUserCssFile->size'.$this->objUserCssFile->size);
         }
-	    	\define('TL_ASSETS_URL', System::getContainer()->get('contao.assets.assets_context')->getStaticUrl());
+	    //	\define('TL_ASSETS_URL', System::getContainer()->get('contao.assets.assets_context')->getStaticUrl());
+	    $asseturl=System::getContainer()->get('contao.assets.assets_context')->getStaticUrl();
 
-        $this->uriRoot = (TL_ASSETS_URL ?: \Environment::get('url')).'/assets/css/';
+        $this->uriRoot = ($asseturl ?: \Environment::get('url')).'/assets/css/';
         //$cmpr = !$GLOBALS['TL_CONFIG']['bypassCache'])                  // PBD das gibt es wohl in Contao 5 nicht mehr die Abfrage auf debugmod muss anders geschehen
         $cmpr=false;
         $this->arrLessOptions = [

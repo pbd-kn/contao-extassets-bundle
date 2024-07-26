@@ -98,7 +98,6 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
 
 
     'palettes' => [
-        '__selector__' => array('addBootstrap'),
 		'default' => '{title_legend},title;{less_legend},observeFolderSRC,variablesSRC;{bootstrap_legend},addbootstrap;setDebug;'
     ],
     // Fields
@@ -150,6 +149,7 @@ $GLOBALS['TL_DCA']['tl_extcss'] = [
             'label' => &$GLOBALS['TL_LANG']['tl_extcss']['addingbootstrap'],
             'exclude' => true,
             'inputType' => 'checkbox',
+            'eval' => ['submitOnChange' => true],
             'default' => true,
             'sql' => "char(1) NOT NULL default ''",
         ],
