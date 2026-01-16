@@ -544,7 +544,7 @@ class ExtCssCombiner extends Frontend
         System::log('fontawesome not in '.$awecssFile.' please purge less files', __METHOD__, TL_ERROR);
         AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'fontsawesome not in $awpath file '.$awecssFile.'  purge less files');
         return;
-      }
+ÿ   ?}
       AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'include awecssFile mode '.$this->mode.' src '.$objOut->value.' hash '.$objOut->hash.' time '.$objOut->mtime); 
       AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'Aenderungsdatum '.date('F d Y H:i:s'. $objOut->mtime));
       $this->arrReturn[self::$fontAwesomeCssKey][] = [              // css-file fuer return merken
@@ -588,8 +588,9 @@ class ExtCssCombiner extends Frontend
 
         foreach ($GLOBALS['TL_USER_CSS'] as $key => $css) {
             $arrCss = trimsplit('|', $css);
-
-            $objFile = new File($arrCss[0]);
+            $clean_filename = parse_url($arrCss[0], PHP_URL_PATH);
+            $objFile = new File($clean_filename);
+            AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, ' add addCustomLessFiles from '.$objFile->value.' cleanfilexxx '. $clean_filename);
 
             if ($this->isFileUpdated($objFile, $this->objUserCssFile)) {
                 $this->rewrite = true;
@@ -598,8 +599,12 @@ class ExtCssCombiner extends Frontend
             $strContent = $objFile->getContent();
 
             // replace variables.less by custom variables.less
-            $hasImports = preg_match_all('!@import(\s+)?(\'|")(.+)(\'|");!U', $strContent, $arrImport);
-
+            // replace variables.less by custom variables.less
+            if ($strContent === false) {
+              $hasImports = false;
+            } else {
+              $hasImports = preg_match_all('!@import(\s+)?(\'|")(.+)(\'|");!U', $strContent, $arrImport);
+            }
             if ($hasImports) {
                 $this->arrLessImportDirs[$objFile->dirname] = $objFile->dirname;
             }

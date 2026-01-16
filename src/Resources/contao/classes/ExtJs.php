@@ -101,6 +101,7 @@ class ExtJs extends Frontend
         //$rootDir = \System::getContainer()->getParameter('kernel.project_dir');;
         //$in = $rootDir.'\\'.BOOTSTRAPDISTDIR.'js/bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
         //$in = '../vendor/pbd-kn/contao-extassets-bundle/src/Resources/contao/assets/bootstrap5/'.'js/bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
+//die ("getTwitterBootstrapjs");
         $fn='bootstrap.bundle'.(!$GLOBALS['TL_CONFIG']['debugMode'] ? '.min' : '').'.js';
         $distnm = BOOTSTRAPDISTDIR.'js/'.$fn;
         $distobj = new \File($distnm);
@@ -186,6 +187,7 @@ class ExtJs extends Frontend
             //AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, 'REWRITE: '.$strrewrite);
             
             // bootstrap nur einmal im Body hinzufuegen
+
             if ($objJs->addBootstrap) {
                 if ($objJs->jsPosition == 'head') {
                     AssetsLog::ExtAssetWriteLog(1, __METHOD__, __LINE__, '!!Boottrapjs NICHT im Header einfuegen');

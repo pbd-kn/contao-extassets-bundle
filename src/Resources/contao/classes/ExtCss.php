@@ -77,6 +77,10 @@ class ExtCss extends Frontend
      *
      * @return \ExtAssets\ExtCSS
      */
+    private static bool $firstCall = true;
+    /**
+     * Dient dazu, dass die Aufbereitung nur einmal pro seite gemacht wird
+     */
     public static function getInstance()
     {
         if (null === self::$instance) {
@@ -260,28 +264,35 @@ class ExtCss extends Frontend
 
     public function hookReplaceDynamicScriptTags($strBuffer)
     {
-        // strbuffer enthält die aktuelle Seite
+        /* strbuffer enthält die aktuelle Seite
+           Immer dann, wenn Contao Skripte verarbeitet, die { { script::* }} oder andere dynamische Tags enthalten.
+           Sowohl im Frontend als auch im Backend, wenn eine Seite gerendert wird.
+           Bei jedem AJAX-Request, wenn Inhalte mit dynamischen Skripten geladen werden.
+           Wenn mehrere dynamische Skripte auf einer Seite existieren, kann der Hook mehrfach durchlaufen werden.
+        */
 
         global $objPage;
 
         if (!$objPage) {
             return $strBuffer;
         }
+        if (self::$firstCall) {
+            self::$firstCall = false; // Setzen, damit die nächsten Aufrufe ignoriert werden
+            // \System::log("Hook hookReplaceDynamicScriptTags wurde aufgerufen: Erstes Mal", __METHOD__, TL_GENERAL);
 
-        $objLayout = LayoutModel::findByPk($objPage->layout);
+            $objLayout = LayoutModel::findByPk($objPage->layout);
 
-        if (!$objLayout) {
-            return $strBuffer;
+            if (!$objLayout) {
+              return $strBuffer;
+            }  
+
+            // the dynamic script replacement array
+            $arrReplace = [];
+
+            $this->parseExtCss($objLayout, $arrReplace);
         }
-
-        // the dynamic script replacement array
-        $arrReplace = [];
-
-        $this->parseExtCss($objLayout, $arrReplace);
-
         return $strBuffer;
     }
-
     protected static function scanLessFiles($path, $arrReturn = [])
     {
         $rootDir=\System::getContainer()->getParameter('kernel.project_dir');
@@ -388,8 +399,8 @@ class ExtCss extends Frontend
 
         $objCss->reset();
 
-        //$combiner = new ExtCssCombiner($objCss, $arrReturn, !$GLOBALS['TL_CONFIG']['bypassCache']);
-        $combiner = new ExtCssCombiner($objCss, $arrReturn, false);                   // PBD das gibt es wohl in Contao 5 nicht mehr die Abfrage auf debugmod muss anders geschehen
+        $combiner = new ExtCssCombiner($objCss, $arrReturn, !$GLOBALS['TL_CONFIG']['bypassCache']);
+        //$combiner = new ExtCssCombiner($objCss, $arrReturn, false);                   // PBD das gibt es wohl in Contao 5 nicht mehr die Abfrage auf debugmod muss anders geschehen
 
         $arrReturn = $combiner->getUserCss();
 
